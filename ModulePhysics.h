@@ -1,6 +1,29 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
+#include "p2Point.h"
+
+// The physics engine implements at least four of the following forces: 
+// impulsive (mrua), 
+// gravity (g=9,8 or 10), 
+// lift (Fy=F-N=F-m*g*sin angle),
+// drag (Fx=F-Ff=F*cos angle-m*g*sin angle*coef_dragging), 
+// buoyancy (EN CATALÀ: flotabilitat), 
+// elastic(springs) (f=kx).
+
+// Class: Atmosphere -> From the example
+class PhysBody {
+	int x, y;
+
+};
+
+class Circle : public PhysBody {
+	int radius;
+};
+
+class Rectangle :public PhysBody {
+	int w, h;
+};
 
 class Atmosphere
 {
@@ -10,6 +33,7 @@ public:
 	float windy; // Wind y
 };
 
+// Class: Ground -> From the example
 class Ground : public SDL_Rect
 {
 public:
@@ -17,7 +41,7 @@ public:
 	SDL_Rect pixels(); // Convert geometry to pixels to draw w/ SDL
 };
 
-// Class: Water
+// Class: Water, public Ground -> From the example
 class Water : public Ground
 {
 public:
@@ -38,6 +62,8 @@ public:
 	bool CleanUp();
 
 private:
-
+	Atmosphere atm;
+	Ground ground;
+	Water water;
 	bool debug;
 };

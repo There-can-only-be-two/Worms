@@ -35,6 +35,15 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update()
 {
 	
+	App->fonts->BlitText(50, 50, App->fonts->font, "PLAYER.X = ");
+	App->fonts->BlitText(50, 100, App->fonts->font, "PLAYER.Y = ");
+
+	return UPDATE_CONTINUE;
+}
+
+// PostUpdate: draw fonts
+update_status ModuleSceneIntro::PostUpdate()
+{
 
 	return UPDATE_CONTINUE;
 }

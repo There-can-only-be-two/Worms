@@ -3,10 +3,6 @@
 
 #include "Module.h"
 #include "SDL\include\SDL_rect.h"
-#include "Module.h"
-#include "Animation.h"
-#include "p2DynArray.h"
-#include "Globals.h"
 
 class ModuleFadeToBlack : public Module
 {
@@ -27,7 +23,7 @@ public:
 
 	// Called at the end of the application loop
 	// Performs the render call of a black rectangle with transparency
-	update_status PostUpdate();
+	update_status PostUpdate() override;
 
 	// Called from another module
 	// Starts the fade process which has two steps, fade_out and fade_in

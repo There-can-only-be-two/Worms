@@ -1,14 +1,14 @@
+#include "Application.h"
 #include "ModuleFadeToBlack.h"
 
 #include "Application.h"
 #include "ModuleRender.h"
 #include "ModuleWindow.h"
 #include "SDL/include/SDL_render.h"
-#include "Globals.h"
 
 ModuleFadeToBlack::ModuleFadeToBlack(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	
+
 }
 
 ModuleFadeToBlack::~ModuleFadeToBlack()
@@ -18,13 +18,13 @@ ModuleFadeToBlack::~ModuleFadeToBlack()
 
 bool ModuleFadeToBlack::Start()
 {
+
 	screenRect = { 0, 0, SCREEN_WIDTH * SCREEN_SIZE, SCREEN_HEIGHT * SCREEN_SIZE };
 
 	LOG("Preparing Fade Screen");
 
 	// Enable blending mode for transparency
 	SDL_SetRenderDrawBlendMode(App->renderer->renderer, SDL_BLENDMODE_BLEND);
-	
 	return true;
 }
 

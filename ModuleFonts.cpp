@@ -15,8 +15,9 @@ ModuleFonts::~ModuleFonts() {
 }
 
 bool ModuleFonts::Start() {
-	const char fontText[] = "ABCDEFGHIJKLNOPQRSTUVXYZ0123456789:!? MW";
-	font = App->fonts->Load("Assets/Fonts/sprite_font_white.png", fontText, 1);
+	const char fontText[] = { "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789.,;:$#'! /?%&()@ -+=      " };
+	font = App->fonts->Load("Assets/Fonts/sprite_font_white.png", fontText, 7);
+
 
 	return true;
 }
