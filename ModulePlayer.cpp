@@ -27,6 +27,23 @@ bool ModulePlayer::CleanUp()
 // Update: draw background
 update_status ModulePlayer::Update()
 {
+	//Left
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
+
+	}
+	//Right
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) {
+
+	}
+	//Up
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
+
+	}
+	//Down
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
+
+	}
+
 	return UPDATE_CONTINUE;
 }
 
