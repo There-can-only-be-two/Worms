@@ -80,9 +80,9 @@ update_status ModuleDebug::PostUpdate()
 
 void ModuleDebug::DrawDebug()
 {
-	int fontId = 6;
-	int debugX = 600;
-	int debugY = 420;
+	int fontId = 0;
+	int debugX = 50;
+	int debugY = 50;
 
 
 	App->fonts->BlitText(debugX, debugY + 0, fontId, "#DEBUG MODE (TAB)  ON/OFF");

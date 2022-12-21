@@ -29,6 +29,8 @@ public:
 	ModulePhysics* physics;
 	ModuleFadeToBlack* fade;
 	ModuleFonts* fonts;
+	ModuleDebug* debug;
+
 private:
 
 	p2List<Module*> list_modules;

@@ -18,7 +18,7 @@ class PhysBody
 	double vx = 0.0f, vy = 0.0f;
 	double ax = 0.0f, ay = 0.0f;
 
-
+	bool isAlive;
 };
 
 class Circle : public PhysBody {

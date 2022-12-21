@@ -2,35 +2,41 @@
 
 Application::Application()
 {
-	renderer = new ModuleRender(this);
-	window = new ModuleWindow(this);
-	textures = new ModuleTextures(this);
-	input = new ModuleInput(this);
-	audio = new ModuleAudio(this, true);
-	player = new ModulePlayer(this);
-	scene_intro = new ModuleSceneIntro(this);
-	physics = new ModulePhysics(this);
-	fade = new ModuleFadeToBlack(this);
-	fonts = new ModuleFonts(this);
+	window		=	new ModuleWindow(this);
+	textures	=	new ModuleTextures(this);
+	input		=	new ModuleInput(this);
+	audio		=	new ModuleAudio(this, true);
+	player		=	new ModulePlayer(this);
+	scene_intro =	new ModuleSceneIntro(this);
+	physics		=	new ModulePhysics(this);
+	fade		=	new ModuleFadeToBlack(this);
+	fonts		=	new ModuleFonts(this);
+	debug		=	new ModuleDebug(this);
+	renderer	=	new ModuleRender(this);
+
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
 	// They will CleanUp() in reverse order
 
+
 	// Main Modules
 	AddModule(window);
-	AddModule(physics);
-	AddModule(renderer);
 	AddModule(textures);
 	AddModule(input);
 	AddModule(audio);
 	AddModule(fonts);
+	AddModule(physics);
+
 	// Scenes
 	AddModule(scene_intro);
 	
 	// Player
 	AddModule(player);
 	AddModule(fade);
+	AddModule(debug);
 	
+	//render last!
+	AddModule(renderer);
 }
 
 Application::~Application()
