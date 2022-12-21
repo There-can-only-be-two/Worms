@@ -1,6 +1,5 @@
-#include "ModuleDebug.h"
-
 #include "Application.h"
+#include "ModuleDebug.h"
 #include "ModuleWindow.h"
 #include "ModuleRender.h"
 #include "ModuleTextures.h"
