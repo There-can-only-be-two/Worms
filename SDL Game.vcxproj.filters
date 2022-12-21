@@ -68,6 +68,9 @@
     <ClInclude Include="ModulePlayer.h">
       <Filter>Gameplay</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleDebug.h">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -108,6 +111,9 @@
     </ClCompile>
     <ClCompile Include="ModulePlayer.cpp">
       <Filter>Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleDebug.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

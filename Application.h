@@ -14,6 +14,7 @@
 #include "ModuleSceneIntro.h"
 #include "ModuleFadeToBlack.h"
 #include "ModuleFonts.h"
+#include "ModuleDebug.h"
 
 class Application
 {
@@ -28,6 +29,8 @@ public:
 	ModulePhysics* physics;
 	ModuleFadeToBlack* fade;
 	ModuleFonts* fonts;
+	ModuleDebug* debug;
+
 private:
 
 	p2List<Module*> list_modules;

@@ -23,6 +23,11 @@ bool ModulePhysics::Start()
 // 
 update_status ModulePhysics::PreUpdate()
 {
+	//Integrate position and velocity
+	
+	//check for collisions in new position
+	//calculate normal collision and bounce coef
+
 	return UPDATE_CONTINUE;
 }
 
