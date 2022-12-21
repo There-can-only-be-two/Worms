@@ -12,8 +12,12 @@
 // elastic(springs) (f=kx).
 
 // Class: Atmosphere -> From the example
-class PhysBody {
-	int x, y;
+class PhysBody
+{
+	double px = 0.0f, py = 0.0f;
+	double vx = 0.0f, vy = 0.0f;
+	double ax = 0.0f, ay = 0.0f;
+
 
 };
 
@@ -28,16 +32,16 @@ class Rectangle :public PhysBody {
 class Atmosphere
 {
 public:
-	float density; // Density of air
-	float windx; // Wind x
-	float windy; // Wind y
+	double density; // Density of air
+	double windx; // Wind x
+	double windy; // Wind y
 };
 
 // Class: Ground -> From the example
 class Ground : public SDL_Rect
 {
 public:
-	float x, y, w, h; // Geometry (x,y,w,h)
+	double x, y, w, h; // Geometry (x,y,w,h)
 	SDL_Rect pixels(); // Convert geometry to pixels to draw w/ SDL
 };
 
@@ -45,9 +49,9 @@ public:
 class Water : public Ground
 {
 public:
-	float density; // Density of fluid
-	float vx; // Velocity x
-	float vy; // Velocity y
+	double density; // Density of fluid
+	double vx; // Velocity x
+	double vy; // Velocity y
 };
 
 class ModulePhysics : public Module

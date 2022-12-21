@@ -14,6 +14,7 @@
 #include "ModuleSceneIntro.h"
 #include "ModuleFadeToBlack.h"
 #include "ModuleFonts.h"
+#include "ModuleDebug.h"
 
 class Application
 {
