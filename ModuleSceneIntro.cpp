@@ -51,7 +51,7 @@ update_status ModuleSceneIntro::Update()
 		bod->vx = 0;
 		bod->vy = 0;
 
-		bod->px = PIXELS_TO_METERS(400);
+		bod->px = PIXELS_TO_METERS(500);
 		bod->py = PIXELS_TO_METERS(100);
 
 		bod->isAlive = true;

@@ -37,7 +37,7 @@ update_status ModulePhysics::PreUpdate()
 		if (!pBody->isStable)
 		{
 			//0.016 time for 1frame asuming 60Hz
-			pBody->ay = 1;
+			pBody->ay = 10;
 
 			pBody->vx += pBody->ax * DELTATIME;
 			pBody->vy += pBody->ay * DELTATIME;
