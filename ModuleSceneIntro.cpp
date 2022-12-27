@@ -37,7 +37,7 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	SDL_Rect ground = App->physics->CreateGround(0, 300, 1200, 100);
+	SDL_Rect ground = App->physics->CreateGround(0, 500, 1200, 100);
 	App->renderer->DrawQuad(ground, 116, 190, 227);
 	
 	
