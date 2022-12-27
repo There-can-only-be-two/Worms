@@ -28,8 +28,8 @@
 #define DELTATIME 0.016666666666666
 
 enum bodytype {
-	PLAYER,
-	SHOT
+	RECT,
+	CIRCLE
 };
 
 // Class: Atmosphere -> From the example
@@ -105,6 +105,8 @@ public:
 	bool CleanUp();
 
 	SDL_Rect CreateGround(float gx, float gy, float gw, float gh);
+	SDL_Rect CreateWater(float wx, float wy, float ww, float wh);
+
 	p2List<PhysBody*> listBodies;
 
 	// Compute modulus of a vector
@@ -123,10 +125,10 @@ public:
 	void integrator_velocity_verlet(Circle& ball, float dt);
 
 	// Detect collision with ground
-	bool is_colliding_with_ground(const Rect& ball, const Ground& ground);
+	bool is_colliding_with_ground(const Circle& ball, const Ground& ground);
 
 	// Detect collision with water
-	bool is_colliding_with_water(const Rect& ball, const Water& water);
+	bool is_colliding_with_water(const Circle& ball, const Water& water);
 
 	// Detect collision between circle and rectange
 	bool check_collision_circle_rectangle(float cx, float cy, float cr, float rx, float ry, float rw, float rh);

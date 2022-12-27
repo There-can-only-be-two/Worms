@@ -88,6 +88,19 @@ SDL_Rect ModulePhysics::CreateGround(float gx, float gy, float gw, float gh)
 	return groundRect;
 }
 
+SDL_Rect ModulePhysics::CreateWater(float wx, float wy, float ww, float wh)
+{
+	Water* water = new Water();
+
+	water->x = PIXELS_TO_METERS(wx); water->y = PIXELS_TO_METERS(wy);
+
+	water->w = PIXELS_TO_METERS(ww); water->h = PIXELS_TO_METERS(wh);
+
+	SDL_Rect waterRect = { wx, wy, ww, wh };
+
+	return waterRect;
+}
+
 // Compute modulus of a vector
 float ModulePhysics::modulus(float vx, float vy)
 {
@@ -117,7 +130,7 @@ void ModulePhysics::compute_hydrodynamic_drag(float& fx, float& fy, const Circle
 }
 
 // Compute Hydrodynamic Buoyancy force
-void compute_hydrodynamic_buoyancy(float& fx, float& fy, const Circle& ball, const Water& water)
+void ModulePhysics::compute_hydrodynamic_buoyancy(float& fx, float& fy, const Circle& ball, const Water& water)
 {
 	// Compute submerged area (assume ball is a rectangle, for simplicity)
 	float water_top_level = water.y + water.h; // Water top level y
@@ -133,7 +146,7 @@ void compute_hydrodynamic_buoyancy(float& fx, float& fy, const Circle& ball, con
 }
 
 // Integration scheme: Velocity Verlet
-void integrator_velocity_verlet(Circle& ball, float dt)
+void ModulePhysics::integrator_velocity_verlet(Circle& ball, float dt)
 {
 	ball.px += ball.vx * dt + 0.5f * ball.ax * dt * dt;
 	ball.py += ball.vy * dt + 0.5f * ball.ay * dt * dt;
@@ -142,7 +155,7 @@ void integrator_velocity_verlet(Circle& ball, float dt)
 }
 
 // Detect collision with ground
-bool is_colliding_with_ground(const Circle& ball, const Ground& ground)
+bool ModulePhysics::is_colliding_with_ground(const Circle& ball, const Ground& ground)
 {
 	float rect_x = (ground.x + ground.w / 2.0f); // Center of rectangle
 	float rect_y = (ground.y + ground.h / 2.0f); // Center of rectangle
@@ -150,7 +163,7 @@ bool is_colliding_with_ground(const Circle& ball, const Ground& ground)
 }
 
 // Detect collision with water
-bool is_colliding_with_water(const Circle& ball, const Water& water)
+bool ModulePhysics::is_colliding_with_water(const Circle& ball, const Water& water)
 {
 	float rect_x = (water.x + water.w / 2.0f); // Center of rectangle
 	float rect_y = (water.y + water.h / 2.0f); // Center of rectangle
@@ -158,7 +171,7 @@ bool is_colliding_with_water(const Circle& ball, const Water& water)
 }
 
 // Detect collision between circle and rectange
-bool check_collision_circle_rectangle(float cx, float cy, float cr, float rx, float ry, float rw, float rh)
+bool ModulePhysics::check_collision_circle_rectangle(float cx, float cy, float cr, float rx, float ry, float rw, float rh)
 {
 	// Algorithm taken from https://stackoverflow.com/a/402010
 
@@ -182,12 +195,12 @@ bool check_collision_circle_rectangle(float cx, float cy, float cr, float rx, fl
 }
 
 // Convert from meters to pixels (for SDL drawing)
-SDL_Rect Ground::pixels()
-{
-	SDL_Rect pos_px{};
-	pos_px.x = METERS_TO_PIXELS(x);
-	pos_px.y = SCREEN_HEIGHT - METERS_TO_PIXELS(y);
-	pos_px.w = METERS_TO_PIXELS(w);
-	pos_px.h = METERS_TO_PIXELS(-h); // Can I do this? LOL
-	return pos_px;
-}
+//SDL_Rect Ground::pixels()
+//{
+//	SDL_Rect pos_px{};
+//	pos_px.x = METERS_TO_PIXELS(x);
+//	pos_px.y = SCREEN_HEIGHT - METERS_TO_PIXELS(y);
+//	pos_px.w = METERS_TO_PIXELS(w);
+//	pos_px.h = METERS_TO_PIXELS(-h); // Can I do this? LOL
+//	return pos_px;
+//}
