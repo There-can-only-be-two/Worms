@@ -107,6 +107,11 @@ public:
 	SDL_Rect CreateGround(float gx, float gy, float gw, float gh);
 	SDL_Rect CreateWater(float wx, float wy, float ww, float wh);
 
+	//Forces
+	void Gravity();
+	void Drag();
+	void Bouyancy();
+
 	p2List<PhysBody*> listBodies;
 
 	// Compute modulus of a vector

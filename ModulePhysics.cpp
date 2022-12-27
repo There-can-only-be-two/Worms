@@ -204,3 +204,18 @@ bool ModulePhysics::check_collision_circle_rectangle(float cx, float cy, float c
 //	pos_px.h = METERS_TO_PIXELS(-h); // Can I do this? LOL
 //	return pos_px;
 //}
+
+void ModulePhysics::Gravity()
+{
+	p2List_item<PhysBody*>* physbodyList = listBodies.start;
+
+
+	while (physbodyList != NULL)
+	{
+		physbodyList.data.fx = physbodyList.data.mass * GRAVITY;
+		physbodyList.data.fy = physbodyList.data.mass * GRAVITY;
+		physbodyList = physbodyList->next;
+	}
+}
+void ModulePhysics::Drag(){}
+void ModulePhysics::Bouyancy(){}
