@@ -2,6 +2,7 @@
 #include "Module.h"
 #include "Globals.h"
 #include "p2Point.h"
+#include "iostream"
 
 // The physics engine implements at least four of the following forces: 
 // impulsive (F*t), 
@@ -11,14 +12,20 @@
 // buoyancy (EN CATALÀ: flotabilitat) (, 
 // elastic(springs) (f=kx).
 
-#define GRAVITY_X 0.0f
-#define GRAVITY_Y -7.0f
-
-#define PIXELS_PER_METER 50.0f // if touched change METER_PER_PIXEL too
-#define METER_PER_PIXEL 0.02f // this is 1 / PIXELS_PER_METER !
+#define PIXELS_PER_METER 32.0f // if touched change METER_PER_PIXEL too
+#define METERS_PER_PIXEL 0.03125f // this is 1 / PIXELS_PER_METER !
+#define RAD_PER_DEG ((float)180/b2_pi)
+#define DEG_PER_RAD ((float)b2_pi/180)
 
 #define METERS_TO_PIXELS(m) ((int) floor(PIXELS_PER_METER * m))
-#define PIXEL_TO_METERS(p)  ((float) METER_PER_PIXEL * p)
+#define PIXELS_TO_METERS(p)  ((float) METERS_PER_PIXEL * p)
+#define RAD_TO_DEG(r) ((float) RAD_PER_DEG * r)
+#define DEG_TO_RAD(r) ((float) DEG_PER_RAD * r)
+#define DEGTORAD 0.0174532925199432957f
+#define RADTODEG 57.295779513082320876f
+
+#define GRAVITY -10
+#define DELTATIME 0.016666666666666
 
 enum bodytype {
 	PLAYER,
@@ -34,14 +41,30 @@ public:
 	double ax = 0.0f, ay = 0.0f;
 
 	bool isAlive;
+	bool isStable;
 	bodytype type;
+
+	// Force (total) applied to the ball
+	float fx = 0.0f;
+	float fy = 0.0f;
+
+	// Mass
+	float mass;
+
+	// Aerodynamics stuff
+	float surface; // Effective wet surface
+	float cl; // Aerodynamic Lift coefficient
+	float cd; // Aerodynamic Drag coefficient
+	float b; // Hydrodynamic Drag coefficient
 };
 
 class Circle : public PhysBody {
-	int radius;
+public:
+	float radius = 1.0f;
 };
 
 class Rect : public PhysBody {
+public:
 	int w, h;
 };
 
@@ -82,34 +105,34 @@ public:
 	bool CleanUp();
 
 	SDL_Rect CreateGround(float gx, float gy, float gw, float gh);
+	p2List<PhysBody*> listBodies;
 
+	// Compute modulus of a vector
+	float modulus(float vx, float vy);
+
+	// Compute Aerodynamic Drag force
+	void compute_aerodynamic_drag(float& fx, float& fy, const Circle& ball, const Atmosphere& atmosphere);
+
+	// Compute Hydrodynamic Drag force
+	void compute_hydrodynamic_drag(float& fx, float& fy, const Circle& ball, const Water& water);
+
+	// Compute Hydrodynamic Buoyancy force
+	void compute_hydrodynamic_buoyancy(float& fx, float& fy, const Circle& ball, const Water& water);
+
+	// Integration scheme: Velocity Verlet
+	void integrator_velocity_verlet(Circle& ball, float dt);
+
+	// Detect collision with ground
+	bool is_colliding_with_ground(const Rect& ball, const Ground& ground);
+
+	// Detect collision with water
+	bool is_colliding_with_water(const Rect& ball, const Water& water);
+
+	// Detect collision between circle and rectange
+	bool check_collision_circle_rectangle(float cx, float cy, float cr, float rx, float ry, float rw, float rh);
 private:
 	Atmosphere atm;
 	Ground ground;
 	Water water;
 	bool debug;
 };
-
-// Compute modulus of a vector
-float modulus(float vx, float vy);
-
-// Compute Aerodynamic Drag force
-void compute_aerodynamic_drag(float& fx, float& fy, const Rect& ball, const Atmosphere& atmosphere);
-
-// Compute Hydrodynamic Drag force
-void compute_hydrodynamic_drag(float& fx, float& fy, const Rect& ball, const Water& water);
-
-// Compute Hydrodynamic Buoyancy force
-void compute_hydrodynamic_buoyancy(float& fx, float& fy, const Rect& ball, const Water& water);
-
-// Integration scheme: Velocity Verlet
-void integrator_velocity_verlet(Rect& ball, float dt);
-
-// Detect collision with ground
-bool is_colliding_with_ground(const Rect& ball, const Ground& ground);
-
-// Detect collision with water
-bool is_colliding_with_water(const Rect& ball, const Water& water);
-
-// Detect collision between circle and rectange
-bool check_collision_circle_rectangle(float cx, float cy, float cr, float rx, float ry, float rw, float rh);
