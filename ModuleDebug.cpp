@@ -186,7 +186,7 @@ void ModuleDebug::DrawPhysics()
 	{
 		pBody = item->data;
 
-		App->renderer->DrawCircle(METERS_TO_PIXELS(pBody->ax), METERS_TO_PIXELS(pBody->ay), METERS_TO_PIXELS(pBody->radius), 255, 255, 255);
+		App->renderer->DrawCircle(METERS_TO_PIXELS(pBody->px), METERS_TO_PIXELS(pBody->py), METERS_TO_PIXELS(pBody->radius), 255, 255, 255);
 	}
 
 }
