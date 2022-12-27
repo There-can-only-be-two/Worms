@@ -40,6 +40,8 @@ update_status ModulePhysics::PostUpdate()
 	if(!debug)
 		return UPDATE_CONTINUE;
 
+	
+
 	return UPDATE_CONTINUE;
 }
 
@@ -50,4 +52,17 @@ bool ModulePhysics::CleanUp()
 	LOG("Destroying physics world");
 
 	return true;
+}
+
+SDL_Rect ModulePhysics::CreateGround(float gx, float gy, float gw, float gh)
+{
+	Ground* ground = new Ground();
+
+	ground->x = PIXEL_TO_METERS(gx); ground->y = PIXEL_TO_METERS(gy);
+
+	ground->w = PIXEL_TO_METERS(gw); ground->h = PIXEL_TO_METERS(gh);
+
+	SDL_Rect groundRect = {gx, gy, gw, gh};
+
+	return groundRect;
 }

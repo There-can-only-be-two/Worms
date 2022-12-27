@@ -11,6 +11,16 @@
 // buoyancy (EN CATALÀ: flotabilitat), 
 // elastic(springs) (f=kx).
 
+#define GRAVITY_X 0.0f
+#define GRAVITY_Y -7.0f
+
+#define PIXELS_PER_METER 50.0f // if touched change METER_PER_PIXEL too
+#define METER_PER_PIXEL 0.02f // this is 1 / PIXELS_PER_METER !
+
+#define METERS_TO_PIXELS(m) ((int) floor(PIXELS_PER_METER * m))
+#define PIXEL_TO_METERS(p)  ((float) METER_PER_PIXEL * p)
+
+
 // Class: Atmosphere -> From the example
 class PhysBody
 {
@@ -42,7 +52,7 @@ class Ground : public SDL_Rect
 {
 public:
 	double x, y, w, h; // Geometry (x,y,w,h)
-	SDL_Rect pixels(); // Convert geometry to pixels to draw w/ SDL
+	SDL_Rect pixels() {} // Convert geometry to pixels to draw w/ SDL
 };
 
 // Class: Water, public Ground -> From the example
@@ -64,6 +74,8 @@ public:
 	update_status PreUpdate();
 	update_status PostUpdate();
 	bool CleanUp();
+
+	SDL_Rect CreateGround(float gx, float gy, float gw, float gh);
 
 private:
 	Atmosphere atm;

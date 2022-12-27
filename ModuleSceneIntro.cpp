@@ -20,6 +20,9 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
+	/*SDL_Rect ground = App->physics->CreateGround(0, 300, 700, 100);
+	App->renderer->DrawQuad(ground, 100, 100, 100, 100);*/
+
 	return ret;
 }
 
@@ -34,6 +37,8 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+	SDL_Rect ground = App->physics->CreateGround(0, 300, 1200, 100);
+	App->renderer->DrawQuad(ground, 116, 190, 227);
 	
 	
 
