@@ -28,7 +28,7 @@
 #define DELTATIME 0.016666666666666
 
 enum bodytype {
-	RECT,
+	RECTANGLE,
 	CIRCLE
 };
 
