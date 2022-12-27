@@ -46,6 +46,10 @@ update_status ModulePhysics::PreUpdate()
 			double potentialY = pBody->py + pBody->vy * DELTATIME;
 
 			//check for collisions on potential pos
+			Circle* circle = new Circle();
+			circle->px = pBody->px;
+			circle->py = pBody->py;
+			//is_colliding_with_ground(circle&, ground);
 
 			pBody->px = potentialX;
 			pBody->py = potentialY;
@@ -77,6 +81,8 @@ bool ModulePhysics::CleanUp()
 
 SDL_Rect ModulePhysics::CreateGround(float gx, float gy, float gw, float gh)
 {
+	//creating dynamically allocated object on function scope???
+	//FIX
 	Ground* ground = new Ground();
 
 	ground->x = PIXELS_TO_METERS(gx); ground->y = PIXELS_TO_METERS(gy);

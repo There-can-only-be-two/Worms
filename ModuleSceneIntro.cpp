@@ -37,8 +37,9 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+	//Create ground - ON UPDATE????
 	SDL_Rect ground = App->physics->CreateGround(0, 500, 1200, 100);
-	App->renderer->DrawQuad(ground, 116, 190, 227);
+	App->renderer->DrawQuad(ground, 116, 190, 227, 64);
 	
 	//TESTING, DO NOT DELETE
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
