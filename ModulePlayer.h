@@ -3,6 +3,9 @@
 #include "Animation.h"
 #include "Globals.h"
 #include "p2Point.h"
+#include "math.h"
+#include "ModulePhysics.h"
+#include "ModuleRender.h"
 
 struct Object
 {
@@ -11,6 +14,11 @@ struct Object
 
 	Object() : graphic(NULL)
 	{}
+};
+
+struct Position {
+	int x;
+	int y;
 };
 
 class ModulePlayer : public Module
@@ -24,5 +32,8 @@ public:
 	bool CleanUp();
 
 public:
+
+	Position pos;
+	PhysBody pBody;
 
 };
