@@ -27,7 +27,8 @@
 #define GRAVITY -10
 #define DELTATIME 0.016666666666666
 
-enum bodytype {
+enum bodytype
+{
 	RECTANGLE,
 	CIRCLE
 };
@@ -43,6 +44,9 @@ public:
 	bool isAlive;
 	bool isStable;
 	bodytype type;
+
+	//THIS IS FOR TESTING DO NOT DELETE
+	double radius = 1.0f;
 
 	// Force (total) applied to the ball
 	float fx = 0.0f;

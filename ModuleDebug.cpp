@@ -20,7 +20,10 @@ ModuleDebug::~ModuleDebug() {}
 
 bool ModuleDebug::Start()
 {
-	drawDebug = false;
+	drawDebug = true;
+	drawPhysics = true;
+	variables = true;
+
 	return true;
 }
 
@@ -135,12 +138,35 @@ void ModuleDebug::DrawDebug()
 
 	if (variables)
 	{
-		//Ball x, y
-		/*std::string string = std::string("BALL.X = ") + std::to_string(App->scene_intro->ball->position.x);
-		App->fonts->BlitText(debugX + 16, debugY + 220, fontId, string.c_str());
+		//Last pBody on List
+		p2List_item<PhysBody*>* item;
+		PhysBody* pBody = NULL;
 
-		string = std::string("BALL.Y = ") + std::to_string(App->scene_intro->ball->position.y);
-		App->fonts->BlitText(debugX + 16, debugY + 240, fontId, string.c_str());*/
+		item = App->physics->listBodies.getLast();
+
+		if (item != NULL)
+		{
+			pBody = item->data;
+
+			std::string string = std::string("PBODY.AX = ") + std::to_string(pBody->ax);
+			App->fonts->BlitText(debugX + 16, debugY + 220, fontId, string.c_str());
+
+			string = std::string("PBODY.AY = ") + std::to_string(pBody->ay);
+			App->fonts->BlitText(debugX + 16, debugY + 240, fontId, string.c_str());
+
+			string = std::string("PBODY.VX = ") + std::to_string(pBody->vx);
+			App->fonts->BlitText(debugX + 16, debugY + 260, fontId, string.c_str());
+
+			string = std::string("PBODY.VY = ") + std::to_string(pBody->vy);
+			App->fonts->BlitText(debugX + 16, debugY + 280, fontId, string.c_str());
+
+			string = std::string("PBODY.PX = ") + std::to_string(pBody->px);
+			App->fonts->BlitText(debugX + 16, debugY + 300, fontId, string.c_str());
+
+			string = std::string("PBODY.PY = ") + std::to_string(pBody->py);
+			App->fonts->BlitText(debugX + 16, debugY + 320, fontId, string.c_str());
+		}
+
 
 		//Spring force
 		/*if (App->scene_intro->springForce == 420)
@@ -153,5 +179,14 @@ void ModuleDebug::DrawDebug()
 
 void ModuleDebug::DrawPhysics()
 {
+	p2List_item<PhysBody*>* item;
+	PhysBody* pBody = NULL;
+
+	for (item = App->physics->listBodies.getFirst(); item != NULL; item = item->next)
+	{
+		pBody = item->data;
+
+		App->renderer->DrawCircle(METERS_TO_PIXELS(pBody->ax), METERS_TO_PIXELS(pBody->ay), METERS_TO_PIXELS(pBody->radius), 255, 255, 255);
+	}
 
 }
