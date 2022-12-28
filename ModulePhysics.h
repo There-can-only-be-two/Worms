@@ -27,6 +27,8 @@
 #define GRAVITY 10
 #define DELTATIME 0.016666666666666
 
+#define AIR_DENSITY 1.293f
+
 enum bodytype
 {
 	RECTANGLE,
@@ -51,6 +53,13 @@ public:
 	// Force (total) applied to the ball
 	float fx = 0.0f;
 	float fy = 0.0f;
+
+	// Drag
+	float drag_fx = 0.0f;
+	float drag_fy = 0.0f;
+	float v_rel_x = 0.0f;
+	float v_rel_y = 0.0f;
+	float drag_surface = 0.3f;
 
 	// Mass
 	float mass;
@@ -110,6 +119,8 @@ public:
 
 	SDL_Rect CreateGround(float gx, float gy, float gw, float gh);
 	SDL_Rect CreateWater(float wx, float wy, float ww, float wh);
+
+	void Drag(PhysBody* phbody);
 
 	p2List<PhysBody*> listBodies;
 
