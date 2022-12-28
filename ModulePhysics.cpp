@@ -29,6 +29,10 @@ update_status ModulePhysics::PreUpdate()
 	//check for collisions in potential position
 	//calculate normal collision and bounce coef
 
+	dt = 1 / App->debug->desiredFPS;
+
+	LOG("DELTA TIME = %f", dt);
+
 	p2List_item<PhysBody*>* item;
 	PhysBody* pBody = NULL;
 
@@ -45,11 +49,11 @@ update_status ModulePhysics::PreUpdate()
 			{
 				pBody->ay = -20;
 			}
-			pBody->vx += pBody->ax * DELTATIME;
-			pBody->vy += pBody->ay * DELTATIME;
+			pBody->vx += pBody->ax * dt;
+			pBody->vy += pBody->ay * dt;
 
-			double potentialX = pBody->px + pBody->vx * DELTATIME;
-			double potentialY = pBody->py + pBody->vy * DELTATIME;
+			double potentialX = pBody->px + pBody->vx * dt;
+			double potentialY = pBody->py + pBody->vy * dt;
 
 			//check for collisions on potential pos
 
@@ -121,7 +125,6 @@ update_status ModulePhysics::PreUpdate()
 				circle->vx *= circle->coef_friction;
 				circle->vy *= circle->coef_restitution;
 			}
-
 		}
 	}
 

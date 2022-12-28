@@ -16,11 +16,6 @@ struct Object
 	{}
 };
 
-struct Position {
-	int x;
-	int y;
-};
-
 class ModulePlayer : public Module
 {
 public:
@@ -30,10 +25,12 @@ public:
 	bool Start();
 	update_status Update();
 	bool CleanUp();
+	void Shoot();
 
 public:
-
-	Position pos;
+	
 	PhysBody pBody;
+	bool isJumping;
+	uint weaponType;
 
 };
