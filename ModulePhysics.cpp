@@ -17,6 +17,8 @@ bool ModulePhysics::Start()
 {
 	LOG("Creating Physics 2D environment");
 	
+	
+
 	return true;
 }
 
@@ -54,91 +56,74 @@ update_status ModulePhysics::PreUpdate()
 			Circle* circle = new Circle();
 			circle->px = pBody->px;
 			circle->py = pBody->py;
+			
+			// Gravity force
+			float fgx = circle->mass * 0.0f;
+			float fgy = circle->mass * -GRAVITY; // Let's assume gravity is constant and downwards, like in real situations
+			circle->fx += fgx; circle->fy += fgy; // Add this force to ball's total force
 
 			if (!is_colliding_with_ground(*circle, *App->scene_intro->ground))
 			{
 				pBody->px = potentialX;
 				pBody->py = potentialY;
 			}
-			else if (pBody->label == MISSILE)
-			{
-				pBody->isStable = TRUE;
-			}
-			else if (pBody->label == GRENADE)
-			{
-				//calculate reflection angle
-
-				//
-				pBody->isStable = TRUE;
-			}
-      
-      /*
-      // TESTING WITH CODE, DO NOT ERASE
-			// Step #1: Compute forces
-			// ----------------------------------------------------------------------------------------
-
-			// Gravity force
-			float fgx = circle.mass * 0.0f;
-			float fgy = circle.mass * -10.0f; // Let's assume gravity is constant and downwards
-			circle.fx += fgx; circle.fy += fgy; // Add this force to ball's total force
 
 			// Aerodynamic Drag force (only when not in water)
-			if (!is_colliding_with_water(circle, water))
+			if (!is_colliding_with_water(*circle, *App->scene_intro->water))
 			{
 				float fdx = 0.0f; float fdy = 0.0f;
-				compute_aerodynamic_drag(fdx, fdy, circle, atm);
-				circle.fx += fdx; circle.fy += fdy; // Add this force to ball's total force
+				compute_aerodynamic_drag(fdx, fdy, *circle, *App->scene_intro->atm);
+				circle->fx += fdx; circle->fy += fdy; // Add this force to ball's total force
 			}
-			
+
 			// Hydrodynamic forces (only when in water)
-			if (is_colliding_with_water(circle, water))
+			if (is_colliding_with_water(*circle, *App->scene_intro->water))
 			{
 				// Hydrodynamic Drag force
 				float fhdx = 0.0f; float fhdy = 0.0f;
-				compute_hydrodynamic_drag(fhdx, fhdy, circle, water);
-				circle.fx += fhdx; circle.fy += fhdy; // Add this force to ball's total force
+				compute_hydrodynamic_drag(fhdx, fhdy, *circle, *App->scene_intro->water);
+				circle->fx += fhdx; circle->fy += fhdy; // Add this force to ball's total force
 
 				// Hydrodynamic Buoyancy force
 				float fhbx = 0.0f; float fhby = 0.0f;
-				compute_hydrodynamic_buoyancy(fhbx, fhby, circle, water);
-				circle.fx += fhbx; circle.fy += fhby; // Add this force to ball's total force
+				compute_hydrodynamic_buoyancy(fhbx, fhby, *circle, *App->scene_intro->water);
+				circle->fx += fhbx; circle->fy += fhby; // Add this force to ball's total force
 			}
 
-			// Step #2: 2nd Newton's Law
-			// ----------------------------------------------------------------------------------------
+			if (pBody->label == MISSILE)
+			{
+			pBody->isStable = TRUE;
+			}
+			if (pBody->label == GRENADE)
+			{
+			//calculate reflection angle
 
-			// SUM_Forces = mass * accel --> accel = SUM_Forces / mass
-			circle.ax = circle.fx / circle.mass;
-			circle.ay = circle.fy / circle.mass;
+			//
+			pBody->isStable = TRUE;
+			}
+      
+		
+		// TESTING WITH CODE, DO NOT ERASE
+			
+			integrator_velocity_verlet(*circle, dt);
 
-			// Step #3: Integrate --> from accel to new velocity & new position
-			// ----------------------------------------------------------------------------------------
-
-			// We will use the 2nd order "Velocity Verlet" method for integration.
-			integrator_velocity_verlet(circle, dt);
-
-			// Step #4: solve collisions
-			// ----------------------------------------------------------------------------------------
-
+			
 			// Solve collision between ball and ground
-			if (is_colliding_with_ground(circle, ground))
+			if (is_colliding_with_ground(*circle, *App->scene_intro->ground))
 			{
 				// TP ball to ground surface
-				circle.py = ground.y + ground.h + circle.radius;
+				circle->py = App->scene_intro->ground->y + App->scene_intro->ground->h + circle->radius;
 
 				// Elastic bounce with ground
-				circle.vy = -circle.vy;
+				circle->vy = -circle->vy;
 
 				// FUYM non-elasticity
-				circle.vx *= circle.coef_friction;
-				circle.vy *= circle.coef_restitution;
-			}*/
+				circle->vx *= circle->coef_friction;
+				circle->vy *= circle->coef_restitution;
+			}
 
 		}
 	}
-
-	
-
 
 	return UPDATE_CONTINUE;
 }
@@ -192,7 +177,7 @@ Ground* ModulePhysics::CreateGround(float gx, float gy, float gw, float gh)
 	return ground;
 }
 
-Ground* ModulePhysics::CreateWater(float wx, float wy, float ww, float wh)
+Water* ModulePhysics::CreateWater(float wx, float wy, float ww, float wh)
 {
 	Water* water = new Water();
 
@@ -201,6 +186,16 @@ Ground* ModulePhysics::CreateWater(float wx, float wy, float ww, float wh)
 	water->w = PIXELS_TO_METERS(ww); water->h = PIXELS_TO_METERS(wh);
 
 	return water;
+}
+
+Atmosphere* ModulePhysics::CreateAtmosphere()
+{
+	Atmosphere* atm = new Atmosphere();
+	atm->windx = 10.0f; // [m/s]
+	atm->windy = 5.0f; // [m/s]
+	atm->density = 1.0f; // [kg/m^3]
+
+	return atm;
 }
 
 // Compute modulus of a vector
