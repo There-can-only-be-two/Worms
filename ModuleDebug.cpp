@@ -165,6 +165,13 @@ void ModuleDebug::DrawDebug()
 
 			string = std::string("PBODY.PY = ") + std::to_string(pBody->py);
 			App->fonts->BlitText(debugX + 16, debugY + 320, fontId, string.c_str());
+
+
+			string = std::string("PLAYER.PX = ") + std::to_string(App->player->pBody.px);
+			App->fonts->BlitText(debugX + 16, debugY + 360, fontId, string.c_str());
+
+			string = std::string("PLAYER.PY = ") + std::to_string(App->player->pBody.py);
+			App->fonts->BlitText(debugX + 16, debugY + 380, fontId, string.c_str());
 		}
 
 
@@ -188,5 +195,4 @@ void ModuleDebug::DrawPhysics()
 
 		App->renderer->DrawCircle(METERS_TO_PIXELS(pBody->px), METERS_TO_PIXELS(pBody->py), METERS_TO_PIXELS(pBody->radius), 255, 255, 255);
 	}
-
 }

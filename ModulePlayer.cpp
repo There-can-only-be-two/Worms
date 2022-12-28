@@ -11,21 +11,21 @@ ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, s
 ModulePlayer::~ModulePlayer()
 {}
 
-void ModulePlayer::Shoot() {
+void ModulePlayer::Shoot()
+{
+	PhysBody* bod = new PhysBody();
 
-		PhysBody* bod = new PhysBody();
+	bod->ax = 0;
+	bod->ay = 0;
 
-		bod->ax = 0;
-		bod->ay = 0;
+	bod->vx = 0;
+	bod->vy = 0;
 
-		bod->vx = 0;
-		bod->vy = 0;
+	bod->px = pBody.px;
+	bod->py = pBody.py;
 
-		bod->px = pBody.px;
-		bod->py = pBody.py;
-
-		bod->isAlive = true;
-		bod->isStable = false;
+	bod->isAlive = true;
+	bod->isStable = false;
 
 	switch (weaponType) {
 	case 0:
@@ -113,6 +113,3 @@ update_status ModulePlayer::Update()
 
 	return UPDATE_CONTINUE;
 }
-
-
-
