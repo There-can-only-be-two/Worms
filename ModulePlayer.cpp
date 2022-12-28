@@ -16,7 +16,7 @@ bool ModulePlayer::Start()
 {
 	isJumping = false;
 	pBody.px = PIXELS_TO_METERS(100);
-	pBody.py = PIXELS_TO_METERS(100);
+	pBody.py = PIXELS_TO_METERS(400);
 	pBody.vx = 6;
 	pBody.vy = 0;
 	pBody.ax = 0;
