@@ -79,6 +79,22 @@ bool ModulePhysics::CleanUp()
 	return true;
 }
 
+void ModulePhysics::Drag(PhysBody* phbody)
+{
+	float rel_v_modul, drag_modul;
+
+	phbody->v_rel_x = atm.windx - phbody->vx;
+	phbody->v_rel_y = atm.windy - phbody->vy;
+
+	rel_v_modul = sqrt((phbody->v_rel_x * phbody->v_rel_x) + (phbody->v_rel_y * phbody->v_rel_y));
+	
+	drag_modul = 0.5f * AIR_DENSITY * rel_v_modul * rel_v_modul * phbody->drag_surface *phbody->cd;
+
+	phbody->drag_fx = drag_modul * phbody->v_rel_x;
+	phbody->drag_fy = drag_modul * phbody->v_rel_y;
+	
+}
+
 SDL_Rect ModulePhysics::CreateGround(float gx, float gy, float gw, float gh)
 {
 	//creating dynamically allocated object on function scope???
