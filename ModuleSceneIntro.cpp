@@ -20,8 +20,8 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
-	/*SDL_Rect ground = App->physics->CreateGround(0, 300, 700, 100);
-	App->renderer->DrawQuad(ground, 100, 100, 100, 100);*/
+	ground = App->physics->CreateGround(0, 500, 1200, 100);
+
 
 	return ret;
 }
@@ -37,10 +37,6 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	//Create ground - ON UPDATE????
-	SDL_Rect ground = App->physics->CreateGround(0, 500, 1200, 100);
-	App->renderer->DrawQuad(ground, 116, 190, 227, 64);
-	
 	//TESTING, DO NOT DELETE
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
@@ -58,6 +54,7 @@ update_status ModuleSceneIntro::Update()
 		bod->isAlive = true;
 		bod->isStable = false;
 
+		bod->label = GRENADE;
 		App->physics->listBodies.add(bod);
 	}
 
@@ -67,6 +64,9 @@ update_status ModuleSceneIntro::Update()
 // PostUpdate: draw fonts
 update_status ModuleSceneIntro::PostUpdate()
 {
+
+	SDL_Rect gRect = { METERS_TO_PIXELS(ground->x), METERS_TO_PIXELS(ground->y), METERS_TO_PIXELS(ground->w), METERS_TO_PIXELS(ground->h) };
+	App->renderer->DrawQuad(gRect, 101, 67, 33, 128);
 
 	return UPDATE_CONTINUE;
 }

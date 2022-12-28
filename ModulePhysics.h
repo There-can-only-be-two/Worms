@@ -29,10 +29,17 @@
 
 #define AIR_DENSITY 1.293f
 
-enum bodytype
+enum Bodytype
 {
 	RECTANGLE,
-	CIRCLE
+	CIRCLE,	
+};
+
+enum Label
+{
+	PLAYER,
+	GRENADE,
+	MISSILE
 };
 
 // Class: Atmosphere -> From the example
@@ -45,7 +52,8 @@ public:
 
 	bool isAlive;
 	bool isStable;
-	bodytype type;
+	Bodytype type;
+	Label label;
 
 	//THIS IS FOR TESTING DO NOT DELETE
 	double radius = 1.0f;
@@ -117,8 +125,8 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
-	SDL_Rect CreateGround(float gx, float gy, float gw, float gh);
-	SDL_Rect CreateWater(float wx, float wy, float ww, float wh);
+	Ground* CreateGround(float gx, float gy, float gw, float gh);
+	Ground* CreateWater(float wx, float wy, float ww, float wh);
 
 	void Drag(PhysBody* phbody);
 

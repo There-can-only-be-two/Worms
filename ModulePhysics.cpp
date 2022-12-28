@@ -39,6 +39,10 @@ update_status ModulePhysics::PreUpdate()
 			//0.016 time for 1frame asuming 60Hz
 			pBody->ay = GRAVITY;
 
+			if (pBody->label == PLAYER )
+			{
+				pBody->ay = -20;
+			}
 			pBody->vx += pBody->ax * DELTATIME;
 			pBody->vy += pBody->ay * DELTATIME;
 
@@ -49,11 +53,23 @@ update_status ModulePhysics::PreUpdate()
 			Circle* circle = new Circle();
 			circle->px = pBody->px;
 			circle->py = pBody->py;
-			//is_colliding_with_ground(circle&, ground);
 
-			pBody->px = potentialX;
-			pBody->py = potentialY;
+			if (!is_colliding_with_ground(*circle, *App->scene_intro->ground))
+			{
+				pBody->px = potentialX;
+				pBody->py = potentialY;
+			}
+			else if (pBody->label == MISSILE)
+			{
+				pBody->isStable = TRUE;
+			}
+			else if (pBody->label == GRENADE)
+			{
+				//calculate reflection angle
 
+				//
+				pBody->isStable = TRUE;
+			}
 		}
 	}
 	return UPDATE_CONTINUE;
@@ -95,7 +111,7 @@ void ModulePhysics::Drag(PhysBody* phbody)
 	
 }
 
-SDL_Rect ModulePhysics::CreateGround(float gx, float gy, float gw, float gh)
+Ground* ModulePhysics::CreateGround(float gx, float gy, float gw, float gh)
 {
 	//creating dynamically allocated object on function scope???
 	//FIX
@@ -105,12 +121,10 @@ SDL_Rect ModulePhysics::CreateGround(float gx, float gy, float gw, float gh)
 
 	ground->w = PIXELS_TO_METERS(gw); ground->h = PIXELS_TO_METERS(gh);
 
-	SDL_Rect groundRect = {gx, gy, gw, gh};
-
-	return groundRect;
+	return ground;
 }
 
-SDL_Rect ModulePhysics::CreateWater(float wx, float wy, float ww, float wh)
+Ground* ModulePhysics::CreateWater(float wx, float wy, float ww, float wh)
 {
 	Water* water = new Water();
 
@@ -118,9 +132,7 @@ SDL_Rect ModulePhysics::CreateWater(float wx, float wy, float ww, float wh)
 
 	water->w = PIXELS_TO_METERS(ww); water->h = PIXELS_TO_METERS(wh);
 
-	SDL_Rect waterRect = { wx, wy, ww, wh };
-
-	return waterRect;
+	return water;
 }
 
 // Compute modulus of a vector

@@ -41,6 +41,7 @@ public:
 	bool CleanUp();
 
 public:
+	Ground* ground;
 
 	SDL_Texture* graphics;
 
