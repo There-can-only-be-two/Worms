@@ -27,10 +27,19 @@
 #define GRAVITY 10
 #define DELTATIME 0.016666666666666
 
-enum bodytype
+#define AIR_DENSITY 1.293f
+
+enum Bodytype
 {
 	RECTANGLE,
-	CIRCLE
+	CIRCLE,	
+};
+
+enum Label
+{
+	PLAYER,
+	GRENADE,
+	MISSILE
 };
 
 // Class: Atmosphere -> From the example
@@ -43,7 +52,8 @@ public:
 
 	bool isAlive;
 	bool isStable;
-	bodytype type;
+	Bodytype type;
+	Label label;
 
 	//THIS IS FOR TESTING DO NOT DELETE
 	double radius = 1.0f;
@@ -51,6 +61,13 @@ public:
 	// Force (total) applied to the ball
 	float fx = 0.0f;
 	float fy = 0.0f;
+
+	// Drag
+	float drag_fx = 0.0f;
+	float drag_fy = 0.0f;
+	float v_rel_x = 0.0f;
+	float v_rel_y = 0.0f;
+	float drag_surface = 0.3f;
 
 	// Mass
 	float mass;
@@ -108,8 +125,10 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
-	SDL_Rect CreateGround(float gx, float gy, float gw, float gh);
-	SDL_Rect CreateWater(float wx, float wy, float ww, float wh);
+	Ground* CreateGround(float gx, float gy, float gw, float gh);
+	Ground* CreateWater(float wx, float wy, float ww, float wh);
+
+	void Drag(PhysBody* phbody);
 
 	p2List<PhysBody*> listBodies;
 

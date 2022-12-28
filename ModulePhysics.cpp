@@ -39,6 +39,10 @@ update_status ModulePhysics::PreUpdate()
 			//0.016 time for 1frame asuming 60Hz
 			pBody->ay = GRAVITY;
 
+			if (pBody->label == PLAYER )
+			{
+				pBody->ay = -20;
+			}
 			pBody->vx += pBody->ax * DELTATIME;
 			pBody->vy += pBody->ay * DELTATIME;
 
@@ -46,16 +50,30 @@ update_status ModulePhysics::PreUpdate()
 			double potentialY = pBody->py + pBody->vy * DELTATIME;
 
 			//check for collisions on potential pos
-			Circle circle = Circle();
-			circle.px = pBody->px;
-			circle.py = pBody->py;
-			//is_colliding_with_ground(circle&, ground);
 
-			pBody->px = potentialX;
-			pBody->py = potentialY;
+			Circle* circle = new Circle();
+			circle->px = pBody->px;
+			circle->py = pBody->py;
 
+			if (!is_colliding_with_ground(*circle, *App->scene_intro->ground))
+			{
+				pBody->px = potentialX;
+				pBody->py = potentialY;
+			}
+			else if (pBody->label == MISSILE)
+			{
+				pBody->isStable = TRUE;
+			}
+			else if (pBody->label == GRENADE)
+			{
+				//calculate reflection angle
 
-			// TESTING WITH CODE, DO NOT ERASE
+				//
+				pBody->isStable = TRUE;
+			}
+      
+      /*
+      // TESTING WITH CODE, DO NOT ERASE
 			// Step #1: Compute forces
 			// ----------------------------------------------------------------------------------------
 
@@ -114,7 +132,7 @@ update_status ModulePhysics::PreUpdate()
 				// FUYM non-elasticity
 				circle.vx *= circle.coef_friction;
 				circle.vy *= circle.coef_restitution;
-			}
+			}*/
 
 		}
 	}
@@ -145,7 +163,23 @@ bool ModulePhysics::CleanUp()
 	return true;
 }
 
-SDL_Rect ModulePhysics::CreateGround(float gx, float gy, float gw, float gh)
+void ModulePhysics::Drag(PhysBody* phbody)
+{
+	float rel_v_modul, drag_modul;
+
+	phbody->v_rel_x = atm.windx - phbody->vx;
+	phbody->v_rel_y = atm.windy - phbody->vy;
+
+	rel_v_modul = sqrt((phbody->v_rel_x * phbody->v_rel_x) + (phbody->v_rel_y * phbody->v_rel_y));
+	
+	drag_modul = 0.5f * AIR_DENSITY * rel_v_modul * rel_v_modul * phbody->drag_surface *phbody->cd;
+
+	phbody->drag_fx = drag_modul * phbody->v_rel_x;
+	phbody->drag_fy = drag_modul * phbody->v_rel_y;
+	
+}
+
+Ground* ModulePhysics::CreateGround(float gx, float gy, float gw, float gh)
 {
 	//creating dynamically allocated object on function scope???
 	//FIX
@@ -155,12 +189,10 @@ SDL_Rect ModulePhysics::CreateGround(float gx, float gy, float gw, float gh)
 
 	ground->w = PIXELS_TO_METERS(gw); ground->h = PIXELS_TO_METERS(gh);
 
-	SDL_Rect groundRect = {gx, gy, gw, gh};
-
-	return groundRect;
+	return ground;
 }
 
-SDL_Rect ModulePhysics::CreateWater(float wx, float wy, float ww, float wh)
+Ground* ModulePhysics::CreateWater(float wx, float wy, float ww, float wh)
 {
 	Water* water = new Water();
 
@@ -168,9 +200,7 @@ SDL_Rect ModulePhysics::CreateWater(float wx, float wy, float ww, float wh)
 
 	water->w = PIXELS_TO_METERS(ww); water->h = PIXELS_TO_METERS(wh);
 
-	SDL_Rect waterRect = { wx, wy, ww, wh };
-
-	return waterRect;
+	return water;
 }
 
 // Compute modulus of a vector
