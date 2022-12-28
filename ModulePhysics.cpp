@@ -67,8 +67,6 @@ update_status ModulePhysics::PreUpdate()
 			else if (pBody->label == GRENADE)
 			{
 				//calculate reflection angle
-
-				//
 				pBody->isStable = TRUE;
 			}
       

@@ -45,9 +45,11 @@ void ModulePlayer::Shoot()
 bool ModulePlayer::Start()
 {
 	isJumping = false;
-	pBody.px = 100;
-	pBody.py = 100;
-	pBody.vx = 300;
+	pBody.px = PIXELS_TO_METERS(100);
+	pBody.py = PIXELS_TO_METERS(100);
+	pBody.vx = 6;
+	pBody.vy = 0;
+	pBody.ax = 0;
 	pBody.ay = GRAVITY*60;
 	weaponType = 0;
 	shootAngle = 180;
@@ -70,11 +72,11 @@ update_status ModulePlayer::Update()
 
 	//Left
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-		pBody.px -= pBody.vx*DELTATIME;
+		pBody.px -= pBody.vx * DELTATIME;
 	}
 	//Right
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-		pBody.px += pBody.vx*DELTATIME;
+		pBody.px += pBody.vx * DELTATIME;
 	}
 	//Jump
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
@@ -104,11 +106,11 @@ update_status ModulePlayer::Update()
 		if (shootForce > 0) { shootForce -= 1; }
 	}
 	//Shooting
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) {
 		Shoot();
 	}
 
-	App->renderer->DrawQuad({ (int)pBody.px, (int)pBody.py, 20, 30 }, 200, 100, 130, 255, true);
+	App->renderer->DrawQuad({ METERS_TO_PIXELS(pBody.px), METERS_TO_PIXELS(pBody.py), 20, 30 }, 200, 100, 130, 255, true);
 	
 
 	return UPDATE_CONTINUE;
