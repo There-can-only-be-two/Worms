@@ -34,6 +34,6 @@ public:
 	microseconds timePerCycle;
 	microseconds elapsedFrame;
 	int desiredFPSmic;
-	int desiredFPS = 60;
+	float desiredFPS = 60.0f;
 
 };

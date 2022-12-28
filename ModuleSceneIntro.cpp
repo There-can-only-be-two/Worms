@@ -21,8 +21,14 @@ bool ModuleSceneIntro::Start()
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
 	ground = App->physics->CreateGround(0, 500, 1200, 100);
+	water = App->physics->CreateWater(0, 200, 1200, 100);
+	atm = App->physics->CreateAtmosphere();
+	
+	water->density = 50.0f; // [kg/m^3]
+	water->vx = -1.0f; // [m/s]
+	water->vy = 0.0f; // [m/s]
 
-
+	
 	return ret;
 }
 
@@ -73,7 +79,10 @@ update_status ModuleSceneIntro::PostUpdate()
 {
 
 	SDL_Rect gRect = { METERS_TO_PIXELS(ground->x), METERS_TO_PIXELS(ground->y), METERS_TO_PIXELS(ground->w), METERS_TO_PIXELS(ground->h) };
+	SDL_Rect wRect = { METERS_TO_PIXELS(water->x), METERS_TO_PIXELS(water->y), METERS_TO_PIXELS(water->w), METERS_TO_PIXELS(water->h) };
+
 	App->renderer->DrawQuad(gRect, 101, 67, 33, 128);
+	App->renderer->DrawQuad(wRect, 176, 224, 230, 128);
 
 	return UPDATE_CONTINUE;
 }

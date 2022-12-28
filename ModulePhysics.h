@@ -25,7 +25,7 @@
 #define RADTODEG 57.295779513082320876f
 
 #define GRAVITY 10
-#define DELTATIME 0.016666666666666
+#define DELTATIME 0.016666666666666 
 
 #define AIR_DENSITY 1.293f
 
@@ -46,6 +46,7 @@ enum Label
 class PhysBody
 {
 public:
+
 	double px = 0.0f, py = 0.0f;
 	double vx = 0.0f, vy = 0.0f;
 	double ax = 0.0f, ay = 0.0f;
@@ -77,6 +78,10 @@ public:
 	float cl; // Aerodynamic Lift coefficient
 	float cd; // Aerodynamic Drag coefficient
 	float b; // Hydrodynamic Drag coefficient
+
+	// Coefficients of friction & restitution (for bounces)
+	float coef_friction;
+	float coef_restitution;
 };
 
 class Circle : public PhysBody {
@@ -126,7 +131,8 @@ public:
 	bool CleanUp();
 
 	Ground* CreateGround(float gx, float gy, float gw, float gh);
-	Ground* CreateWater(float wx, float wy, float ww, float wh);
+	Water* CreateWater(float wx, float wy, float ww, float wh);
+	Atmosphere* CreateAtmosphere();
 
 	void Drag(PhysBody* phbody);
 
@@ -156,6 +162,7 @@ public:
 	// Detect collision between circle and rectange
 	bool check_collision_circle_rectangle(float cx, float cy, float cr, float rx, float ry, float rw, float rh);
 private:
+
 	Atmosphere atm;
 	Ground ground;
 	Water water;
