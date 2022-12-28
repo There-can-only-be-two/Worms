@@ -11,36 +11,6 @@ ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, s
 ModulePlayer::~ModulePlayer()
 {}
 
-void ModulePlayer::Shoot()
-{
-	PhysBody* bod = new PhysBody();
-
-	bod->ax = 0;
-	bod->ay = 0;
-
-	bod->vx = 0;
-	bod->vy = 0;
-
-	bod->px = pBody.px;
-	bod->py = pBody.py;
-
-	bod->isAlive = true;
-	bod->isStable = false;
-
-	switch (weaponType) {
-	case 0:
-		bod->label = GRENADE;
-		break;
-	case 1:
-		bod->label = MISSILE;
-		break;
-	default:
-		break;
-	}
-
-	App->physics->listBodies.add(bod);
-}
-
 // Load assets
 bool ModulePlayer::Start()
 {
@@ -52,8 +22,8 @@ bool ModulePlayer::Start()
 	pBody.ax = 0;
 	pBody.ay = GRAVITY*60;
 	weaponType = 0;
-	shootAngle = 180;
-	shootForce = 50;
+	shootAngle = 90;
+	shootForce = 10;
 	LOG("Loading player");
 	return true;
 }
@@ -92,10 +62,10 @@ update_status ModulePlayer::Update()
 		weaponType = 1;
 	}
 	//Angle
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN) {
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) {
 		if (shootAngle < 180) { shootAngle += 1; }
 	}
-	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN) {
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) {
 		if (shootAngle > 0) { shootAngle -= 1; }
 	}
 	//Force
@@ -106,7 +76,7 @@ update_status ModulePlayer::Update()
 		if (shootForce > 0) { shootForce -= 1; }
 	}
 	//Shooting
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) {
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 		Shoot();
 	}
 
@@ -114,4 +84,34 @@ update_status ModulePlayer::Update()
 	
 
 	return UPDATE_CONTINUE;
+}
+
+void ModulePlayer::Shoot()
+{
+	PhysBody* bod = new PhysBody();
+
+	bod->ax = 0;
+	bod->ay = 0;
+
+	bod->vx = shootForce * cos(shootAngle * DEGTORAD);
+	bod->vy = -shootForce * sin(shootAngle * DEGTORAD);
+
+	bod->px = pBody.px;
+	bod->py = pBody.py;
+
+	bod->isAlive = true;
+	bod->isStable = false;
+
+	switch (weaponType) {
+	case 0:
+		bod->label = GRENADE;
+		break;
+	case 1:
+		bod->label = MISSILE;
+		break;
+	default:
+		break;
+	}
+
+	App->physics->listBodies.add(bod);
 }

@@ -186,6 +186,14 @@ void ModuleDebug::DrawDebug()
 
 void ModuleDebug::DrawPhysics()
 {
+	//Shooting angle
+	int cosinus = 100 * cos(App->player->shootAngle * DEGTORAD);
+	int sinus = 100 * sin(App->player->shootAngle * DEGTORAD);
+	int playerX = App->player->pBody.px;
+	int playerY = App->player->pBody.py;
+	App->renderer->DrawLine(playerX, playerY, playerX + cosinus, playerY - sinus, 255, 165, 0, 255, false);
+
+	//Physics bodies
 	p2List_item<PhysBody*>* item;
 	PhysBody* pBody = NULL;
 
