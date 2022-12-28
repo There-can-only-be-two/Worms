@@ -32,5 +32,7 @@ public:
 	PhysBody pBody;
 	bool isJumping;
 	uint weaponType;
+	int shootAngle;
+	int shootForce;
 
 };
