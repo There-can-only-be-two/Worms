@@ -160,4 +160,6 @@ private:
 	Ground ground;
 	Water water;
 	bool debug;
+	float dt = 1.0 / 60.0;
+
 };
