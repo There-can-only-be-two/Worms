@@ -11,11 +11,19 @@ ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, s
 ModulePlayer::~ModulePlayer()
 {}
 
+void ModulePlayer::Shoot() {
+
+}
+
 // Load assets
 bool ModulePlayer::Start()
 {
-	pos.x = 100;
-	pos.y = 100;
+	isJumping = false;
+	pBody.px = 100;
+	pBody.py = 100;
+	pBody.vx = 300;
+	pBody.ay = GRAVITY*60;
+	weaponType = 0;
 	LOG("Loading player");
 	return true;
 }
@@ -31,24 +39,39 @@ bool ModulePlayer::CleanUp()
 // Update: draw background
 update_status ModulePlayer::Update()
 {
+
 	//Left
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-		pos.x -= 5;
+		pBody.px -= pBody.vx*DELTATIME;
 	}
 	//Right
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-		pos.x += 5;
+		pBody.px += pBody.vx*DELTATIME;
 	}
-	//Up
+	//Jump
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
+		isJumping = true;
+	}
+	//Weapon 1
+	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
+		LOG("Selected GRENADE");
+		weaponType = 0;
+	}
+	//Weapon 2
+	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) {
+		LOG("Selected ROCKET LAUNCHER");
+		weaponType = 1;
+	}
+	//Shooting
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+		switch (weaponType) {
+		case 1:
+
+		}
 
 	}
-	//Down
-	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
 
-	}
-
-	App->renderer->DrawQuad({ pos.x, pos.y, 20, 30 }, 200, 100, 130, 255, true);
+	App->renderer->DrawQuad({ (int)pBody.px, (int)pBody.py, 20, 30 }, 200, 100, 130, 255, true);
 	
 
 	return UPDATE_CONTINUE;
