@@ -23,6 +23,7 @@ bool ModuleDebug::Start()
 	drawDebug = true;
 	drawPhysics = true;
 	variables = true;
+	hideUI = false;
 
 	return true;
 }
@@ -60,7 +61,7 @@ update_status ModuleDebug::Update()
 
 		//U: Chnage UI
 		if (App->input->GetKey(SDL_SCANCODE_U) == KEY_DOWN)
-			changeUI = !changeUI;
+			hideUI = !hideUI;
 
 		if (App->input->GetKey(SDL_SCANCODE_V) == KEY_DOWN)
 			variables = !variables;
@@ -108,20 +109,20 @@ void ModuleDebug::DrawDebug()
 	App->fonts->BlitText(debugX, debugY + 80, fontId, string.c_str());
 
 	//Gravity
-	//string = std::string("#GRAVITY.Y  (S-/W+)  ") + std::to_string((int)-App->physics->gravity);
-	//App->fonts->BlitText(debugX, debugY + 100, fontId, string.c_str());
+	string = std::string("#GRAVITY.Y  (S-/W+)  ") + std::to_string(99999);
+	App->fonts->BlitText(debugX, debugY + 100, fontId, string.c_str());
 
 	////Bounce coef
-	//string = std::string("#BOUNCE COEF(A-/D+)  ") + std::to_string(App->scene_intro->ball->intensity);
-	//App->fonts->BlitText(debugX, debugY + 120, fontId, string.c_str());
+	string = std::string("#BOUNCE COEF(A-/D+)  ") + std::to_string(99999);
+	App->fonts->BlitText(debugX, debugY + 120, fontId, string.c_str());
 
 
 
-	//Change UI
-	if (changeUI)
-		App->fonts->BlitText(debugX, debugY + 160, fontId, "#CHANGE UI  (U)    ON");
+	//Hide UI
+	if (hideUI)
+		App->fonts->BlitText(debugX, debugY + 160, fontId, "#HIDE UI    (U)    ON");
 	else
-		App->fonts->BlitText(debugX, debugY + 160, fontId, "#CHANGE UI  (U)    OFF");
+		App->fonts->BlitText(debugX, debugY + 160, fontId, "#HIDE UI    (U)    OFF");
 
 	//Mute SFX
 	if (sfxON)
