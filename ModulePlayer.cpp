@@ -65,7 +65,8 @@ update_status ModulePlayer::Update()
 	//Shooting
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 		switch (weaponType) {
-		case 1:
+		
+		//case 1:
 
 		}
 
