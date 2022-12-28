@@ -78,6 +78,10 @@ public:
 	float cl; // Aerodynamic Lift coefficient
 	float cd; // Aerodynamic Drag coefficient
 	float b; // Hydrodynamic Drag coefficient
+
+	// Coefficients of friction & restitution (for bounces)
+	float coef_friction;
+	float coef_restitution;
 };
 
 class Circle : public PhysBody {
@@ -127,7 +131,8 @@ public:
 	bool CleanUp();
 
 	Ground* CreateGround(float gx, float gy, float gw, float gh);
-	Ground* CreateWater(float wx, float wy, float ww, float wh);
+	Water* CreateWater(float wx, float wy, float ww, float wh);
+	Atmosphere* CreateAtmosphere();
 
 	void Drag(PhysBody* phbody);
 

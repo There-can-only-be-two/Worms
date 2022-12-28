@@ -42,6 +42,8 @@ public:
 
 public:
 	Ground* ground;
+	Water* water;
+	Atmosphere* atm;
 
 	SDL_Texture* graphics;
 
