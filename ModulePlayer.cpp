@@ -23,7 +23,7 @@ bool ModulePlayer::Start()
 	pBody->py = PIXELS_TO_METERS(100);
 	pBody->vx = 6;
 	pBody->vy = 0;
-	App->physics->listBodies.add(pBody);
+	//App->physics->listBodies.add(pBody);
 	weaponType = 0;
 	shootAngle = 90;
 	shootForce = 10;
