@@ -192,6 +192,8 @@ Water* ModulePhysics::CreateWater(float wx, float wy, float ww, float wh)
 	water->w = PIXELS_TO_METERS(ww); water->h = PIXELS_TO_METERS(wh);
 	
 	water->density = 50.0f; // [kg/m^3]
+	water->vx = -1.0f; // [m/s]
+	water->vy = 0.0f; // [m/s]
 
 	return water;
 }

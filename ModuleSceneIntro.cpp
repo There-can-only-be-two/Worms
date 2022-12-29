@@ -67,9 +67,17 @@ update_status ModuleSceneIntro::Update()
 		bod->isAlive = true;
 		bod->isStable = false;
 
-		bod->mass = 10.0f;
-		
+		bod->mass = 10.0f; // [kg]
+		bod->surface = 1.0f; // [m^2]
+		bod->radius = 0.5f; // [m]
+		bod->cd = 0.4f; // [-]
+		bod->cl = 1.2f; // [-]
+		bod->b = 10.0f; // [...]
+		bod->coef_friction = 0.9f; // [-]
+		bod->coef_restitution = 0.8f; // [-]
+
 		bod->label = GRENADE;
+
 		App->physics->listBodies.add(bod);
 	}
 
