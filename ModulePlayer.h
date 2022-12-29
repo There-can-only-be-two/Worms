@@ -30,9 +30,10 @@ public:
 public:
 	
 	Circle* pBody;
-	bool isJumping;
+	uint isJumping;
 	uint weaponType;
 	int shootAngle;
 	int shootForce;
+	int speed;
 
 };

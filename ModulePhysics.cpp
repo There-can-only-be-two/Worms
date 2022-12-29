@@ -42,8 +42,6 @@ update_status ModulePhysics::PreUpdate()
 
 		if (!pBody->isStable)
 		{
-			//0.016 time for 1frame asuming 60Hz
-			pBody->ay = 0;
 
 			if (pBody->label == PLAYER)
 			{
@@ -56,19 +54,20 @@ update_status ModulePhysics::PreUpdate()
 			double potentialY = pBody->py + pBody->vy * DELTATIME;*/
 
 			pBody->fx = pBody->fy = 0.0f;
-			pBody->ax = pBody->ay = 0.0f;
-			
+			pBody->ax = 0.0f;
+			pBody->ay = 0.0f;
+
 			// Aerodynamic Drag force (only when not in water)
 			if (!is_colliding_with_water(*pBody, *App->scene_intro->water))
 			{
 				//pBody->px = potentialX;
 				//pBody->py = potentialY;
-
-				float fdx = 0.0f; float fdy = 0.0f;
-				if (pBody->label != PLAYER) {
+				if (pBody->label == GRENADE) {
+					float fdx = 0.0f; float fdy = 0.0f;
 					compute_aerodynamic_drag(fdx, fdy, *pBody, *App->scene_intro->atm);
 					pBody->fx += fdx; pBody->fy += fdy; // Add this force to ball's total force
 				}
+				
 			}
 
 			else if (pBody->label == MISSILE)
@@ -87,6 +86,12 @@ update_status ModulePhysics::PreUpdate()
 			float fgx = 0.0f;
 			float fgy = pBody->mass * -GRAVITY; // Let's assume gravity is constant and downwards, like in real situations
 			pBody->fx += fgx; pBody->fy += fgy; // Add this force to ball's total force
+
+			if (pBody->label == PLAYER && App->player->isJumping > 0) {
+				pBody->fy += 100;
+				App->player->isJumping--;
+			}
+
 
 			// Hydrodynamic forces (only when in water)
 			if (is_colliding_with_water(*pBody, *App->scene_intro->water))

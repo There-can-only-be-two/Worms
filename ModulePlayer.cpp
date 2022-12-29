@@ -19,10 +19,11 @@ bool ModulePlayer::Start()
 	isJumping = false;
 	pBody->px = PIXELS_TO_METERS(600);
 	pBody->py = PIXELS_TO_METERS(400);
-	pBody->vx = 6;
+	pBody->vx = 0;
 	pBody->vy = 0;
 	pBody->ax = 0;
 	pBody->ay = 0;
+	speed = 6;
 
 	pBody->isAlive = true;
 	pBody->isStable = false;
@@ -39,6 +40,7 @@ bool ModulePlayer::Start()
 	weaponType = 0;
 	shootAngle = 90;
 	shootForce = 10;
+	isJumping = 0;
 
 	App->physics->listBodies.add(pBody);
 
@@ -60,15 +62,15 @@ update_status ModulePlayer::Update()
 
 	//Left
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-		pBody->px -= pBody->vx * DELTATIME;
+		pBody->px -= speed * DELTATIME;
 	}
 	//Right
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-		pBody->px += pBody->vx * DELTATIME;
+		pBody->px += speed * DELTATIME;
 	}
 	//Jump
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
-		isJumping = true;
+		isJumping = 8;
 	}
 	//Weapons
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
