@@ -18,7 +18,6 @@ bool ModulePlayer::Start()
 	pBody->label = PLAYER;
 	pBody->isStable = false;
 	isJumping = false;
-
 	pBody->px = PIXELS_TO_METERS(100);
 	pBody->py = PIXELS_TO_METERS(100);
 	pBody->vx = 6;
