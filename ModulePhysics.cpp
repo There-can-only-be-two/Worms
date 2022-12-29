@@ -109,7 +109,7 @@ update_status ModulePhysics::PreUpdate()
 			if (is_colliding_with_ground(*pBody, *App->scene_intro->ground))
 			{
 				// TP ball to ground surface
-				pBody->py = App->scene_intro->ground->y - App->scene_intro->ground->h - pBody->radius*0.5;
+				pBody->py = App->scene_intro->ground->y - pBody->radius;
 
 				// Elastic bounce with ground
 				pBody->vy = -pBody->vy;

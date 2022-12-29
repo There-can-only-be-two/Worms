@@ -79,7 +79,7 @@ update_status ModulePlayer::Update()
 		if (shootForce > 0) { shootForce -= 1; }
 	}
 	//Shooting
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) {
 		Shoot();
 	}
 	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
@@ -116,7 +116,7 @@ void ModulePlayer::Shoot()
 	bod->cl = 1.2f; // [-]
 	bod->b = 10.0f; // [...]
 	bod->coef_friction = 0.9f; // [-]
-	bod->coef_restitution = 0.2f; // [-]
+	bod->coef_restitution = 0.7f; // [-]
 
 	bod->label = GRENADE;
 
