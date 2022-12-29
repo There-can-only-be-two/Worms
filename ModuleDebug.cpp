@@ -168,10 +168,10 @@ void ModuleDebug::DrawDebug()
 			App->fonts->BlitText(debugX + 16, debugY + 320, fontId, string.c_str());
 
 
-			string = std::string("PLAYER.PX = ") + std::to_string(App->player->pBody.px);
+			string = std::string("PLAYER.PX = ") + std::to_string(App->player->pBody->px);
 			App->fonts->BlitText(debugX + 16, debugY + 360, fontId, string.c_str());
 
-			string = std::string("PLAYER.PY = ") + std::to_string(App->player->pBody.py);
+			string = std::string("PLAYER.PY = ") + std::to_string(App->player->pBody->py);
 			App->fonts->BlitText(debugX + 16, debugY + 380, fontId, string.c_str());
 		}
 
@@ -190,8 +190,8 @@ void ModuleDebug::DrawPhysics()
 	//Shooting angle
 	double cosinus = METERS_TO_PIXELS(100 * cos(App->player->shootAngle * DEGTORAD));
 	double sinus = METERS_TO_PIXELS(100 * sin(App->player->shootAngle * DEGTORAD));
-	double playerX = METERS_TO_PIXELS(App->player->pBody.px);
-	double playerY = METERS_TO_PIXELS(App->player->pBody.py);
+	double playerX = METERS_TO_PIXELS(App->player->pBody->px);
+	double playerY = METERS_TO_PIXELS(App->player->pBody->py);
 	App->renderer->DrawLine(playerX, playerY, playerX + cosinus, playerY - sinus, 255, 165, 0, 255, false);
 
   //Draw physBodies
