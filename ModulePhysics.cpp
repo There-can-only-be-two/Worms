@@ -33,8 +33,8 @@ update_status ModulePhysics::PreUpdate()
 
 	LOG("DELTA TIME = %f", dt);
 
-	p2List_item<PhysBody*>* item;
-	PhysBody* pBody = NULL;
+	p2List_item<Circle*>* item;
+	Circle* pBody = NULL;
 
 	for (item = App->physics->listBodies.getFirst(); item != NULL; item = item->next)
 	{
@@ -43,89 +43,88 @@ update_status ModulePhysics::PreUpdate()
 		if (!pBody->isStable)
 		{
 			//0.016 time for 1frame asuming 60Hz
-			pBody->ay = GRAVITY;
+			//pBody->ay = 0.0;
 
-			if (pBody->label == PLAYER )
+			if (pBody->label == PLAYER)
 			{
 				pBody->ay = -20;
 			}
-			pBody->vx += pBody->ax * dt;
-			pBody->vy += pBody->ay * dt;
+			/*pBody->vx += pBody->ax * DELTATIME;
+			pBody->vy += pBody->ay * DELTATIME;
 
-			double potentialX = pBody->px + pBody->vx * dt;
-			double potentialY = pBody->py + pBody->vy * dt;
+			double potentialX = pBody->px + pBody->vx * DELTATIME;
+			double potentialY = pBody->py + pBody->vy * DELTATIME;*/
 
 			//check for collisions on potential pos
-
 			Circle* circle = new Circle();
 			circle->px = pBody->px;
 			circle->py = pBody->py;
-			
-			// Gravity force
-			float fgx = circle->mass * 0.0f;
-			float fgy = circle->mass * -GRAVITY; // Let's assume gravity is constant and downwards, like in real situations
-			circle->fx += fgx; circle->fy += fgy; // Add this force to ball's total force
-
-			if (!is_colliding_with_ground(*circle, *App->scene_intro->ground))
-			{
-				pBody->px = potentialX;
-				pBody->py = potentialY;
-			}
 
 			// Aerodynamic Drag force (only when not in water)
-			if (!is_colliding_with_water(*circle, *App->scene_intro->water))
+			if (!is_colliding_with_water(*pBody, *App->scene_intro->water))
 			{
+				/*pBody->px = potentialX;
+				pBody->py = potentialY;*/
+				
 				float fdx = 0.0f; float fdy = 0.0f;
-				compute_aerodynamic_drag(fdx, fdy, *circle, *App->scene_intro->atm);
-				circle->fx += fdx; circle->fy += fdy; // Add this force to ball's total force
+				compute_aerodynamic_drag(fdx, fdy, *pBody, *App->scene_intro->atm);
+				pBody->fx += fdx; pBody->fy += fdy; // Add this force to ball's total force
 			}
 
+			else if (pBody->label == MISSILE)
+			{
+				pBody->isStable = TRUE;
+			}
+			else if (pBody->label == GRENADE)
+			{
+				//calculate reflection angle
+				//
+				pBody->isStable = TRUE;
+			}
+
+
+			// Gravity force
+			float fgx = pBody->mass * 0.0f;
+			float fgy = pBody->mass * -GRAVITY; // Let's assume gravity is constant and downwards, like in real situations
+			pBody->fx += fgx; pBody->fy += fgy; // Add this force to ball's total force
+
 			// Hydrodynamic forces (only when in water)
-			if (is_colliding_with_water(*circle, *App->scene_intro->water))
+			if (is_colliding_with_water(*pBody, *App->scene_intro->water))
 			{
 				// Hydrodynamic Drag force
 				float fhdx = 0.0f; float fhdy = 0.0f;
-				compute_hydrodynamic_drag(fhdx, fhdy, *circle, *App->scene_intro->water);
-				circle->fx += fhdx; circle->fy += fhdy; // Add this force to ball's total force
+				compute_hydrodynamic_drag(fhdx, fhdy, *pBody, *App->scene_intro->water);
+				pBody->fx += fhdx; pBody->fy += fhdy; // Add this force to ball's total force
 
 				// Hydrodynamic Buoyancy force
 				float fhbx = 0.0f; float fhby = 0.0f;
-				compute_hydrodynamic_buoyancy(fhbx, fhby, *circle, *App->scene_intro->water);
-				circle->fx += fhbx; circle->fy += fhby; // Add this force to ball's total force
+				compute_hydrodynamic_buoyancy(fhbx, fhby, *pBody, *App->scene_intro->water);
+				pBody->fx += fhbx; pBody->fy += fhby; // Add this force to ball's total force
 			}
-
-			if (pBody->label == MISSILE)
-			{
-			pBody->isStable = TRUE;
-			}
-			if (pBody->label == GRENADE)
-			{
-			//calculate reflection angle
-
-			//
-			pBody->isStable = TRUE;
-			}
-      
-		
-		// TESTING WITH CODE, DO NOT ERASE
 			
-			integrator_velocity_verlet(*circle, dt);
-
+			// TESTING WITH CODE, DO NOT ERASE
+			
+			//pBody->ax = circle->fx / circle->mass;
+			//pBody->ay = circle->fy / circle->mass;
 			
 			// Solve collision between ball and ground
-			if (is_colliding_with_ground(*circle, *App->scene_intro->ground))
+			if (is_colliding_with_ground(*pBody, *App->scene_intro->ground))
 			{
 				// TP ball to ground surface
-				circle->py = App->scene_intro->ground->y + App->scene_intro->ground->h + circle->radius;
+				pBody->py = App->scene_intro->ground->y + App->scene_intro->ground->h + pBody->radius;
 
 				// Elastic bounce with ground
-				circle->vy = -circle->vy;
+				pBody->vy = -pBody->vy;
 
 				// FUYM non-elasticity
-				circle->vx *= circle->coef_friction;
-				circle->vy *= circle->coef_restitution;
+				pBody->vx *= pBody->coef_friction;
+				pBody->vy *= pBody->coef_restitution;
 			}
+
+			integrator_velocity_verlet(pBody, dt);
+
 		}
+		
 	}
 
 	return UPDATE_CONTINUE;

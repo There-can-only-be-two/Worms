@@ -136,7 +136,7 @@ public:
 
 	void Drag(PhysBody* phbody);
 
-	p2List<PhysBody*> listBodies;
+	p2List<Circle*> listBodies;
 
 	// Compute modulus of a vector
 	float modulus(float vx, float vy);
@@ -167,6 +167,6 @@ private:
 	Ground ground;
 	Water water;
 	bool debug;
-	float dt = 1.0 / 60.0;
+	float dt;
 
 };

@@ -21,12 +21,12 @@ bool ModuleSceneIntro::Start()
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
 	ground = App->physics->CreateGround(0, 500, 1200, 100);
-	water = App->physics->CreateWater(0, 200, 1200, 100);
+	water = App->physics->CreateWater(0, 400, 1200, 100);
 	atm = App->physics->CreateAtmosphere();
 	
-	water->density = 50.0f; // [kg/m^3]
-	water->vx = -1.0f; // [m/s]
-	water->vy = 0.0f; // [m/s]
+	//water->density = 50.0f; // [kg/m^3]
+	//water->vx = -1.0f; // [m/s]
+	//water->vy = 0.0f; // [m/s]
 
 	
 	return ret;
@@ -53,7 +53,7 @@ update_status ModuleSceneIntro::Update()
 	//TESTING, DO NOT DELETE
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
-		PhysBody* bod = new PhysBody();
+		Circle* bod = new Circle();
 
 		bod->ax = 0;
 		bod->ay = 0;

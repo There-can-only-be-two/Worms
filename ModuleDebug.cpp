@@ -139,8 +139,8 @@ void ModuleDebug::DrawDebug()
 	if (variables)
 	{
 		//Last pBody on List
-		p2List_item<PhysBody*>* item;
-		PhysBody* pBody = NULL;
+		p2List_item<Circle*>* item;
+		Circle* pBody = NULL;
 
 		item = App->physics->listBodies.getLast();
 
@@ -179,8 +179,8 @@ void ModuleDebug::DrawDebug()
 
 void ModuleDebug::DrawPhysics()
 {
-	p2List_item<PhysBody*>* item;
-	PhysBody* pBody = NULL;
+	p2List_item<Circle*>* item;
+	Circle* pBody = NULL;
 
 	for (item = App->physics->listBodies.getFirst(); item != NULL; item = item->next)
 	{
