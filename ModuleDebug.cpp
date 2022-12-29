@@ -140,8 +140,8 @@ void ModuleDebug::DrawDebug()
 	if (variables)
 	{
 		//Last pBody on List
-		p2List_item<PhysBody*>* item;
-		PhysBody* pBody = NULL;
+		p2List_item<Circle*>* item;
+		Circle* pBody = NULL;
 
 		item = App->physics->listBodies.getLast();
 
@@ -194,10 +194,10 @@ void ModuleDebug::DrawPhysics()
 	double playerY = METERS_TO_PIXELS(App->player->pBody.py);
 	App->renderer->DrawLine(playerX, playerY, playerX + cosinus, playerY - sinus, 255, 165, 0, 255, false);
 
-	//Physics bodies
-	p2List_item<PhysBody*>* item;
-	PhysBody* pBody = NULL;
-
+  //Draw physBodies
+  p2List_item<Circle*>* item;
+	Circle* pBody = NULL;
+  
 	for (item = App->physics->listBodies.getFirst(); item != NULL; item = item->next)
 	{
 		pBody = item->data;

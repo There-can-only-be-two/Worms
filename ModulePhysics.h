@@ -24,7 +24,7 @@
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f
 
-#define GRAVITY 10
+#define GRAVITY -10
 #define DELTATIME 0.016666666666666 
 
 #define AIR_DENSITY 1.293f
@@ -136,7 +136,7 @@ public:
 
 	void Drag(PhysBody* phbody);
 
-	p2List<PhysBody*> listBodies;
+	p2List<Circle*> listBodies;
 
 	// Compute modulus of a vector
 	float modulus(float vx, float vy);
@@ -167,6 +167,6 @@ private:
 	Ground ground;
 	Water water;
 	bool debug;
-	float dt = 1.0 / 60.0;
+	float dt;
 
 };

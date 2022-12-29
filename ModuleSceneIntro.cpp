@@ -21,12 +21,12 @@ bool ModuleSceneIntro::Start()
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
 	ground = App->physics->CreateGround(0, 500, 1200, 100);
-	water = App->physics->CreateWater(0, 200, 1200, 100);
+	water = App->physics->CreateWater(0, 400, 1200, 100);
 	atm = App->physics->CreateAtmosphere();
 	
-	water->density = 50.0f; // [kg/m^3]
-	water->vx = -1.0f; // [m/s]
-	water->vy = 0.0f; // [m/s]
+	//water->density = 50.0f; // [kg/m^3]
+	//water->vx = -1.0f; // [m/s]
+	//water->vy = 0.0f; // [m/s]
 
 	
 	return ret;
@@ -51,6 +51,11 @@ update_status ModuleSceneIntro::Update()
 	//SDL_Rect water = App->physics->CreateWater(50, 50, 1200, 100);
 
 	//TESTING, DO NOT DELETE
+
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	{
+		Circle* bod = new Circle();
+
 	//if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	//{
 	//	PhysBody* bod = new PhysBody();
@@ -66,6 +71,21 @@ update_status ModuleSceneIntro::Update()
 
 	//	bod->isAlive = true;
 	//	bod->isStable = false;
+
+
+		bod->mass = 100.0f; // [kg]
+		bod->surface = 1.0f; // [m^2]
+		bod->radius = 0.5f; // [m]
+		bod->cd = 0.4f; // [-]
+		bod->cl = 1.2f; // [-]
+		bod->b = 10.0f; // [...]
+		bod->coef_friction = 0.9f; // [-]
+		bod->coef_restitution = 0.8f; // [-]
+
+		bod->label = GRENADE;
+
+		App->physics->listBodies.add(bod);
+	}
 
 	//	bod->label = GRENADE;
 	//	App->physics->listBodies.add(bod);
