@@ -43,7 +43,7 @@ update_status ModulePhysics::PreUpdate()
 		if (!pBody->isStable)
 		{
 			//0.016 time for 1frame asuming 60Hz
-			pBody->ay = GRAVITY;
+			pBody->ay = 0;
 
 			if (pBody->label == PLAYER)
 			{
@@ -105,8 +105,8 @@ update_status ModulePhysics::PreUpdate()
 
 			// TESTING WITH CODE, DO NOT ERASE
 
-			//pBody->ax = circle->fx / circle->mass;
-			//pBody->ay = circle->fy / circle->mass;
+			pBody->ax = pBody->fx / pBody->mass;
+			pBody->ay = pBody->fy / pBody->mass;
 
 			// Solve collision between ball and ground
 			if (is_colliding_with_ground(*pBody, *App->scene_intro->ground))
@@ -201,8 +201,8 @@ Water* ModulePhysics::CreateWater(float wx, float wy, float ww, float wh)
 Atmosphere* ModulePhysics::CreateAtmosphere()
 {
 	Atmosphere* atm = new Atmosphere();
-	atm->windx = 10.0f; // [m/s]
-	atm->windy = 5.0f; // [m/s]
+	atm->windx = 10; // [m/s]
+	atm->windy = -5.0f; // [m/s]
 	atm->density = 1.0f; // [kg/m^3]
 
 	return atm;

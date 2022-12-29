@@ -67,7 +67,7 @@ update_status ModuleSceneIntro::Update()
 		bod->isAlive = true;
 		bod->isStable = false;
 
-		bod->mass = 10.0f; // [kg]
+		bod->mass = 100.0f; // [kg]
 		bod->surface = 1.0f; // [m^2]
 		bod->radius = 0.5f; // [m]
 		bod->cd = 0.4f; // [-]
