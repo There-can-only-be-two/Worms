@@ -109,7 +109,7 @@ void ModulePlayer::Shoot()
 	bod->cl = 1.2f; // [-]
 	bod->b = 10.0f; // [...]
 	bod->coef_friction = 0.9f; // [-]
-	bod->coef_restitution = 0.8f; // [-]
+	bod->coef_restitution = 0.2f; // [-]
 
 	bod->label = GRENADE;
 
