@@ -50,6 +50,14 @@ update_status ModuleDebug::Update()
 		else if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN && desiredFPS > 10)
 			desiredFPS -= 5;
 
+		//Gravity
+		if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT && App->physics->getGravity() > -100)
+			App->physics->changeGravity(App->physics->getGravity() - 1);
+		else if (App->input->GetKey(SDL_SCANCODE_T) == KEY_REPEAT && App->physics->getGravity() < 100)
+			App->physics->changeGravity(App->physics->getGravity() + 1);
+
+		//Bounce Coef
+
 		//F4: Sfx ON/OFF
 		if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN)
 			sfxON = !sfxON;
@@ -109,7 +117,7 @@ void ModuleDebug::DrawDebug()
 	App->fonts->BlitText(debugX, debugY + 80, fontId, string.c_str());
 
 	//Gravity
-	string = std::string("#GRAVITY.Y  (S-/W+)  ") + std::to_string(99999);
+	string = std::string("#GRAVITY.Y  (R-/T+)  ") + std::to_string(App->physics->getGravity());
 	App->fonts->BlitText(debugX, debugY + 100, fontId, string.c_str());
 
 	////Bounce coef

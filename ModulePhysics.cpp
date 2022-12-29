@@ -17,7 +17,7 @@ bool ModulePhysics::Start()
 {
 	LOG("Creating Physics 2D environment");
 	
-	
+	gravity = GRAVITY;
 
 	return true;
 }
@@ -84,7 +84,7 @@ update_status ModulePhysics::PreUpdate()
 
 			// Gravity force
 			float fgx = 0.0f;
-			float fgy = pBody->mass * -GRAVITY; // Let's assume gravity is constant and downwards, like in real situations
+			float fgy = pBody->mass * -gravity; // Let's assume gravity is constant and downwards, like in real situations
 			pBody->fx += fgx; pBody->fy += fgy; // Add this force to ball's total force
 
 			if (pBody->label == PLAYER && App->player->isJumping > 0) {
@@ -308,6 +308,16 @@ bool ModulePhysics::check_collision_circle_rectangle(float cx, float cy, float c
 	float b = dist_y - rh / 2.0f;
 	float cornerDistance_sq = a * a + b * b;
 	return (cornerDistance_sq <= (cr * cr));
+}
+
+void ModulePhysics::changeGravity(float g)
+{
+	gravity = g;
+}
+
+float ModulePhysics::getGravity()
+{
+	return gravity;
 }
 
 // Convert from meters to pixels (for SDL drawing)
