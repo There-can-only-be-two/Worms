@@ -111,7 +111,16 @@ update_status ModulePhysics::PreUpdate()
 				if (std::abs(pBody->px - (App->scene_intro->ground->x + App->scene_intro->ground->w / 2.0f)) <= ((App->scene_intro->ground->x + App->scene_intro->ground->w)/ 2.0f)) {
 					pBody->py = App->scene_intro->ground->y - pBody->radius;
 				}
-				
+
+				if (pBody->px > App->scene_intro->ground->x && pBody->px < (App->scene_intro->ground->x + App->scene_intro->ground->w / 2.0f)) {
+
+				}
+				if (pBody->px > App->scene_intro->ground->x && pBody->px < (App->scene_intro->ground->x + App->scene_intro->ground->w / 2.0f)) {
+
+				}
+
+
+
 				// TP ball to ground surface
 				pBody->py = App->scene_intro->ground->y - pBody->radius;
 
