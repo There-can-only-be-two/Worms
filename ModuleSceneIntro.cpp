@@ -67,6 +67,8 @@ update_status ModuleSceneIntro::Update()
 		bod->isAlive = true;
 		bod->isStable = false;
 
+		bod->mass = 10.0f;
+		
 		bod->label = GRENADE;
 		App->physics->listBodies.add(bod);
 	}

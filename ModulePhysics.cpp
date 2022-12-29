@@ -43,7 +43,7 @@ update_status ModulePhysics::PreUpdate()
 		if (!pBody->isStable)
 		{
 			//0.016 time for 1frame asuming 60Hz
-			//pBody->ay = 0.0;
+			pBody->ay = GRAVITY;
 
 			if (pBody->label == PLAYER)
 			{
@@ -60,12 +60,13 @@ update_status ModulePhysics::PreUpdate()
 			circle->px = pBody->px;
 			circle->py = pBody->py;
 
+			
 			// Aerodynamic Drag force (only when not in water)
 			if (!is_colliding_with_water(*pBody, *App->scene_intro->water))
 			{
-				/*pBody->px = potentialX;
-				pBody->py = potentialY;*/
-				
+				//pBody->px = potentialX;
+				//pBody->py = potentialY;
+
 				float fdx = 0.0f; float fdy = 0.0f;
 				compute_aerodynamic_drag(fdx, fdy, *pBody, *App->scene_intro->atm);
 				pBody->fx += fdx; pBody->fy += fdy; // Add this force to ball's total force
@@ -101,12 +102,12 @@ update_status ModulePhysics::PreUpdate()
 				compute_hydrodynamic_buoyancy(fhbx, fhby, *pBody, *App->scene_intro->water);
 				pBody->fx += fhbx; pBody->fy += fhby; // Add this force to ball's total force
 			}
-			
+
 			// TESTING WITH CODE, DO NOT ERASE
-			
+
 			//pBody->ax = circle->fx / circle->mass;
 			//pBody->ay = circle->fy / circle->mass;
-			
+
 			// Solve collision between ball and ground
 			if (is_colliding_with_ground(*pBody, *App->scene_intro->ground))
 			{
@@ -120,9 +121,12 @@ update_status ModulePhysics::PreUpdate()
 				pBody->vx *= pBody->coef_friction;
 				pBody->vy *= pBody->coef_restitution;
 			}
-
-			integrator_velocity_verlet(pBody, dt);
-
+			
+			integrator_velocity_verlet(*pBody, dt);
+			/*pBody->px += pBody->vx * dt + 0.5f * pBody->ax * dt * dt;
+			pBody->py += pBody->vy * dt + 0.5f * pBody->ay * dt * dt;
+			pBody->vx += pBody->ax * dt;
+			pBody->vy += pBody->ay * dt;*/
 		}
 		
 	}
@@ -186,6 +190,8 @@ Water* ModulePhysics::CreateWater(float wx, float wy, float ww, float wh)
 	water->x = PIXELS_TO_METERS(wx); water->y = PIXELS_TO_METERS(wy);
 
 	water->w = PIXELS_TO_METERS(ww); water->h = PIXELS_TO_METERS(wh);
+	
+	water->density = 50.0f; // [kg/m^3]
 
 	return water;
 }
@@ -244,7 +250,7 @@ void ModulePhysics::compute_hydrodynamic_buoyancy(float& fx, float& fy, const Ci
 	fy = fbuoyancy_modulus; // Buoyancy is parallel to pressure gradient
 }
 
-// Integration scheme: Velocity Verlet
+//Integration scheme: Velocity Verlet
 void ModulePhysics::integrator_velocity_verlet(Circle& ball, float dt)
 {
 	ball.px += ball.vx * dt + 0.5f * ball.ax * dt * dt;
