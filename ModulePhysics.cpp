@@ -88,7 +88,8 @@ update_status ModulePhysics::PreUpdate()
 			pBody->fx += fgx; pBody->fy += fgy; // Add this force to ball's total force
 
 			if (pBody->label == PLAYER && App->player->isJumping > 0) {
-				pBody->fy += 100;
+				App->player->grounded = false;
+				pBody->fy -= 1000;
 				App->player->isJumping--;
 			}
 
@@ -124,6 +125,10 @@ update_status ModulePhysics::PreUpdate()
 				// FUYM non-elasticity
 				pBody->vx *= pBody->coef_friction;
 				pBody->vy *= pBody->coef_restitution;
+
+				if (pBody->label == PLAYER) {
+					App->player->grounded = true;
+				}
 			}
 			
 			integrator_velocity_verlet(*pBody, dt);
