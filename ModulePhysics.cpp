@@ -65,8 +65,10 @@ update_status ModulePhysics::PreUpdate()
 				//pBody->py = potentialY;
 
 				float fdx = 0.0f; float fdy = 0.0f;
-				compute_aerodynamic_drag(fdx, fdy, *pBody, *App->scene_intro->atm);
-				pBody->fx += fdx; pBody->fy += fdy; // Add this force to ball's total force
+				if (pBody->label != PLAYER) {
+					compute_aerodynamic_drag(fdx, fdy, *pBody, *App->scene_intro->atm);
+					pBody->fx += fdx; pBody->fy += fdy; // Add this force to ball's total force
+				}
 			}
 
 			else if (pBody->label == MISSILE)
