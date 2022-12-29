@@ -19,8 +19,8 @@ bool ModulePlayer::Start()
 	pBody->isStable = false;
 	isJumping = false;
 
-	pBody->px = PIXELS_TO_METERS(100);
-	pBody->py = PIXELS_TO_METERS(100);
+	pBody->px = PIXELS_TO_METERS(600);
+	pBody->py = PIXELS_TO_METERS(400);
 	pBody->vx = 6;
 	pBody->vy = 0;
 	//App->physics->listBodies.add(pBody);
