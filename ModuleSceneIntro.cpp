@@ -51,21 +51,27 @@ update_status ModuleSceneIntro::Update()
 	//SDL_Rect water = App->physics->CreateWater(50, 50, 1200, 100);
 
 	//TESTING, DO NOT DELETE
+
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
 		Circle* bod = new Circle();
 
-		bod->ax = 0;
-		bod->ay = 0;
+	//if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	//{
+	//	PhysBody* bod = new PhysBody();
 
-		bod->vx = 0;
-		bod->vy = 0;
+	//	bod->ax = 0;
+	//	bod->ay = 0;
 
-		bod->px = PIXELS_TO_METERS(500);
-		bod->py = PIXELS_TO_METERS(100);
+	//	bod->vx = 0;
+	//	bod->vy = 0;
 
-		bod->isAlive = true;
-		bod->isStable = false;
+	//	bod->px = PIXELS_TO_METERS(500);
+	//	bod->py = PIXELS_TO_METERS(100);
+
+	//	bod->isAlive = true;
+	//	bod->isStable = false;
+
 
 		bod->mass = 100.0f; // [kg]
 		bod->surface = 1.0f; // [m^2]
@@ -80,6 +86,10 @@ update_status ModuleSceneIntro::Update()
 
 		App->physics->listBodies.add(bod);
 	}
+
+	//	bod->label = GRENADE;
+	//	App->physics->listBodies.add(bod);
+	//}
 
 	return UPDATE_CONTINUE;
 }

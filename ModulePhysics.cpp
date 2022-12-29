@@ -47,7 +47,7 @@ update_status ModulePhysics::PreUpdate()
 
 			if (pBody->label == PLAYER)
 			{
-				pBody->ay = -20;
+				//pBody->ay = -20;
 			}
 			/*pBody->vx += pBody->ax * DELTATIME;
 			pBody->vy += pBody->ay * DELTATIME;

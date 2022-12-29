@@ -29,7 +29,7 @@ public:
 	bool lightsON = false;
 	bool musicON = false;
 	bool sfxON = true;
-	bool changeUI = false;
+	bool hideUI = false;
 
 	microseconds timePerCycle;
 	microseconds elapsedFrame;

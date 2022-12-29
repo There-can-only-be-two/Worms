@@ -23,6 +23,7 @@ bool ModuleDebug::Start()
 	drawDebug = true;
 	drawPhysics = true;
 	variables = true;
+	hideUI = false;
 
 	return true;
 }
@@ -60,7 +61,7 @@ update_status ModuleDebug::Update()
 
 		//U: Chnage UI
 		if (App->input->GetKey(SDL_SCANCODE_U) == KEY_DOWN)
-			changeUI = !changeUI;
+			hideUI = !hideUI;
 
 		if (App->input->GetKey(SDL_SCANCODE_V) == KEY_DOWN)
 			variables = !variables;
@@ -108,20 +109,20 @@ void ModuleDebug::DrawDebug()
 	App->fonts->BlitText(debugX, debugY + 80, fontId, string.c_str());
 
 	//Gravity
-	//string = std::string("#GRAVITY.Y  (S-/W+)  ") + std::to_string((int)-App->physics->gravity);
-	//App->fonts->BlitText(debugX, debugY + 100, fontId, string.c_str());
+	string = std::string("#GRAVITY.Y  (S-/W+)  ") + std::to_string(99999);
+	App->fonts->BlitText(debugX, debugY + 100, fontId, string.c_str());
 
 	////Bounce coef
-	//string = std::string("#BOUNCE COEF(A-/D+)  ") + std::to_string(App->scene_intro->ball->intensity);
-	//App->fonts->BlitText(debugX, debugY + 120, fontId, string.c_str());
+	string = std::string("#BOUNCE COEF(A-/D+)  ") + std::to_string(99999);
+	App->fonts->BlitText(debugX, debugY + 120, fontId, string.c_str());
 
 
 
-	//Change UI
-	if (changeUI)
-		App->fonts->BlitText(debugX, debugY + 160, fontId, "#CHANGE UI  (U)    ON");
+	//Hide UI
+	if (hideUI)
+		App->fonts->BlitText(debugX, debugY + 160, fontId, "#HIDE UI    (U)    ON");
 	else
-		App->fonts->BlitText(debugX, debugY + 160, fontId, "#CHANGE UI  (U)    OFF");
+		App->fonts->BlitText(debugX, debugY + 160, fontId, "#HIDE UI    (U)    OFF");
 
 	//Mute SFX
 	if (sfxON)
@@ -165,6 +166,13 @@ void ModuleDebug::DrawDebug()
 
 			string = std::string("PBODY.PY = ") + std::to_string(pBody->py);
 			App->fonts->BlitText(debugX + 16, debugY + 320, fontId, string.c_str());
+
+
+			string = std::string("PLAYER.PX = ") + std::to_string(App->player->pBody.px);
+			App->fonts->BlitText(debugX + 16, debugY + 360, fontId, string.c_str());
+
+			string = std::string("PLAYER.PY = ") + std::to_string(App->player->pBody.py);
+			App->fonts->BlitText(debugX + 16, debugY + 380, fontId, string.c_str());
 		}
 
 
@@ -179,14 +187,21 @@ void ModuleDebug::DrawDebug()
 
 void ModuleDebug::DrawPhysics()
 {
-	p2List_item<Circle*>* item;
-	Circle* pBody = NULL;
+	//Shooting angle
+	double cosinus = METERS_TO_PIXELS(100 * cos(App->player->shootAngle * DEGTORAD));
+	double sinus = METERS_TO_PIXELS(100 * sin(App->player->shootAngle * DEGTORAD));
+	double playerX = METERS_TO_PIXELS(App->player->pBody.px);
+	double playerY = METERS_TO_PIXELS(App->player->pBody.py);
+	App->renderer->DrawLine(playerX, playerY, playerX + cosinus, playerY - sinus, 255, 165, 0, 255, false);
 
+  //Draw physBodies
+  p2List_item<Circle*>* item;
+	Circle* pBody = NULL;
+  
 	for (item = App->physics->listBodies.getFirst(); item != NULL; item = item->next)
 	{
 		pBody = item->data;
 
 		App->renderer->DrawCircle(METERS_TO_PIXELS(pBody->px), METERS_TO_PIXELS(pBody->py), METERS_TO_PIXELS(pBody->radius), 255, 255, 255);
 	}
-
 }
