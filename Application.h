@@ -12,6 +12,7 @@
 #include "ModulePlayer.h"
 #include "ModulePhysics.h"
 #include "ModuleSceneIntro.h"
+#include "ModuleTitle.h"
 #include "ModuleFadeToBlack.h"
 #include "ModuleFonts.h"
 #include "ModuleDebug.h"
@@ -26,6 +27,7 @@ public:
 	ModuleAudio* audio;
 	ModulePlayer* player;
 	ModuleSceneIntro* scene_intro;
+	ModuleTitle* title;
 	ModulePhysics* physics;
 	ModuleFadeToBlack* fade;
 	ModuleFonts* fonts;

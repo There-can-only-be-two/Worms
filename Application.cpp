@@ -5,13 +5,14 @@ Application::Application()
 	window		=	new ModuleWindow(this);
 	textures	=	new ModuleTextures(this);
 	input		=	new ModuleInput(this);
-	audio		=	new ModuleAudio(this, true);
-	player		=	new ModulePlayer(this);
-	scene_intro =	new ModuleSceneIntro(this);
+	audio		=	new ModuleAudio(this, true);	
+	title		=   new ModuleTitle(this);
+	player		=	new ModulePlayer(this, false);
+	scene_intro =	new ModuleSceneIntro(this, false);
 	physics		=	new ModulePhysics(this);
 	fade		=	new ModuleFadeToBlack(this);
 	fonts		=	new ModuleFonts(this);
-	debug		=	new ModuleDebug(this);
+	debug		=	new ModuleDebug(this, false);
 	renderer	=	new ModuleRender(this);
 
 	// The order of calls is very important!
@@ -28,6 +29,7 @@ Application::Application()
 	AddModule(physics);
 
 	// Scenes
+	AddModule(title);
 	AddModule(scene_intro);
 	
 	// Player
