@@ -16,7 +16,7 @@ bool ModulePlayer::Start()
 {
 	isJumping = false;
 	pBody.px = PIXELS_TO_METERS(100);
-	pBody.py = PIXELS_TO_METERS(400);
+	pBody.py = PIXELS_TO_METERS(100);
 	pBody.vx = 6;
 	pBody.vy = 0;
 	pBody.ax = 0;
@@ -88,7 +88,7 @@ update_status ModulePlayer::Update()
 
 void ModulePlayer::Shoot()
 {
-	PhysBody* bod = new PhysBody();
+	Circle* bod = new Circle();
 
 	bod->ax = 0;
 	bod->ay = 0;
@@ -101,6 +101,17 @@ void ModulePlayer::Shoot()
 
 	bod->isAlive = true;
 	bod->isStable = false;
+
+	bod->mass = 100.0f; // [kg]
+	bod->surface = 1.0f; // [m^2]
+	bod->radius = 0.5f; // [m]
+	bod->cd = 0.4f; // [-]
+	bod->cl = 1.2f; // [-]
+	bod->b = 10.0f; // [...]
+	bod->coef_friction = 0.9f; // [-]
+	bod->coef_restitution = 0.8f; // [-]
+
+	bod->label = GRENADE;
 
 	switch (weaponType) {
 	case 0:
