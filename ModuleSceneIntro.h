@@ -42,6 +42,7 @@ public:
 
 public:
 	Ground* ground;
+	Ground* ground2;
 	Water* water;
 	Atmosphere* atm;
 

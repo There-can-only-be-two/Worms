@@ -64,9 +64,9 @@ update_status ModulePhysics::PreUpdate()
 				//pBody->px = potentialX;
 				//pBody->py = potentialY;
 
-				//float fdx = 0.0f; float fdy = 0.0f;
-				//compute_aerodynamic_drag(fdx, fdy, *pBody, *App->scene_intro->atm);
-				//pBody->fx += fdx; pBody->fy += fdy; // Add this force to ball's total force
+				float fdx = 0.0f; float fdy = 0.0f;
+				compute_aerodynamic_drag(fdx, fdy, *pBody, *App->scene_intro->atm);
+				pBody->fx += fdx; pBody->fy += fdy; // Add this force to ball's total force
 			}
 
 			else if (pBody->label == MISSILE)
@@ -109,7 +109,7 @@ update_status ModulePhysics::PreUpdate()
 			if (is_colliding_with_ground(*pBody, *App->scene_intro->ground))
 			{
 				// TP ball to ground surface
-				pBody->py = App->scene_intro->ground->y + App->scene_intro->ground->h + pBody->radius;
+				pBody->py = App->scene_intro->ground->y - pBody->radius;
 
 				// Elastic bounce with ground
 				pBody->vy = -pBody->vy;
