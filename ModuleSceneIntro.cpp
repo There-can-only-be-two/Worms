@@ -57,7 +57,7 @@ update_status ModuleSceneIntro::PostUpdate()
 
 	App->renderer->DrawQuad(gRect, 101, 67, 33, 128);
 	App->renderer->DrawQuad(g2Rect, 101, 67, 33, 128);
-	App->renderer->DrawQuad(wRect, 176, 224, 230, 128);
+	App->renderer->DrawQuad(wRect, 135, 205, 235, 128);
 
 	return UPDATE_CONTINUE;
 }

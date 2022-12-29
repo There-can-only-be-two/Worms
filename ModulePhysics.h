@@ -39,7 +39,8 @@ enum Label
 {
 	PLAYER,
 	GRENADE,
-	MISSILE
+	MISSILE,
+	ENEMY
 };
 
 // Class: Atmosphere -> From the example
