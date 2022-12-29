@@ -18,6 +18,7 @@ bool ModulePlayer::Start()
 	pBody->label = PLAYER;
 	pBody->isStable = false;
 	isJumping = false;
+
 	pBody->px = PIXELS_TO_METERS(100);
 	pBody->py = PIXELS_TO_METERS(100);
 	pBody->vx = 6;
@@ -108,7 +109,7 @@ void ModulePlayer::Shoot()
 	bod->isAlive = true;
 	bod->isStable = false;
 
-	bod->mass = 100.0f; // [kg]
+	bod->mass = 10.0f; // [kg]
 	bod->surface = 1.0f; // [m^2]
 	bod->radius = 0.5f; // [m]
 	bod->cd = 0.4f; // [-]

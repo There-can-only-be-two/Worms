@@ -20,9 +20,9 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
-	ground = App->physics->CreateGround(0, 500, 1200, 100);
-	water = App->physics->CreateWater(0, 400, 1200, 100);
-	atm = App->physics->CreateAtmosphere();
+	ground = App->physics->CreateGround(0, 600, 1200, 100);
+	water = App->physics->CreateWater(0, 400, 1200, 200);
+	//atm = App->physics->CreateAtmosphere();
 
 	
 	return ret;

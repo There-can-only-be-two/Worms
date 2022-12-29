@@ -55,11 +55,8 @@ update_status ModulePhysics::PreUpdate()
 			double potentialX = pBody->px + pBody->vx * DELTATIME;
 			double potentialY = pBody->py + pBody->vy * DELTATIME;*/
 
-			//check for collisions on potential pos
-			Circle* circle = new Circle();
-			circle->px = pBody->px;
-			circle->py = pBody->py;
-
+			pBody->fx = pBody->fy = 0.0f;
+			pBody->ax = pBody->ay = 0.0f;
 			
 			// Aerodynamic Drag force (only when not in water)
 			if (!is_colliding_with_water(*pBody, *App->scene_intro->water))
@@ -67,25 +64,25 @@ update_status ModulePhysics::PreUpdate()
 				//pBody->px = potentialX;
 				//pBody->py = potentialY;
 
-				float fdx = 0.0f; float fdy = 0.0f;
-				compute_aerodynamic_drag(fdx, fdy, *pBody, *App->scene_intro->atm);
-				pBody->fx += fdx; pBody->fy += fdy; // Add this force to ball's total force
+				//float fdx = 0.0f; float fdy = 0.0f;
+				//compute_aerodynamic_drag(fdx, fdy, *pBody, *App->scene_intro->atm);
+				//pBody->fx += fdx; pBody->fy += fdy; // Add this force to ball's total force
 			}
 
 			else if (pBody->label == MISSILE)
 			{
-				pBody->isStable = TRUE;
+				//pBody->isStable = TRUE;
 			}
 			else if (pBody->label == GRENADE)
 			{
 				//calculate reflection angle
 				//
-				pBody->isStable = TRUE;
+				//pBody->isStable = TRUE;
 			}
 
 
 			// Gravity force
-			float fgx = pBody->mass * 0.0f;
+			float fgx = 0.0f;
 			float fgy = pBody->mass * -GRAVITY; // Let's assume gravity is constant and downwards, like in real situations
 			pBody->fx += fgx; pBody->fy += fgy; // Add this force to ball's total force
 
@@ -100,7 +97,7 @@ update_status ModulePhysics::PreUpdate()
 				// Hydrodynamic Buoyancy force
 				float fhbx = 0.0f; float fhby = 0.0f;
 				compute_hydrodynamic_buoyancy(fhbx, fhby, *pBody, *App->scene_intro->water);
-				pBody->fx += fhbx; pBody->fy += fhby; // Add this force to ball's total force
+				pBody->fx += fhbx; pBody->fy -= fhby; // Add this force to ball's total force
 			}
 
 			// TESTING WITH CODE, DO NOT ERASE
@@ -201,8 +198,8 @@ Water* ModulePhysics::CreateWater(float wx, float wy, float ww, float wh)
 Atmosphere* ModulePhysics::CreateAtmosphere()
 {
 	Atmosphere* atm = new Atmosphere();
-	atm->windx = 10; // [m/s]
-	atm->windy = -5.0f; // [m/s]
+	atm->windx = 10.0f; // [m/s]
+	atm->windy = 5.0f; // [m/s]
 	atm->density = 1.0f; // [kg/m^3]
 
 	return atm;
