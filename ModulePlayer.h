@@ -29,7 +29,7 @@ public:
 
 public:
 	
-	PhysBody pBody;
+	Circle* pBody;
 	bool isJumping;
 	uint weaponType;
 	int shootAngle;
