@@ -36,8 +36,8 @@ update_status ModulePhysics::PreUpdate()
 	p2List_item<Circle*>* item;
 	Circle* pBody = NULL;
 
-	if (App->player->grenadeTimer > 0) {
-		App->player->grenadeTimer--;
+	if (App->player->explosionTimer > 0) {
+		App->player->explosionTimer--;
 	}
 
 	for (item = App->physics->listBodies.getFirst(); item != NULL; item = item->next)
@@ -65,11 +65,15 @@ update_status ModulePhysics::PreUpdate()
 			{
 				if (is_colliding_with_ground(*pBody, *App->scene_intro->ground))
 				{
-					pBody->isStable = TRUE;
+					App->player->explosionTimer = 0;
+				}
+				if (is_colliding_with_water(*pBody, *App->scene_intro->water))
+				{
+					App->player->explosionTimer = 0;
 				}
 			}
 
-			if (App->player->grenadeTimer <= 0 && pBody->label == GRENADE) {
+			if (App->player->explosionTimer <= 0 && (pBody->label == GRENADE || pBody->label == MISSILE)) {
 				App->scene_intro->explosion->x = pBody->px;
 				App->scene_intro->explosion->y = pBody->py;
 				listBodies.del(item);
@@ -133,58 +137,58 @@ update_status ModulePhysics::PreUpdate()
 			}
 			
 			
-			if (is_colliding_with_enemy(*pBody, *App->scene_intro->enemy)){
-				if (is_colliding_with_enemy(*pBody, *App->scene_intro->enemy)) {
-					if (std::abs(pBody->vy) > std::abs(pBody->vx)) {
-						if (pBody->vy < 0) {
-							// TP ball to ground surface
-							pBody->py = App->scene_intro->enemy->y + App->scene_intro->enemy->h + pBody->radius;
+			//if (is_colliding_with_enemy(*pBody, *App->scene_intro->enemy)){
+			//	if (is_colliding_with_enemy(*pBody, *App->scene_intro->enemy)) {
+			//		if (std::abs(pBody->vy) > std::abs(pBody->vx)) {
+			//			if (pBody->vy < 0) {
+			//				// TP ball to ground surface
+			//				pBody->py = App->scene_intro->enemy->y + App->scene_intro->enemy->h + pBody->radius;
 
-							// Elastic bounce with ground
-							pBody->vy = -pBody->vy;
+			//				// Elastic bounce with ground
+			//				pBody->vy = -pBody->vy;
 
-							// FUYM non-elasticity
-							pBody->vx *= pBody->coef_friction;
-							pBody->vy *= pBody->coef_restitution;
-						}
-						else if (pBody->vy > 0) {
-							// TP ball to ground surface
-							pBody->py = App->scene_intro->enemy->y - pBody->radius;
+			//				// FUYM non-elasticity
+			//				pBody->vx *= pBody->coef_friction;
+			//				pBody->vy *= pBody->coef_restitution;
+			//			}
+			//			else if (pBody->vy > 0) {
+			//				// TP ball to ground surface
+			//				pBody->py = App->scene_intro->enemy->y - pBody->radius;
 
-							// Elastic bounce with ground
-							pBody->vy = -pBody->vy;
+			//				// Elastic bounce with ground
+			//				pBody->vy = -pBody->vy;
 
-							// FUYM non-elasticity
-							pBody->vx *= pBody->coef_friction;
-							pBody->vy *= pBody->coef_restitution;
-						}
-					}
-					else if (std::abs(pBody->vx) > std::abs(pBody->vy)) {
-						if (pBody->vx < 0) {
-							// TP ball to ground surface
-							pBody->px = App->scene_intro->enemy->x + App->scene_intro->ground->w + pBody->radius;
+			//				// FUYM non-elasticity
+			//				pBody->vx *= pBody->coef_friction;
+			//				pBody->vy *= pBody->coef_restitution;
+			//			}
+			//		}
+			//		else if (std::abs(pBody->vx) > std::abs(pBody->vy)) {
+			//			if (pBody->vx < 0) {
+			//				// TP ball to ground surface
+			//				pBody->px = App->scene_intro->enemy->x + App->scene_intro->ground->w + pBody->radius;
 
-							// Elastic bounce with ground
-							pBody->vx = -pBody->vx;
+			//				// Elastic bounce with ground
+			//				pBody->vx = -pBody->vx;
 
-							// FUYM non-elasticity
-							pBody->vy *= pBody->coef_friction;
-							pBody->vx *= pBody->coef_restitution;
-						}
-						else if (pBody->vx > 0) {
-							// TP ball to ground surface
-							pBody->px = App->scene_intro->enemy->x - pBody->radius;
+			//				// FUYM non-elasticity
+			//				pBody->vy *= pBody->coef_friction;
+			//				pBody->vx *= pBody->coef_restitution;
+			//			}
+			//			else if (pBody->vx > 0) {
+			//				// TP ball to ground surface
+			//				pBody->px = App->scene_intro->enemy->x - pBody->radius;
 
-							// Elastic bounce with ground
-							pBody->vx = -pBody->vx;
+			//				// Elastic bounce with ground
+			//				pBody->vx = -pBody->vx;
 
-							// FUYM non-elasticity
-							pBody->vy *= pBody->coef_friction;
-							pBody->vx *= pBody->coef_restitution;
-						}
-					}
-				}
-			}
+			//				// FUYM non-elasticity
+			//				pBody->vy *= pBody->coef_friction;
+			//				pBody->vx *= pBody->coef_restitution;
+			//			}
+			//		}
+			//	}
+			//}
 
 			integrator_velocity_verlet(*pBody, dt);
 		}
@@ -267,18 +271,18 @@ Atmosphere* ModulePhysics::CreateAtmosphere()
 	return atm;
 }
 
-Enemy* ModulePhysics::CreateEnemy(float ex, float ey, float ew, float eh)
-{
-	Enemy* enemy = new Enemy();
-
-	enemy->x = PIXELS_TO_METERS(ex); enemy->y = PIXELS_TO_METERS(ey);
-
-	enemy->w = PIXELS_TO_METERS(ew); enemy->h = PIXELS_TO_METERS(eh);
-
-	enemy->life = 100;
-
-	return enemy;
-}
+//Enemy* ModulePhysics::CreateEnemy(float ex, float ey, float ew, float eh)
+//{
+//	Enemy* enemy = new Enemy();
+//
+//	enemy->x = PIXELS_TO_METERS(ex); enemy->y = PIXELS_TO_METERS(ey);
+//
+//	enemy->w = PIXELS_TO_METERS(ew); enemy->h = PIXELS_TO_METERS(eh);
+//
+//	enemy->life = 100;
+//
+//	return enemy;
+//}
 
 // Compute modulus of a vector
 float ModulePhysics::modulus(float vx, float vy)
