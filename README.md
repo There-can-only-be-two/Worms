@@ -23,40 +23,38 @@ It follows the submission rules stated above.
 ## Keys
 - A and D: Player movement on x
 - W: Player jump
-- 
-- LEFT AND RIGHT ARROWS: Change shooting direction
+- LEFT AND RIGHT ARROWS: Change shooting angle
 - DOWN AND UP ARROW: Change shooting force
 - SPACE: shoot
 - ESC: Quit
 
 ### Debug
 - TAB: Enables and displays the following debug functionality
-  - F1: Draws all colliders and allow to use a mouse joint
-  - F2: Turn the lights of the pinball ON/OFF
-  - F3: Turn the music of the pinball ON/OFF
-  - Frame Control: (Q-/E+)
-  - Gravity: (S-/W+)
-  - Bounce coef: (A-/D+)
-  - V: Displays the following variables - Ball(x, y), Spring force, Gravity and Bounce coef
-  - F: Finishes the game and displays rankings
-  - U: Change display of the UI
-  - R: Resets ranking to default (Only after the game has finished and the ranking is displayed)
-
-## Information
-- AMOUNT OF BALLS PER GAME: 3 balls
-  - Number of balls remaining is displayed at the bottom of the pinball.
-- TIME: Even though game finishes when the player is out of balls, it can also finish when the player is out of time.
-  - Time remaining is displayed at the bottom left of the pinball.
+  - F1: Draws colliders
+  - F2: Turn the lights of the worm ON/OFF
+  - O: Turn the sfx of the worm ON/OFF
+  - Frame Control: (I-/U+)
+  - Gravity: (J-/K+)
+  - Wind: on X (R-/T+) / on Y (3-/4+)
+  - B: Switch between player and grenade to enable variable setting
+    - Bounce coef: (N-/M+)
+    - Aerodynamic Drag coef: (Z-/X+)
+    - Hydrodynamic Drag coef: (G-/H+)
+  - 5: enables/disables GRAVITY
+  - P: change between players 1 and 2
+  - U: Hide UI
+  - V: Displays the following variables - Player 1 and 2: position Missile and Grenade: position, velocity, acceleration, grenade cooldown, show weopon equiped- 
+  - 1: Grenade selected
+  - 2: Missile selected
   
-## Combos and Feautures
-- EXTRA KIKCERS: Automatically shoots the ball when touched. Once activated, the kicker used turns off and will not activate again.
-- EXTRA TIME: Passing through the Time feauture rewards the player extra time. However, Extra Time cancels the X2 multiplier and equals it to 1.
-- MULTIPLIER: 
-  - X2: Activating the three parts in the upper right zone of the map will sum 2 to the current value of the multiplier.
-  - X10: Activating the three parts in the upper right zone of the map will temporally sum 10 to the current value of the multiplier.
-- LIGHTS: Lights will turn on and off when ball bounces, parts of the pinball are activated, etc.
-- RANKING: When the game finishes, the ranking displays the TOP 5 scores of the game. Scores by player are displayed in yellow. Try to get to TOP 1!
-- UI: Highscore, Current Score, Multiplier, Previous Score, Time remaining, Balls remaining
+## Information
+- 2 types of weopons: grenades and missiles
+- Forces applied: aerodynamic drag, hydrodynamic drag, gravity, impulse forces, bouyancy.
+- When the player collides with water we add 200kg to its mass to simulate the death as in the worms game.
+  
+## Feautures
+- Explosions: grenades and missiles explode and damage players in a radius.
+- Multiplayer game
 
 ## Development
 
