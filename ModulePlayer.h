@@ -33,7 +33,7 @@ public:
 	Circle* pBody;
 	uint weaponType;
 
-	uint grenadeTimer;
+	uint explosionTimer;
 	bool isShootingGrenade;
 	bool isShootingMissile;
 

@@ -175,6 +175,10 @@ public:
 	// Detect collision between circle and rectange
 	bool check_collision_circle_rectangle(float cx, float cy, float cr, float rx, float ry, float rw, float rh);
 
+	// Detect Direction
+	void detect_direction_ground(Circle& pBody, const Ground& ground);
+	void detect_direction_enemy(Circle& pBody, const Enemy& enemy);
+
 	void SetGravity(float g);
 	float GetGravity();
 private:

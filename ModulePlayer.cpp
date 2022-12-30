@@ -43,14 +43,14 @@ bool ModulePlayer::Start()
 		isShootingGrenade = false;
 		isShootingMissile = false;
 
-		pBody->mass = 12.0f; // [kg]
-		pBody->surface = 1.0f; // [m^2]
-		pBody->radius = 0.8f; // [m]
-		pBody->cd = 0.4f; // [-]
-		pBody->cl = 1.2f; // [-]
-		pBody->b = 10.0f; // [...]
-		pBody->coef_friction = 0.0f; // [-]
-		pBody->coef_restitution = 0.0f; // [-]
+	pBody->mass = 30.0f; // [kg]
+	pBody->surface = 1.0f; // [m^2]
+	pBody->radius = 0.8f; // [m]
+	pBody->cd = 0.4f; // [-]
+	pBody->cl = 1.2f; // [-]
+	pBody->b = 10.0f; // [...]
+	pBody->coef_friction = 0.0f; // [-]
+	pBody->coef_restitution = 0.0f; // [-]
 
 		weaponType = 0;
 		shootAngle = 90;
@@ -177,11 +177,12 @@ void ModulePlayer::Shoot()
 	case 0:
 		bod->label = GRENADE;
 		isShootingGrenade = true;
-		grenadeTimer = 5 / DELTATIME;
+		explosionTimer = 5 / DELTATIME;
 		break;
 	case 1:
 		bod->label = MISSILE;
 		isShootingMissile = true;
+		explosionTimer = 5 / DELTATIME;
 		break;
 	default:
 		break;
