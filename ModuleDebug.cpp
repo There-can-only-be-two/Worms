@@ -280,7 +280,9 @@ void ModuleDebug::DrawPhysics()
 {
 	double playerX;
 	double playerY;
-	int shootForce = App->player->shootForce;
+	double cosinus;
+	double sinus;
+	int shootForce;
 
 	//Draw physBodies
 	p2List_item<Circle*>* item;
@@ -292,19 +294,17 @@ void ModuleDebug::DrawPhysics()
 
 		App->renderer->DrawCircle(METERS_TO_PIXELS(pBody->px), METERS_TO_PIXELS(pBody->py), METERS_TO_PIXELS(pBody->radius), 255, 255, 255);
 
-		//Get pos of player in turn
+		//Get values of player in turn
 		if (App->scene_intro->turn == pBody->label)
 		{
 			playerX = METERS_TO_PIXELS(pBody->px);
 			playerY = METERS_TO_PIXELS(pBody->py);
+			shootForce = pBody->shootForce;
+			cosinus = METERS_TO_PIXELS(shootForce * cos(pBody->shootAngle * DEGTORAD));
+			sinus = METERS_TO_PIXELS(shootForce * sin(pBody->shootAngle * DEGTORAD));
 		}
 	}
 
-
-	//Shooting Angle
-	double cosinus = METERS_TO_PIXELS(shootForce * cos(App->player->shootAngle * DEGTORAD));
-	double sinus = METERS_TO_PIXELS(shootForce * sin(App->player->shootAngle * DEGTORAD));
-	
 	
 	//Shoot Force color
 	uint r = 2 * shootForce;

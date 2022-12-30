@@ -53,8 +53,8 @@ bool ModulePlayer::Start()
 		pBody->coef_restitution = 0.0f; // [-]
 
 		weaponType = 0;
-		shootAngle = 90;
-		shootForce = 10;
+		pBody->shootAngle = 90;
+		pBody->shootForce = 10;
 		pBody->isJumping = 0;
 		pBody->isGrounded = true;
 
@@ -115,17 +115,17 @@ update_status ModulePlayer::Update()
 			}
 			//Angle
 			if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) {
-				if (shootAngle < 180) { shootAngle += 1; }
+				if (player->shootAngle < 180) { player->shootAngle += 1; }
 			}
 			if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) {
-				if (shootAngle > 0) { shootAngle -= 1; }
+				if (player->shootAngle > 0) { player->shootAngle -= 1; }
 			}
 			//Force
 			if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT) {
-				if (shootForce < 100) { shootForce += 1; }
+				if (player->shootForce < 100) { player->shootForce += 1; }
 			}
 			if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) {
-				if (shootForce > 0) { shootForce -= 1; }
+				if (player->shootForce > 0) { player->shootForce -= 1; }
 			}
 			//Shooting
 			if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
@@ -151,8 +151,8 @@ void ModulePlayer::Shoot(Circle* player)
 	bod->ax = 0;
 	bod->ay = 0;
 
-	bod->vx = shootForce * cos(shootAngle * DEGTORAD);
-	bod->vy = -shootForce * sin(shootAngle * DEGTORAD);
+	bod->vx = player->shootForce * cos(player->shootAngle * DEGTORAD);
+	bod->vy = -player->shootForce * sin(player->shootAngle * DEGTORAD);
 
 	bod->px = player->px;
 	bod->py = player->py;

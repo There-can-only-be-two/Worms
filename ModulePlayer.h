@@ -37,7 +37,5 @@ public:
 	bool isShootingGrenade;
 	bool isShootingMissile;
 
-	int shootAngle;
-	int shootForce;
 	int speed;
 };
