@@ -278,31 +278,39 @@ void ModuleDebug::DrawDebug()
 
 void ModuleDebug::DrawPhysics()
 {
+	double playerX;
+	double playerY;
 	int shootForce = App->player->shootForce;
+
+	//Draw physBodies
+	p2List_item<Circle*>* item;
+	Circle* pBody = NULL;
+
+	for (item = App->physics->listBodies.getFirst(); item != NULL; item = item->next)
+	{
+		pBody = item->data;
+
+		App->renderer->DrawCircle(METERS_TO_PIXELS(pBody->px), METERS_TO_PIXELS(pBody->py), METERS_TO_PIXELS(pBody->radius), 255, 255, 255);
+
+		//Get pos of player in turn
+		if (App->scene_intro->turn == pBody->label)
+		{
+			playerX = METERS_TO_PIXELS(pBody->px);
+			playerY = METERS_TO_PIXELS(pBody->py);
+		}
+	}
+
 
 	//Shooting Angle
 	double cosinus = METERS_TO_PIXELS(shootForce * cos(App->player->shootAngle * DEGTORAD));
 	double sinus = METERS_TO_PIXELS(shootForce * sin(App->player->shootAngle * DEGTORAD));
-	double playerX = METERS_TO_PIXELS(App->player->pBody->px);
-	double playerY = METERS_TO_PIXELS(App->player->pBody->py);
-
+	
+	
 	//Shoot Force color
 	uint r = 2 * shootForce;
 	uint g = 2 * (1 - shootForce);
 	uint b = 0;
 	uint a = 255;
 
-	App->renderer->DrawLine(playerX, playerY, playerX + cosinus, playerY - sinus, r, g, b, a, false);
-
-
-    //Draw physBodies
-    p2List_item<Circle*>* item;
-	Circle* pBody = NULL;
-  
-	for (item = App->physics->listBodies.getFirst(); item != NULL; item = item->next)
-	{
-		pBody = item->data;
-
-		App->renderer->DrawCircle(METERS_TO_PIXELS(pBody->px), METERS_TO_PIXELS(pBody->py), METERS_TO_PIXELS(pBody->radius), 255, 255, 255);
-	}
+	App->renderer->DrawLine(playerX, playerY, playerX + cosinus, playerY - sinus, r, g, b, a, false);  
 }

@@ -130,7 +130,7 @@ update_status ModulePlayer::Update()
 			//Shooting
 			if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 				if (!isShootingGrenade && !isShootingMissile) {
-					Shoot();
+					Shoot(player);
 				}
 				if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
 					player->px = PIXELS_TO_METERS(600);
@@ -144,7 +144,7 @@ update_status ModulePlayer::Update()
 	return UPDATE_CONTINUE;
 }
 
-void ModulePlayer::Shoot()
+void ModulePlayer::Shoot(Circle* player)
 {
 	Circle* bod = new Circle();
 
@@ -154,8 +154,8 @@ void ModulePlayer::Shoot()
 	bod->vx = shootForce * cos(shootAngle * DEGTORAD);
 	bod->vy = -shootForce * sin(shootAngle * DEGTORAD);
 
-	bod->px = pBody->px;
-	bod->py = pBody->py;
+	bod->px = player->px;
+	bod->py = player->py;
 
 	bod->isAlive = true;
 	bod->isStable = false;
