@@ -198,16 +198,22 @@ void ModuleDebug::DrawDebug()
 	std::string string = std::string("MAX FPS   (U-/I+)  ") + std::to_string(desiredFPS);
 	App->fonts->BlitText(debugX + 16, debugY + 60, fontId, string.c_str());
 
-	//Gravity
-	string = std::string("#GRAVITY.Y  (J-/K+)  ") + std::to_string(App->physics->GetGravity());
+
+	//FORCES
+	string = std::string("#FORCES");
 	App->fonts->BlitText(debugX, debugY + 100, fontId, string.c_str());
 
-	//Wind
-	string = std::string("#WIND X  (R-/T+)  ") + std::to_string(App->scene_intro->atm->windx);
-	App->fonts->BlitText(debugX, debugY + 120, fontId, string.c_str());
+	//Gravity
+	string = std::string("GRAVITY.Y  (J-/K+)  ") + std::to_string(App->physics->GetGravity());
+	App->fonts->BlitText(debugX + 16, debugY + 120, fontId, string.c_str());
 
-	string = std::string("#WIND Y  (3-/4+)  ") + std::to_string(App->scene_intro->atm->windy);
-	App->fonts->BlitText(debugX, debugY + 130, fontId, string.c_str());
+	//Wind
+	string = std::string("WIND X  (R-/T+)  ") + std::to_string(App->scene_intro->atm->windx);
+	App->fonts->BlitText(debugX + 16, debugY + 140, fontId, string.c_str());
+
+	string = std::string("WIND Y  (3-/4+)  ") + std::to_string(App->scene_intro->atm->windy);
+	App->fonts->BlitText(debugX + 16, debugY + 160, fontId, string.c_str());
+
 
 	////Bounce coef
 	float bouncePrint, cdPrint, bPrint;
@@ -217,32 +223,25 @@ void ModuleDebug::DrawDebug()
 		bouncePrint = App->player->coef_rest_grenade;
 		cdPrint = App->player->cd_grenade;
 		bPrint = App->player->b_grenade;
-		App->fonts->BlitText(debugX, debugY + 150, fontId, "#BOUNCE COEF (B) = GRENADE");
+		App->fonts->BlitText(debugX, debugY + 200, fontId, "#SWITCH ENTITY (B) = GRENADE");
 	}
 	else if (!isGrenade)
 	{
 		bouncePrint = App->player->coef_rest_player;
 		cdPrint = App->player->cd_player;
 		bPrint = App->player->b_player;
-		App->fonts->BlitText(debugX, debugY + 150, fontId, "#SWITCH ENTITY (B) = PLAYER");
+		App->fonts->BlitText(debugX, debugY + 200, fontId, "#SWITCH ENTITY (B) = PLAYER");
 	}
 
-	string = std::string("#BOUNCE COEF     (N-/M+)  ") + std::to_string(bouncePrint);
-	App->fonts->BlitText(debugX, debugY + 170, fontId, string.c_str());
+	string = std::string("BOUNCE COEF     (N-/M+)  ") + std::to_string(bouncePrint);
+	App->fonts->BlitText(debugX + 16, debugY + 220, fontId, string.c_str());
 
-	string = std::string("#AERO DRAG COEF  (Z-/X+)  ") + std::to_string(cdPrint);
-	App->fonts->BlitText(debugX, debugY + 180, fontId, string.c_str());
+	string = std::string("AERO DRAG COEF  (Z-/X+)  ") + std::to_string(cdPrint);
+	App->fonts->BlitText(debugX + 16, debugY + 240, fontId, string.c_str());
 
-	string = std::string("#HYDRO DRAG COEF (G-/H+)  ") + std::to_string(bPrint);
-	App->fonts->BlitText(debugX, debugY + 190, fontId, string.c_str());
+	string = std::string("HYDRO DRAG COEF (G-/H+)  ") + std::to_string(bPrint);
+	App->fonts->BlitText(debugX + 16, debugY + 260, fontId, string.c_str());
 
-	//ACTIVATE / DISACTIVATE FORCES
-
-		//Gravity
-	if (!noGravity)
-		App->fonts->BlitText(debugX, debugY + 210, fontId, "#GRAVITY  (5)   ON");
-	else
-		App->fonts->BlitText(debugX, debugY + 210, fontId, "#GRAVITY  (5)   OFF");
 
 
 	//Change player
@@ -253,21 +252,21 @@ void ModuleDebug::DrawDebug()
 		turn = "PLAYER 2";
 
 	string = std::string("#TURN       (P)    ") + turn;
-	App->fonts->BlitText(debugX, debugY + 260, fontId, string.c_str());
+	App->fonts->BlitText(debugX, debugY + 300, fontId, string.c_str());
 
 
 
 	//Hide UI
 	if (hideUI)
-		App->fonts->BlitText(debugX, debugY + 280, fontId, "#HIDE UI    (U)    ON");
+		App->fonts->BlitText(debugX, debugY + 320, fontId, "#HIDE UI    (U)    ON");
 	else
-		App->fonts->BlitText(debugX, debugY + 280, fontId, "#HIDE UI    (U)    OFF");
+		App->fonts->BlitText(debugX, debugY + 320, fontId, "#HIDE UI    (U)    OFF");
 
 	//Mute SFX
 	if (sfxON)
-		App->fonts->BlitText(debugX, debugY + 300, fontId, "#SFX        (M)    ON");
+		App->fonts->BlitText(debugX, debugY + 340, fontId, "#SFX        (M)    ON");
 	else
-		App->fonts->BlitText(debugX, debugY + 300, fontId, "#SFX        (M)    OFF");
+		App->fonts->BlitText(debugX, debugY + 340, fontId, "#SFX        (M)    OFF");
 
 
 
