@@ -249,14 +249,13 @@ void ModuleDebug::DrawDebug()
 			
 
 			//Grenade cooldown
-			string = std::string("GRENADECOOLDOWN = ") + std::to_string(App->player->grenadeTimer);
+			string = std::string("GRENADECOOLDOWN = ") + std::to_string(App->player->explosionTimer);
 			App->fonts->BlitText(debugX + 16, debugY + 760, fontId, string.c_str());
 
 			if (App->player->isShootingGrenade == false && App->player->isShootingMissile == false) {
 				string = std::string("SHOOTING = AVAILABLE");
 				App->fonts->BlitText(debugX + 16, debugY + 780, fontId, string.c_str());
 			}
-
 			else {
 				string = std::string("SHOOTING = UNAVAILABLE");
 				App->fonts->BlitText(debugX + 16, debugY + 780, fontId, string.c_str());
@@ -266,7 +265,6 @@ void ModuleDebug::DrawDebug()
 				string = std::string("WEAPON: GRENADE");
 				App->fonts->BlitText(debugX + 16, debugY + 660, fontId, string.c_str());
 			}
-
 			else {
 				string = std::string("WEAPON: MISSILE");
 				App->fonts->BlitText(debugX + 16, debugY + 660, fontId, string.c_str());
