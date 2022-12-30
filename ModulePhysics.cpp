@@ -218,18 +218,18 @@ Atmosphere* ModulePhysics::CreateAtmosphere()
 	return atm;
 }
 
-//Enemy* ModulePhysics::CreateEnemy(float ex, float ey, float ew, float eh)
-//{
-//	Enemy* enemy = new Enemy();
-//
-//	enemy->x = PIXELS_TO_METERS(ex); enemy->y = PIXELS_TO_METERS(ey);
-//
-//	enemy->w = PIXELS_TO_METERS(ew); enemy->h = PIXELS_TO_METERS(eh);
-//
-//	enemy->life = 100;
-//
-//	return enemy;
-//}
+Enemy* ModulePhysics::CreateEnemy(float ex, float ey, float ew, float eh)
+{
+	Enemy* enemy = new Enemy();
+
+	enemy->x = PIXELS_TO_METERS(ex); enemy->y = PIXELS_TO_METERS(ey);
+
+	enemy->w = PIXELS_TO_METERS(ew); enemy->h = PIXELS_TO_METERS(eh);
+
+	enemy->life = 100;
+
+	return enemy;
+}
 
 // Compute modulus of a vector
 float ModulePhysics::modulus(float vx, float vy)
