@@ -38,4 +38,5 @@ public:
 	int shootAngle;
 	int shootForce;
 	int speed;
+
 };
