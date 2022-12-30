@@ -14,6 +14,10 @@ ModulePlayer::~ModulePlayer()
 // Load assets
 bool ModulePlayer::Start()
 {
+	coef_rest_grenade = 0.7f;
+	cd_grenade = 0.4f;
+	b_grenade = 10.0f;
+
 	for (int i = 0; i < 2; i++)
 	{
 		pBody = new Circle();
@@ -83,6 +87,10 @@ update_status ModulePlayer::Update()
 	for (pItem = listPlayers.getFirst(); pItem != NULL; pItem = pItem->next)
 	{
 		player = pItem->data;
+
+		player->coef_restitution = coef_rest_player;
+		player->cd = cd_player;
+		player->b = b_player;
 
 		if (player->label == App->scene_intro->turn)
 		{
@@ -160,11 +168,11 @@ void ModulePlayer::Shoot()
 	bod->mass = 10.0f; // [kg]
 	bod->surface = 1.0f; // [m^2]
 	bod->radius = 0.4f; // [m]
-	bod->cd = 0.4f; // [-]
+	bod->cd = cd_grenade; // [-]
 	bod->cl = 1.2f; // [-]
-	bod->b = 10.0f; // [...]
+	bod->b = b_grenade; // [...]
 	bod->coef_friction = 0.9f; // [-]
-	bod->coef_restitution = 0.7f; // [-]
+	bod->coef_restitution = coef_rest_grenade; // [-]
 
 	App->scene_intro->explosion->steps = App->scene_intro->explosion->stepIterator;
 
