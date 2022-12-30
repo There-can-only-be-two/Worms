@@ -58,7 +58,10 @@ update_status ModulePhysics::PreUpdate()
 			}
 			else if (pBody->label == MISSILE)
 			{
-				pBody->isStable = TRUE;
+				if (is_colliding_with_ground(*pBody, *App->scene_intro->ground))
+				{
+					pBody->isStable = TRUE;
+				}
 			}
 
 
@@ -94,33 +97,41 @@ update_status ModulePhysics::PreUpdate()
 			pBody->ax = pBody->fx / pBody->mass;
 			pBody->ay = pBody->fy / pBody->mass;
 
-			// Solve collision between ball and ground
-			if (is_colliding_with_ground(*pBody, *App->scene_intro->ground))
+			// Solve collision between ball and ground(list)
+			p2List_item<Ground*>* gItem;
+			Ground* ground = NULL;
+			for (gItem = App->scene_intro->listGrounds.getFirst(); gItem != NULL; gItem = gItem->next)
 			{
-				if (std::abs(pBody->px - (App->scene_intro->ground->x + App->scene_intro->ground->w / 2.0f)) <= ((App->scene_intro->ground->x + App->scene_intro->ground->w)/ 2.0f)) {
-					pBody->py = App->scene_intro->ground->y - pBody->radius;
-				}
-				if (pBody->px > App->scene_intro->ground->x && pBody->px < (App->scene_intro->ground->x + App->scene_intro->ground->w / 2.0f)) {
+				ground = gItem->data;
 
-				}
-				if (pBody->px > App->scene_intro->ground->x && pBody->px < (App->scene_intro->ground->x + App->scene_intro->ground->w / 2.0f)) {
+				if (is_colliding_with_ground(*pBody, *ground))
+				{
+					if (std::abs(pBody->px - (ground->x + ground->w / 2.0f)) <= ((ground->x + ground->w) / 2.0f)) {
+						pBody->py = ground->y - pBody->radius;
+					}
+					if (pBody->px > ground->x && pBody->px < (ground->x + ground->w / 2.0f)) {
 
-				}
+					}
+					if (pBody->px > ground->x && pBody->px < (ground->x + ground->w / 2.0f)) {
 
-				// TP ball to ground surface
-				pBody->py = App->scene_intro->ground->y - pBody->radius;
+					}
 
-				// Elastic bounce with ground
-				pBody->vy = -pBody->vy;
+					// TP ball to ground surface
+					pBody->py = ground->y - pBody->radius;
 
-				// FUYM non-elasticity
-				pBody->vx *= pBody->coef_friction;
-				pBody->vy *= pBody->coef_restitution;
+					// Elastic bounce with ground
+					pBody->vy = -pBody->vy;
 
-				if (pBody->label == PLAYER) {
-					App->player->isGrounded = true;
+					// FUYM non-elasticity
+					pBody->vx *= pBody->coef_friction;
+					pBody->vy *= pBody->coef_restitution;
+
+					if (pBody->label == PLAYER) {
+						App->player->isGrounded = true;
+					}
 				}
 			}
+			
 			
 			if (is_colliding_with_enemy(*pBody, *App->scene_intro->enemy)){
 				// TP ball to ground surface

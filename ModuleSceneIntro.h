@@ -41,8 +41,12 @@ public:
 	bool CleanUp();
 
 public:
+	p2List<Ground*> listGrounds;
+
 	Ground* ground;
 	Ground* ground2;
+	Ground* ground3;
+
 	Water* water;
 	Atmosphere* atm;
 	Enemy* enemy;

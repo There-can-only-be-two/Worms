@@ -38,7 +38,7 @@ bool ModuleTitle::Start()
 	//Load sound
 	sfx_saberON_1 = App->audio->LoadFx("Assets/Audio/saberON_1.wav");
 	sfx_saberON_2 = App->audio->LoadFx("Assets/Audio/saberON_2.wav");
-	Mix_Volume(-1, 32);
+	Mix_Volume(-1, 16);
 
 	//Logo sound
 	srand(time(NULL));
@@ -60,7 +60,7 @@ bool ModuleTitle::CleanUp()
 
 update_status ModuleTitle::Update()
 {
-	App->renderer->Blit(logo, 210, -100);
+	App->renderer->Blit(logo, 310, -100);
 	
 
 	
