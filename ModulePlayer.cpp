@@ -56,7 +56,7 @@ bool ModulePlayer::Start()
 	shootAngle = 90;
 	shootForce = 10;
 	isJumping = 0;
-	grenadeTimer = 0;
+	explosionTimer = 0;
 
 		App->physics->listBodies.add(pBody);
 		listPlayers.add(pBody);
@@ -174,11 +174,12 @@ void ModulePlayer::Shoot()
 	case 0:
 		bod->label = GRENADE;
 		isShootingGrenade = true;
-		grenadeTimer = 5 / DELTATIME;
+		explosionTimer = 5 / DELTATIME;
 		break;
 	case 1:
 		bod->label = MISSILE;
 		isShootingMissile = true;
+		explosionTimer = 5 / DELTATIME;
 		break;
 	default:
 		break;

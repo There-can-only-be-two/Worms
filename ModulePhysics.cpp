@@ -36,8 +36,8 @@ update_status ModulePhysics::PreUpdate()
 	p2List_item<Circle*>* item;
 	Circle* pBody = NULL;
 
-	if (App->player->grenadeTimer > 0) {
-		App->player->grenadeTimer--;
+	if (App->player->explosionTimer > 0) {
+		App->player->explosionTimer--;
 	}
 
 	for (item = App->physics->listBodies.getFirst(); item != NULL; item = item->next)
@@ -65,11 +65,15 @@ update_status ModulePhysics::PreUpdate()
 			{
 				if (is_colliding_with_ground(*pBody, *App->scene_intro->ground))
 				{
-					pBody->isStable = TRUE;
+					App->player->explosionTimer = 0;
+				}
+				if (is_colliding_with_water(*pBody, *App->scene_intro->water))
+				{
+					App->player->explosionTimer = 0;
 				}
 			}
 
-			if (App->player->grenadeTimer <= 0 && pBody->label == GRENADE) {
+			if (App->player->explosionTimer <= 0 && (pBody->label == GRENADE || pBody->label == MISSILE)) {
 				App->scene_intro->explosion->x = pBody->px;
 				App->scene_intro->explosion->y = pBody->py;
 				listBodies.del(item);
@@ -214,18 +218,18 @@ Atmosphere* ModulePhysics::CreateAtmosphere()
 	return atm;
 }
 
-Enemy* ModulePhysics::CreateEnemy(float ex, float ey, float ew, float eh)
-{
-	Enemy* enemy = new Enemy();
-
-	enemy->x = PIXELS_TO_METERS(ex); enemy->y = PIXELS_TO_METERS(ey);
-
-	enemy->w = PIXELS_TO_METERS(ew); enemy->h = PIXELS_TO_METERS(eh);
-
-	enemy->life = 100;
-
-	return enemy;
-}
+//Enemy* ModulePhysics::CreateEnemy(float ex, float ey, float ew, float eh)
+//{
+//	Enemy* enemy = new Enemy();
+//
+//	enemy->x = PIXELS_TO_METERS(ex); enemy->y = PIXELS_TO_METERS(ey);
+//
+//	enemy->w = PIXELS_TO_METERS(ew); enemy->h = PIXELS_TO_METERS(eh);
+//
+//	enemy->life = 100;
+//
+//	return enemy;
+//}
 
 // Compute modulus of a vector
 float ModulePhysics::modulus(float vx, float vy)

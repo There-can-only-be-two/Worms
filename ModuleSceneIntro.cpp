@@ -58,11 +58,12 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update()
 {
 
-	if (explosion->steps > 0 && App->player->grenadeTimer <= 0 && App->player->isShootingGrenade == true) {
+	if (explosion->steps > 0 && App->player->explosionTimer <= 0 && (App->player->isShootingGrenade == true || App->player->isShootingMissile == true)) {
 		App->renderer->DrawCircle(METERS_TO_PIXELS(explosion->x), METERS_TO_PIXELS(explosion->y), METERS_TO_PIXELS(explosion->radius) - METERS_TO_PIXELS(explosion->radius*(explosion->steps/explosion->stepIterator)), 255, 128, 0, 255);
 		explosion->steps--;
 		if (explosion->steps == 0) {
 			App->player->isShootingGrenade = false;
+			App->player->isShootingMissile = false;
 		}
 	}
 
