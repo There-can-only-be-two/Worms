@@ -70,7 +70,7 @@ update_status ModulePhysics::PreUpdate()
 			float fgy = pBody->mass * -gravity; // Let's assume gravity is constant and downwards, like in real situations
 			pBody->fx += fgx; pBody->fy += fgy; // Add this force to ball's total force
 
-			if (pBody->label == PLAYER && App->player->isJumping > 0)
+			if (pBody->label == PLAYER_1 && App->player->isJumping > 0)
 			{
 				App->player->isGrounded = false;
 				pBody->fy -= 1000;
@@ -126,24 +126,24 @@ update_status ModulePhysics::PreUpdate()
 					pBody->vx *= pBody->coef_friction;
 					pBody->vy *= pBody->coef_restitution;
 
-					if (pBody->label == PLAYER) {
+					if (pBody->label == PLAYER_1 || pBody->label ==  PLAYER_2) {
 						App->player->isGrounded = true;
 					}
 				}
 			}
 			
 			
-			if (is_colliding_with_enemy(*pBody, *App->scene_intro->enemy)){
-				// TP ball to ground surface
-				pBody->py = App->scene_intro->enemy->y - pBody->radius;
+			//if (is_colliding_with_enemy(*pBody, *App->scene_intro->enemy)){
+			//	// TP ball to ground surface
+			//	pBody->py = App->scene_intro->enemy->y - pBody->radius;
 
-				// Elastic bounce with ground
-				pBody->vy = -pBody->vy;
+			//	// Elastic bounce with ground
+			//	pBody->vy = -pBody->vy;
 
-				// FUYM non-elasticity
-				pBody->vx *= pBody->coef_friction;
-				pBody->vy *= pBody->coef_restitution;
-			}
+			//	// FUYM non-elasticity
+			//	pBody->vx *= pBody->coef_friction;
+			//	pBody->vy *= pBody->coef_restitution;
+			//}
 
 			integrator_velocity_verlet(*pBody, dt);
 			/*pBody->px += pBody->vx * dt + 0.5f * pBody->ax * dt * dt;

@@ -27,10 +27,11 @@ public:
 	bool drawPhysics = false;
 	bool variables = false;
 	bool fpsCap = false;
+	bool changePlayer = false;
 	bool musicON = false;
 	bool sfxON = true;
 	bool hideUI = false;
-
+	
 	microseconds timePerCycle;
 	microseconds elapsedFrame;
 	int desiredFPSmic;

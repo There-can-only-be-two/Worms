@@ -14,37 +14,52 @@ ModulePlayer::~ModulePlayer()
 // Load assets
 bool ModulePlayer::Start()
 {
-	pBody = new Circle();
-	pBody->label = PLAYER;
-	isJumping = false;
-	pBody->px = PIXELS_TO_METERS(600);
-	pBody->py = PIXELS_TO_METERS(400);
-	pBody->vx = 0;
-	pBody->vy = 0;
-	pBody->ax = 0;
-	pBody->ay = 0;
-	speed = 6;
+	for (int i = 0; i < 2; i++)
+	{
+		pBody = new Circle();
 
-	pBody->isAlive = true;
-	pBody->isStable = false;
-	isGrounded = false;
+		if (i == 0)
+		{
+			pBody->px = PIXELS_TO_METERS(600);
+			pBody->py = PIXELS_TO_METERS(400);
+			pBody->label = PLAYER_1;
+		}
+		else
+		{
+			pBody->px = PIXELS_TO_METERS(1400);
+			pBody->py = PIXELS_TO_METERS(500);
+			pBody->label = PLAYER_2;
+		}
 
-	pBody->mass = 10.0f; // [kg]
-	pBody->surface = 1.0f; // [m^2]
-	pBody->radius = 0.8f; // [m]
-	pBody->cd = 0.4f; // [-]
-	pBody->cl = 1.2f; // [-]
-	pBody->b = 10.0f; // [...]
-	pBody->coef_friction = 0.0f; // [-]
-	pBody->coef_restitution = 0.0f; // [-]
+		pBody->vx = 0;
+		pBody->vy = 0;
+		pBody->ax = 0;
+		pBody->ay = 0;
+		speed = 6;
 
-	weaponType = 0;
-	shootAngle = 90;
-	shootForce = 10;
-	isJumping = 0;
+		pBody->isAlive = true;
+		pBody->isStable = false;
+		isGrounded = false;
+		isJumping = 0;
 
-	App->physics->listBodies.add(pBody);
+		pBody->mass = 10.0f; // [kg]
+		pBody->surface = 1.0f; // [m^2]
+		pBody->radius = 0.8f; // [m]
+		pBody->cd = 0.4f; // [-]
+		pBody->cl = 1.2f; // [-]
+		pBody->b = 10.0f; // [...]
+		pBody->coef_friction = 0.0f; // [-]
+		pBody->coef_restitution = 0.0f; // [-]
 
+		weaponType = 0;
+		shootAngle = 90;
+		shootForce = 10;
+
+
+		App->physics->listBodies.add(pBody);
+		listPlayers.add(pBody);
+	}
+	
 	LOG("Loading player");
 	return true;
 }
@@ -60,56 +75,64 @@ bool ModulePlayer::CleanUp()
 // Update: draw background
 update_status ModulePlayer::Update()
 {
+	p2List_item<Circle*>* pItem;
+	Circle* player = NULL;
 
-	//Left
-	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-		pBody->px -= speed * DELTATIME;
-	}
-	//Right
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-		pBody->px += speed * DELTATIME;
-	}
-	//Jump
-	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
-		if (isGrounded) {
-			isJumping = 8;
-			isGrounded = false;
+	for (pItem = listPlayers.getFirst(); pItem != NULL; pItem = pItem->next)
+	{
+		player = pItem->data;
+
+		if (player->label == App->scene_intro->turn)
+		{
+			//Left
+			if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+				pBody->px -= speed * DELTATIME;
+			}
+			//Right
+			if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+				pBody->px += speed * DELTATIME;
+			}
+			//Jump
+			if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
+				if (isGrounded) {
+					isJumping = 8;
+					isGrounded = false;
+				}
+			}
+			//Weapons
+			if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
+				LOG("Selected GRENADE");
+				weaponType = 0;
+			}
+			if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) {
+				LOG("Selected ROCKET LAUNCHER");
+				weaponType = 1;
+			}
+			//Angle
+			if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) {
+				if (shootAngle < 180) { shootAngle += 1; }
+			}
+			if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) {
+				if (shootAngle > 0) { shootAngle -= 1; }
+			}
+			//Force
+			if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT) {
+				if (shootForce < 100) { shootForce += 1; }
+			}
+			if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) {
+				if (shootForce > 0) { shootForce -= 1; }
+			}
+			//Shooting
+			if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+				Shoot();
+			}
+			if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
+				pBody->px = PIXELS_TO_METERS(600);
+				pBody->py = PIXELS_TO_METERS(400);
+			}
 		}
 	}
-	//Weapons
-	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
-		LOG("Selected GRENADE");
-		weaponType = 0;
-	}
-	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) {
-		LOG("Selected ROCKET LAUNCHER");
-		weaponType = 1;
-	}
-	//Angle
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) {
-		if (shootAngle < 180) { shootAngle += 1; }
-	}
-	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) {
-		if (shootAngle > 0) { shootAngle -= 1; }
-	}
-	//Force
-	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT) {
-		if (shootForce < 100) { shootForce += 1; }
-	}
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) {
-		if (shootForce > 0) { shootForce -= 1; }
-	}
-	//Shooting
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
-		Shoot();
-	}
-	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
-		pBody->px = PIXELS_TO_METERS(600);
-		pBody->py = PIXELS_TO_METERS(400);
-	}
-
-	App->renderer->DrawQuad({ METERS_TO_PIXELS(pBody->px), METERS_TO_PIXELS(pBody->py), 20, 30 }, 200, 100, 130, 255, true);
-	
+		
 
 	return UPDATE_CONTINUE;
 }

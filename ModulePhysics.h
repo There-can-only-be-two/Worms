@@ -37,7 +37,8 @@ enum Bodytype
 
 enum Label
 {
-	PLAYER,
+	PLAYER_1,
+	PLAYER_2,
 	GRENADE,
 	MISSILE
 };

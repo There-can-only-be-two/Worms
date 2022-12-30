@@ -51,6 +51,8 @@ public:
 	Atmosphere* atm;
 	Enemy* enemy;
 
+	Label turn;
+
 	SDL_Texture* graphics;
 
 	SDL_Texture* tex_light_tiny;

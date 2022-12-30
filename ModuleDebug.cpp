@@ -62,8 +62,25 @@ update_status ModuleDebug::Update()
 		else if (App->input->GetKey(SDL_SCANCODE_M) == KEY_REPEAT && App->physics->GetGravity() < 100)
 			App->physics->SetGravity(App->physics->GetGravity() + 1);
 
+		
+
+		//P: Change Player
+		if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
+		{
+			if (App->scene_intro->turn == PLAYER_1)
+				App->scene_intro->turn = PLAYER_2;
+			else
+				App->scene_intro->turn = PLAYER_1;
+		}
+			
+
+		//U: HIDE UI
+		if (App->input->GetKey(SDL_SCANCODE_U) == KEY_DOWN)
+			hideUI = !hideUI;
+
+		
 		//F4: Sfx ON/OFF
-		if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN)
+		if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
 			sfxON = !sfxON;
 
 		if (sfxON)
@@ -71,10 +88,7 @@ update_status ModuleDebug::Update()
 		else
 			Mix_Volume(-1, 0);
 
-		//U: Chnage UI
-		if (App->input->GetKey(SDL_SCANCODE_U) == KEY_DOWN)
-			hideUI = !hideUI;
-
+		//Variables
 		if (App->input->GetKey(SDL_SCANCODE_V) == KEY_DOWN)
 			variables = !variables;
 	}
@@ -131,23 +145,40 @@ void ModuleDebug::DrawDebug()
 
 
 
+	//Change player
+	std::string turn;
+	if (App->scene_intro->turn == PLAYER_1)
+		turn = "PLAYER 1";
+	else
+		turn = "PLAYER 2";
+
+	string = std::string("#TURN       (P)    ") + turn;
+	App->fonts->BlitText(debugX, debugY + 200, fontId, string.c_str());
+
+
+
 	//Hide UI
 	if (hideUI)
-		App->fonts->BlitText(debugX, debugY + 160, fontId, "#HIDE UI    (U)    ON");
+		App->fonts->BlitText(debugX, debugY + 240, fontId, "#HIDE UI    (U)    ON");
 	else
-		App->fonts->BlitText(debugX, debugY + 160, fontId, "#HIDE UI    (U)    OFF");
+		App->fonts->BlitText(debugX, debugY + 240, fontId, "#HIDE UI    (U)    OFF");
 
 	//Mute SFX
 	if (sfxON)
-		App->fonts->BlitText(debugX, debugY + 180, fontId, "#SFX        (M)    ON");
+		App->fonts->BlitText(debugX, debugY + 260, fontId, "#SFX        (M)    ON");
 	else
-		App->fonts->BlitText(debugX, debugY + 180, fontId, "#SFX        (M)    OFF");
+		App->fonts->BlitText(debugX, debugY + 260, fontId, "#SFX        (M)    OFF");
+
+
+
+
+
 
 	//Variables
 	if (variables)
-		App->fonts->BlitText(debugX, debugY + 200, fontId, "#VARIABLES  (V)    ON");
+		App->fonts->BlitText(debugX, debugY + 300, fontId, "#VARIABLES  (V)    ON");
 	else
-		App->fonts->BlitText(debugX, debugY + 200, fontId, "#VARIABLES  (V)    OFF");
+		App->fonts->BlitText(debugX, debugY + 300, fontId, "#VARIABLES  (V)    OFF");
 
 
 	if (variables)
@@ -163,29 +194,29 @@ void ModuleDebug::DrawDebug()
 			pBody = item->data;
 
 			std::string string = std::string("PBODY.AX = ") + std::to_string(pBody->ax);
-			App->fonts->BlitText(debugX + 16, debugY + 220, fontId, string.c_str());
+			App->fonts->BlitText(debugX + 16, debugY + 320, fontId, string.c_str());
 
 			string = std::string("PBODY.AY = ") + std::to_string(pBody->ay);
-			App->fonts->BlitText(debugX + 16, debugY + 240, fontId, string.c_str());
+			App->fonts->BlitText(debugX + 16, debugY + 340, fontId, string.c_str());
 
 			string = std::string("PBODY.VX = ") + std::to_string(pBody->vx);
-			App->fonts->BlitText(debugX + 16, debugY + 260, fontId, string.c_str());
+			App->fonts->BlitText(debugX + 16, debugY + 360, fontId, string.c_str());
 
 			string = std::string("PBODY.VY = ") + std::to_string(pBody->vy);
-			App->fonts->BlitText(debugX + 16, debugY + 280, fontId, string.c_str());
+			App->fonts->BlitText(debugX + 16, debugY + 380, fontId, string.c_str());
 
 			string = std::string("PBODY.PX = ") + std::to_string(pBody->px);
-			App->fonts->BlitText(debugX + 16, debugY + 300, fontId, string.c_str());
+			App->fonts->BlitText(debugX + 16, debugY + 400, fontId, string.c_str());
 
 			string = std::string("PBODY.PY = ") + std::to_string(pBody->py);
-			App->fonts->BlitText(debugX + 16, debugY + 320, fontId, string.c_str());
+			App->fonts->BlitText(debugX + 16, debugY + 420, fontId, string.c_str());
 
 
 			string = std::string("PLAYER.PX = ") + std::to_string(App->player->pBody->px);
-			App->fonts->BlitText(debugX + 16, debugY + 360, fontId, string.c_str());
+			App->fonts->BlitText(debugX + 16, debugY + 460, fontId, string.c_str());
 
 			string = std::string("PLAYER.PY = ") + std::to_string(App->player->pBody->py);
-			App->fonts->BlitText(debugX + 16, debugY + 380, fontId, string.c_str());
+			App->fonts->BlitText(debugX + 16, debugY + 480, fontId, string.c_str());
 		}
 
 

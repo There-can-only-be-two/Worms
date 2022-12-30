@@ -29,6 +29,7 @@ public:
 
 public:
 	
+	p2List<Circle*> listPlayers;
 	Circle* pBody;
 	uint weaponType;
 
