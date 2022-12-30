@@ -25,7 +25,7 @@ Link of the Github Repository:
   - Frame Control: (I-/U+)
   - Gravity: (J-/K+)
   - Wind: on X (R-/T+) / on Y (3-/4+)
-  - B: Switch between player and grenade to enable variable setting
+  - B: Switch between player and grenade to enable variable settings
     - Bounce coef: (N-/M+)
     - Aerodynamic Drag coef: (Z-/X+)
     - Hydrodynamic Drag coef: (G-/H+)
