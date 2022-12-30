@@ -211,12 +211,25 @@ void ModuleDebug::DrawDebug()
 			string = std::string("PBODY.PY = ") + std::to_string(pBody->py);
 			App->fonts->BlitText(debugX + 16, debugY + 420, fontId, string.c_str());
 
-
 			string = std::string("PLAYER.PX = ") + std::to_string(App->player->pBody->px);
 			App->fonts->BlitText(debugX + 16, debugY + 460, fontId, string.c_str());
 
 			string = std::string("PLAYER.PY = ") + std::to_string(App->player->pBody->py);
-			App->fonts->BlitText(debugX + 16, debugY + 480, fontId, string.c_str());
+			App->fonts->BlitText(debugX + 16, debugY + 380, fontId, string.c_str());
+
+			string = std::string("GRENADECOOLDOWN = ") + std::to_string(App->player->grenadeTimer);
+			App->fonts->BlitText(debugX + 16, debugY + 400, fontId, string.c_str());
+
+			if (App->player->isShootingGrenade == false) {
+				string = std::string("SHOOTING = AVAILABLE");
+				App->fonts->BlitText(debugX + 16, debugY + 420, fontId, string.c_str());
+			}
+			else {
+				string = std::string("SHOOTING = UNAVAILABLE");
+				App->fonts->BlitText(debugX + 16, debugY + 420, fontId, string.c_str());
+			}
+
+
 		}
 
 

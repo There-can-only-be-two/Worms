@@ -34,7 +34,10 @@ public:
 	uint weaponType;
 
 	uint isJumping;
+	uint grenadeTimer;
 	bool isGrounded;
+	bool isShootingGrenade;
+	bool isShootingMissile;
 
 	int shootAngle;
 	int shootForce;

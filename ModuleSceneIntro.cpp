@@ -35,6 +35,11 @@ bool ModuleSceneIntro::Start()
 	water = App->physics->CreateWater(700, 620, 500, 200);
 	atm = App->physics->CreateAtmosphere();
 	//enemy = App->physics->CreateEnemy(1000, 200, 100, 100);
+
+	explosion = new Explosion();
+
+	explosion->radius = 2.5;
+	explosion->stepIterator = 10;
 	
 	turn = PLAYER_1;
 
@@ -52,6 +57,14 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+
+	if (explosion->steps > 0 && App->player->grenadeTimer <= 0 && App->player->isShootingGrenade == true) {
+		App->renderer->DrawCircle(METERS_TO_PIXELS(explosion->x), METERS_TO_PIXELS(explosion->y), METERS_TO_PIXELS(explosion->radius) - METERS_TO_PIXELS(explosion->radius*(explosion->steps/explosion->stepIterator)), 255, 128, 0, 255);
+		explosion->steps--;
+		if (explosion->steps == 0) {
+			App->player->isShootingGrenade = false;
+		}
+	}
 
 	return UPDATE_CONTINUE;
 }

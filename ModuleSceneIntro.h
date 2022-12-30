@@ -29,6 +29,15 @@ struct Light
 	int x, y;
 };
 
+struct Explosion
+{
+	double steps;
+	double stepIterator;
+	double radius;
+	double x;
+	double y;
+};
+
 class ModuleSceneIntro : public Module
 {
 public:
@@ -50,6 +59,7 @@ public:
 	Water* water;
 	Atmosphere* atm;
 	Enemy* enemy;
+	Explosion* explosion;
 
 	Label turn;
 

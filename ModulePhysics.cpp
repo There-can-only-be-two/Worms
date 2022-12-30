@@ -36,6 +36,10 @@ update_status ModulePhysics::PreUpdate()
 	p2List_item<Circle*>* item;
 	Circle* pBody = NULL;
 
+	if (App->player->grenadeTimer > 0) {
+		App->player->grenadeTimer--;
+	}
+
 	for (item = App->physics->listBodies.getFirst(); item != NULL; item = item->next)
 	{
 		pBody = item->data;
@@ -55,6 +59,7 @@ update_status ModulePhysics::PreUpdate()
 					compute_aerodynamic_drag(fdx, fdy, *pBody, *App->scene_intro->atm);
 					pBody->fx += fdx; pBody->fy += fdy; // Add this force to ball's total force
 				}
+
 			}
 			else if (pBody->label == MISSILE)
 			{
@@ -64,6 +69,11 @@ update_status ModulePhysics::PreUpdate()
 				}
 			}
 
+			if (App->player->grenadeTimer <= 0 && pBody->label == GRENADE) {
+				App->scene_intro->explosion->x = pBody->px;
+				App->scene_intro->explosion->y = pBody->py;
+				listBodies.del(item);
+			}
 
 			// Gravity force
 			float fgx = 0.0f;

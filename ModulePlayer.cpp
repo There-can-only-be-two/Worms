@@ -37,24 +37,26 @@ bool ModulePlayer::Start()
 		pBody->ay = 0;
 		speed = 6;
 
-		pBody->isAlive = true;
-		pBody->isStable = false;
-		isGrounded = false;
-		isJumping = 0;
+	pBody->isAlive = true;
+	pBody->isStable = false;
+	isGrounded = false;
+	isShootingGrenade = false;
+	isShootingMissile = false;
 
-		pBody->mass = 10.0f; // [kg]
-		pBody->surface = 1.0f; // [m^2]
-		pBody->radius = 0.8f; // [m]
-		pBody->cd = 0.4f; // [-]
-		pBody->cl = 1.2f; // [-]
-		pBody->b = 10.0f; // [...]
-		pBody->coef_friction = 0.0f; // [-]
-		pBody->coef_restitution = 0.0f; // [-]
+	pBody->mass = 12.0f; // [kg]
+	pBody->surface = 1.0f; // [m^2]
+	pBody->radius = 0.8f; // [m]
+	pBody->cd = 0.4f; // [-]
+	pBody->cl = 1.2f; // [-]
+	pBody->b = 10.0f; // [...]
+	pBody->coef_friction = 0.0f; // [-]
+	pBody->coef_restitution = 0.0f; // [-]
 
-		weaponType = 0;
-		shootAngle = 90;
-		shootForce = 10;
-
+	weaponType = 0;
+	shootAngle = 90;
+	shootForce = 10;
+	isJumping = 0;
+	grenadeTimer = 0;
 
 		App->physics->listBodies.add(pBody);
 		listPlayers.add(pBody);
@@ -124,7 +126,8 @@ update_status ModulePlayer::Update()
 			}
 			//Shooting
 			if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
-				Shoot();
+				if (!isShootingGrenade && !isShootingMissile) {
+					Shoot();
 			}
 			if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
 				pBody->px = PIXELS_TO_METERS(600);
@@ -162,14 +165,19 @@ void ModulePlayer::Shoot()
 	bod->coef_friction = 0.9f; // [-]
 	bod->coef_restitution = 0.7f; // [-]
 
+	App->scene_intro->explosion->steps = App->scene_intro->explosion->stepIterator;
+
 	bod->label = GRENADE;
 
 	switch (weaponType) {
 	case 0:
 		bod->label = GRENADE;
+		isShootingGrenade = true;
+		grenadeTimer = 5 / DELTATIME;
 		break;
 	case 1:
 		bod->label = MISSILE;
+		isShootingMissile = true;
 		break;
 	default:
 		break;
