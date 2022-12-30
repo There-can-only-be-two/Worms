@@ -43,7 +43,7 @@ bool ModulePlayer::Start()
 	isShootingGrenade = false;
 	isShootingMissile = false;
 
-	pBody->mass = 12.0f; // [kg]
+	pBody->mass = 30.0f; // [kg]
 	pBody->surface = 1.0f; // [m^2]
 	pBody->radius = 0.8f; // [m]
 	pBody->cd = 0.4f; // [-]
