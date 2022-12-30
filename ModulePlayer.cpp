@@ -28,8 +28,10 @@ bool ModulePlayer::Start()
 	pBody->isAlive = true;
 	pBody->isStable = false;
 	isGrounded = false;
+	isShootingGrenade = false;
+	isShootingMissile = false;
 
-	pBody->mass = 10.0f; // [kg]
+	pBody->mass = 12.0f; // [kg]
 	pBody->surface = 1.0f; // [m^2]
 	pBody->radius = 0.8f; // [m]
 	pBody->cd = 0.4f; // [-]
@@ -42,6 +44,7 @@ bool ModulePlayer::Start()
 	shootAngle = 90;
 	shootForce = 10;
 	isJumping = 0;
+	grenadeTimer = 0;
 
 	App->physics->listBodies.add(pBody);
 
@@ -101,7 +104,9 @@ update_status ModulePlayer::Update()
 	}
 	//Shooting
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
-		Shoot();
+		if (!isShootingGrenade && !isShootingMissile) {
+			Shoot();
+		}
 	}
 	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
 		pBody->px = PIXELS_TO_METERS(600);
@@ -144,9 +149,12 @@ void ModulePlayer::Shoot()
 	switch (weaponType) {
 	case 0:
 		bod->label = GRENADE;
+		isShootingGrenade = true;
+		grenadeTimer = 5 / DELTATIME;
 		break;
 	case 1:
 		bod->label = MISSILE;
+		isShootingMissile = true;
 		break;
 	default:
 		break;
