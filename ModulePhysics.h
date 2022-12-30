@@ -56,6 +56,7 @@ public:
 	bool isStable;
 	int isJumping;
 	bool isGrounded;
+	bool isHit;
 	Bodytype type;
 	Label label;
 
@@ -85,6 +86,8 @@ public:
 	// Coefficients of friction & restitution (for bounces)
 	float coef_friction;
 	float coef_restitution;
+
+
 };
 
 class Circle : public PhysBody {
@@ -95,6 +98,15 @@ public:
 class Rect : public PhysBody {
 public:
 	int w, h;
+};
+
+struct Explosion
+{
+	double steps;
+	double stepIterator;
+	double radius;
+	double x;
+	double y;
 };
 
 class Atmosphere
@@ -143,6 +155,8 @@ public:
 	Water* CreateWater(float wx, float wy, float ww, float wh);
 	Atmosphere* CreateAtmosphere();
 	Enemy* CreateEnemy(float ex, float ey, float ew, float eh);
+
+	void CheckIfHit(PhysBody& body, Explosion& ex);
 
 	void Drag(PhysBody* phbody);
 

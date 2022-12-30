@@ -137,6 +137,7 @@ update_status ModulePlayer::Update()
 					player->py = PIXELS_TO_METERS(400);
 				}
 			}
+		
 		}
 	}
 		
