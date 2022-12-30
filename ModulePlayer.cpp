@@ -78,7 +78,16 @@ bool ModulePlayer::Start()
 bool ModulePlayer::CleanUp()
 {
 	LOG("Unloading player");
-
+	p2List_item<Circle*>* pItem;
+	Circle* player = NULL;
+	for (pItem = listPlayers.getFirst(); pItem != NULL; pItem = pItem->next)
+	{
+		player = pItem->data;
+		player->px = 1000;
+		player->py = 1000;
+		player->label = DEAD;
+	
+	}
 	return true;
 }
 
@@ -153,18 +162,33 @@ update_status ModulePlayer::Update()
 			if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 				if (!isShootingGrenade && !isShootingMissile) {
 					Shoot(player);
+					if (App->scene_intro->turn == PLAYER_1) {
+						App->scene_intro->turn = PLAYER_2;
+					}
+					else {
+						App->scene_intro->turn = PLAYER_1;
+					}
 				}
 				if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
 					player->px = PIXELS_TO_METERS(600);
 					player->py = PIXELS_TO_METERS(400);
 				}
-				if (App->scene_intro->turn == PLAYER_1) {
-					App->scene_intro->turn = PLAYER_2;
-				} else {
-					App->scene_intro->turn = PLAYER_1;
+				
+			}
+			if (player->life == 0) {
+				//if (pBody->label == PLAYER_1)
+
+				App->fonts->BlitText(700, 400, App->fonts->selected, "GAME OVER, CLICK ENTER TO RESTART");
+				if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+					App->fade->FadeBlack((Module*)App->scene_intro, (Module*)App->scene_intro, 90);
+					player->life = 100;
+					player->px = 1000;
+					player->py = 1000;
+					player->label = DEAD;
+					//listPlayers.del(*player);
+
 				}
 			}
-		
 		}
 		else {
 			if (player->label == PLAYER_1) {
@@ -179,17 +203,7 @@ update_status ModulePlayer::Update()
 			}
 		}
 
-		if (player->life == 0) {
-			//if (pBody->label == PLAYER_1)
-
-			App->fonts->BlitText(700, 400, App->fonts->selected, "GAME OVER, CLICK ENTER TO RESTART");
-			//std::string string = std::to_string();
-			//App->fonts->BlitText(METERS_TO_PIXELS(player->px - 10), METERS_TO_PIXELS(player->py - 50), App->fonts->selected, string.c_str());
-			if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
-				App->fade->FadeBlack((Module*)App->scene_intro, (Module*)App->scene_intro, 90);
-				player->life = 100;
-			}
-		}
+		
 	}
 		
 

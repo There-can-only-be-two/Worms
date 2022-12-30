@@ -40,7 +40,8 @@ enum Label
 	PLAYER_1,
 	PLAYER_2,
 	GRENADE,
-	MISSILE
+	MISSILE,
+	DEAD
 };
 
 // Class: Atmosphere -> From the example
