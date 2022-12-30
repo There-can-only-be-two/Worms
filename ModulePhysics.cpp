@@ -88,7 +88,7 @@ update_status ModulePhysics::PreUpdate()
 			pBody->fx += fgx; pBody->fy += fgy; // Add this force to ball's total force
 
 			if (pBody->label == PLAYER && App->player->isJumping > 0) {
-				App->player->grounded = false;
+				App->player->isGrounded = false;
 				pBody->fy -= 1000;
 				App->player->isJumping--;
 			}
@@ -116,6 +116,18 @@ update_status ModulePhysics::PreUpdate()
 			// Solve collision between ball and ground
 			if (is_colliding_with_ground(*pBody, *App->scene_intro->ground))
 			{
+				if (std::abs(pBody->px - (App->scene_intro->ground->x + App->scene_intro->ground->w / 2.0f)) <= ((App->scene_intro->ground->x + App->scene_intro->ground->w) / 2.0f)) {
+					pBody->py = App->scene_intro->ground->y - pBody->radius;
+				}
+
+
+				if (pBody->px > App->scene_intro->ground->x && pBody->px < (App->scene_intro->ground->x + App->scene_intro->ground->w / 2.0f)) {
+
+				}
+				if (pBody->px > App->scene_intro->ground->x && pBody->px < (App->scene_intro->ground->x + App->scene_intro->ground->w / 2.0f)) {
+
+				}
+
 				// TP ball to ground surface
 				pBody->py = App->scene_intro->ground->y - pBody->radius;
 
@@ -127,7 +139,7 @@ update_status ModulePhysics::PreUpdate()
 				pBody->vy *= pBody->coef_restitution;
 
 				if (pBody->label == PLAYER) {
-					App->player->grounded = true;
+					App->player->isGrounded = true;
 				}
 			}
 			
