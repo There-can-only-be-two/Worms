@@ -333,6 +333,24 @@ bool ModulePhysics::check_collision_circle_rectangle(float cx, float cy, float c
 }
 
 void ModulePhysics::detect_direction_ground(Circle& pBody, const Ground& ground) {
+	
+	////up-left
+	//if (pBody.vx < 0 && pBody.vy < 0) {
+	//	
+	//}
+	////up-right
+	//else if (pBody.vx > 0 && pBody.vy < 0) {
+	//
+	//}
+	////down-left
+	//else if (pBody.vx < 0 && pBody.vy > 0) {
+	//
+	//}
+	////down-right
+	//else if (pBody.vx > 0 && pBody.vy > 0) {
+	//
+	//}
+	
 	if (std::abs(pBody.vy) > std::abs(pBody.vx)) {
 		// TP ball to ground surface
 		if (pBody.vy < 0) {
@@ -343,7 +361,7 @@ void ModulePhysics::detect_direction_ground(Circle& pBody, const Ground& ground)
 		}
 		// Elastic bounce with ground
 		pBody.vy = -pBody.vy;
-
+	
 		// FUYM non-elasticity
 		pBody.vx *= pBody.coef_friction;
 		pBody.vy *= pBody.coef_restitution;
@@ -358,7 +376,7 @@ void ModulePhysics::detect_direction_ground(Circle& pBody, const Ground& ground)
 		}
 		// Elastic bounce with ground
 		pBody.vx = -pBody.vx;
-
+	
 		// FUYM non-elasticity
 		pBody.vy *= pBody.coef_friction;
 		pBody.vx *= pBody.coef_restitution;
