@@ -116,11 +116,9 @@ update_status ModulePhysics::PreUpdate()
 			// Solve collision between ball and ground
 			if (is_colliding_with_ground(*pBody, *App->scene_intro->ground))
 			{
-				if (std::abs(pBody->px - (App->scene_intro->ground->x + App->scene_intro->ground->w / 2.0f)) <= ((App->scene_intro->ground->x + App->scene_intro->ground->w) / 2.0f)) {
+				if (std::abs(pBody->px - (App->scene_intro->ground->x + App->scene_intro->ground->w / 2.0f)) <= ((App->scene_intro->ground->x + App->scene_intro->ground->w)/ 2.0f)) {
 					pBody->py = App->scene_intro->ground->y - pBody->radius;
 				}
-
-
 				if (pBody->px > App->scene_intro->ground->x && pBody->px < (App->scene_intro->ground->x + App->scene_intro->ground->w / 2.0f)) {
 
 				}
@@ -143,6 +141,18 @@ update_status ModulePhysics::PreUpdate()
 				}
 			}
 			
+			if (is_colliding_with_enemy(*pBody, *App->scene_intro->enemy)){
+				// TP ball to ground surface
+				pBody->py = App->scene_intro->enemy->y - pBody->radius;
+
+				// Elastic bounce with ground
+				pBody->vy = -pBody->vy;
+
+				// FUYM non-elasticity
+				pBody->vx *= pBody->coef_friction;
+				pBody->vy *= pBody->coef_restitution;
+			}
+
 			integrator_velocity_verlet(*pBody, dt);
 			/*pBody->px += pBody->vx * dt + 0.5f * pBody->ax * dt * dt;
 			pBody->py += pBody->vy * dt + 0.5f * pBody->ay * dt * dt;
@@ -220,11 +230,25 @@ Water* ModulePhysics::CreateWater(float wx, float wy, float ww, float wh)
 Atmosphere* ModulePhysics::CreateAtmosphere()
 {
 	Atmosphere* atm = new Atmosphere();
+	
 	atm->windx = 10.0f; // [m/s]
 	atm->windy = 5.0f; // [m/s]
 	atm->density = 1.0f; // [kg/m^3]
 
 	return atm;
+}
+
+Enemy* ModulePhysics::CreateEnemy(float ex, float ey, float ew, float eh)
+{
+	Enemy* enemy = new Enemy();
+
+	enemy->x = PIXELS_TO_METERS(ex); enemy->y = PIXELS_TO_METERS(ey);
+
+	enemy->w = PIXELS_TO_METERS(ew); enemy->h = PIXELS_TO_METERS(eh);
+
+	enemy->life = 100;
+
+	return enemy;
 }
 
 // Compute modulus of a vector
@@ -294,6 +318,14 @@ bool ModulePhysics::is_colliding_with_water(const Circle& ball, const Water& wat
 	float rect_x = (water.x + water.w / 2.0f); // Center of rectangle
 	float rect_y = (water.y + water.h / 2.0f); // Center of rectangle
 	return check_collision_circle_rectangle(ball.px, ball.py, ball.radius, rect_x, rect_y, water.w, water.h);
+}
+
+// Detect collision with enemy
+bool ModulePhysics::is_colliding_with_enemy(const Circle& ball, const Enemy& enemy)
+{
+	float rect_x = (enemy.x + enemy.w / 2.0f); // Center of rectangle
+	float rect_y = (enemy.y + enemy.h / 2.0f); // Center of rectangle
+	return check_collision_circle_rectangle(ball.px, ball.py, ball.radius, rect_x, rect_y, enemy.w, enemy.h);
 }
 
 // Detect collision between circle and rectange

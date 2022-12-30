@@ -100,7 +100,7 @@ update_status ModulePlayer::Update()
 		if (shootForce > 0) { shootForce -= 1; }
 	}
 	//Shooting
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) {
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 		Shoot();
 	}
 	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {

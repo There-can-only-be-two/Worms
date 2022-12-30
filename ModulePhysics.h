@@ -119,6 +119,12 @@ public:
 	double vy; // Velocity y
 };
 
+class Enemy : public Ground
+{
+public:
+	int life;
+};
+
 class ModulePhysics : public Module
 {
 public:
@@ -133,6 +139,7 @@ public:
 	Ground* CreateGround(float gx, float gy, float gw, float gh);
 	Water* CreateWater(float wx, float wy, float ww, float wh);
 	Atmosphere* CreateAtmosphere();
+	Enemy* CreateEnemy(float ex, float ey, float ew, float eh);
 
 	void Drag(PhysBody* phbody);
 
@@ -159,6 +166,9 @@ public:
 	// Detect collision with water
 	bool is_colliding_with_water(const Circle& ball, const Water& water);
 
+	// Detect collision with enemy
+	bool is_colliding_with_enemy(const Circle& ball, const Enemy& enemy);
+
 	// Detect collision between circle and rectange
 	bool check_collision_circle_rectangle(float cx, float cy, float cr, float rx, float ry, float rw, float rh);
 
@@ -169,6 +179,7 @@ private:
 	Atmosphere atm;
 	Ground ground;
 	Water water;
+	Enemy enemy;
 	bool debug;
 	float dt;
 	float gravity;
