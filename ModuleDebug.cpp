@@ -45,18 +45,22 @@ update_status ModuleDebug::Update()
 			fpsCap = !fpsCap;
 
 		//FPS
-		if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN && desiredFPS < 120)
+		if (App->input->GetKey(SDL_SCANCODE_U) == KEY_DOWN && desiredFPS < 120)
 			desiredFPS += 5;
-		else if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN && desiredFPS > 10)
+		else if (App->input->GetKey(SDL_SCANCODE_I) == KEY_DOWN && desiredFPS > 10)
 			desiredFPS -= 5;
 
 		//Gravity
-		if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT && App->physics->GetGravity() > -100)
+		if (App->input->GetKey(SDL_SCANCODE_J) == KEY_REPEAT && App->physics->GetGravity() > -100)
 			App->physics->SetGravity(App->physics->GetGravity() - 1);
-		else if (App->input->GetKey(SDL_SCANCODE_T) == KEY_REPEAT && App->physics->GetGravity() < 100)
+		else if (App->input->GetKey(SDL_SCANCODE_K) == KEY_REPEAT && App->physics->GetGravity() < 100)
 			App->physics->SetGravity(App->physics->GetGravity() + 1);
 
 		//Bounce Coef
+		if (App->input->GetKey(SDL_SCANCODE_N) == KEY_REPEAT && App->physics->GetGravity() > -100)
+			App->physics->SetGravity(App->physics->GetGravity() - 1);
+		else if (App->input->GetKey(SDL_SCANCODE_M) == KEY_REPEAT && App->physics->GetGravity() < 100)
+			App->physics->SetGravity(App->physics->GetGravity() + 1);
 
 		//F4: Sfx ON/OFF
 		if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN)

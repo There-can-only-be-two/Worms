@@ -41,43 +41,23 @@ update_status ModulePhysics::PreUpdate()
 		pBody = item->data;
 
 		if (!pBody->isStable)
-		{
-
-			if (pBody->label == PLAYER)
-			{
-				pBody = App->player->pBody;
-			}
-			/*pBody->vx += pBody->ax * DELTATIME;
-			pBody->vy += pBody->ay * DELTATIME;
-
-			double potentialX = pBody->px + pBody->vx * DELTATIME;
-			double potentialY = pBody->py + pBody->vy * DELTATIME;*/
-
+		{		
 			pBody->fx = pBody->fy = 0.0f;
 			pBody->ax = 0.0f;
 			pBody->ay = 0.0f;
 
-			// Aerodynamic Drag force (only when not in water)
-			if (!is_colliding_with_water(*pBody, *App->scene_intro->water))
+			if (pBody->label == GRENADE)
 			{
-				//pBody->px = potentialX;
-				//pBody->py = potentialY;
-				if (pBody->label == GRENADE) {
+				// Aerodynamic Drag force (only when not in water)
+				if (!is_colliding_with_water(*pBody, *App->scene_intro->water))
+				{
 					float fdx = 0.0f; float fdy = 0.0f;
 					compute_aerodynamic_drag(fdx, fdy, *pBody, *App->scene_intro->atm);
 					pBody->fx += fdx; pBody->fy += fdy; // Add this force to ball's total force
 				}
-				
 			}
-
 			else if (pBody->label == MISSILE)
 			{
-				//pBody->isStable = TRUE;
-			}
-			else if (pBody->label == GRENADE)
-			{
-				//calculate reflection angle
-				//
 				//pBody->isStable = TRUE;
 			}
 
@@ -158,6 +138,13 @@ update_status ModulePhysics::PreUpdate()
 			pBody->py += pBody->vy * dt + 0.5f * pBody->ay * dt * dt;
 			pBody->vx += pBody->ax * dt;
 			pBody->vy += pBody->ay * dt;*/
+
+			//FUIM integrator
+			/*pBody->vx += pBody->ax * DELTATIME;
+			pBody->vy += pBody->ay * DELTATIME;
+
+			double potentialX = pBody->px + pBody->vx * DELTATIME;
+			double potentialY = pBody->py + pBody->vy * DELTATIME;*/
 		}
 	}
 	return UPDATE_CONTINUE;
