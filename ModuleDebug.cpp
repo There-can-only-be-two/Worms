@@ -228,20 +228,14 @@ void ModuleDebug::DrawDebug()
 
 					string = std::string("PLAYER 1.PY = ") + std::to_string(pBody->py);
 					App->fonts->BlitText(debugX + 16, debugY + 580, fontId, string.c_str());
-
-					string = std::string("PLAYER 2.J = ") + std::to_string(pBody->isJumping);
-					App->fonts->BlitText(debugX + 16, debugY + 600, fontId, string.c_str());
-
-					string = std::string("PLAYER 2.G = ") + std::to_string(pBody->isGrounded);
-					App->fonts->BlitText(debugX + 16, debugY + 620, fontId, string.c_str());
 				}
 				else if (pBody->label == PLAYER_2)
 				{
 					string = std::string("PLAYER 2.PX = ") + std::to_string(pBody->px);
-					App->fonts->BlitText(debugX + 16, debugY + 660, fontId, string.c_str());
+					App->fonts->BlitText(debugX + 16, debugY + 600, fontId, string.c_str());
 
 					string = std::string("PLAYER 2.PY = ") + std::to_string(pBody->py);
-					App->fonts->BlitText(debugX + 16, debugY + 680, fontId, string.c_str());
+					App->fonts->BlitText(debugX + 16, debugY + 620, fontId, string.c_str());
 
 				}
 				
@@ -250,24 +244,24 @@ void ModuleDebug::DrawDebug()
 
 			//Grenade cooldown
 			string = std::string("GRENADECOOLDOWN = ") + std::to_string(App->player->explosionTimer);
-			App->fonts->BlitText(debugX + 16, debugY + 760, fontId, string.c_str());
+			App->fonts->BlitText(debugX + 16, debugY + 660, fontId, string.c_str());
 
 			if (App->player->isShootingGrenade == false && App->player->isShootingMissile == false) {
 				string = std::string("SHOOTING = AVAILABLE");
-				App->fonts->BlitText(debugX + 16, debugY + 780, fontId, string.c_str());
+				App->fonts->BlitText(debugX + 16, debugY + 680, fontId, string.c_str());
 			}
 			else {
 				string = std::string("SHOOTING = UNAVAILABLE");
-				App->fonts->BlitText(debugX + 16, debugY + 780, fontId, string.c_str());
+				App->fonts->BlitText(debugX + 16, debugY + 680, fontId, string.c_str());
 			}
 
 			if (App->player->weaponType == 0) {
 				string = std::string("WEAPON: GRENADE");
-				App->fonts->BlitText(debugX + 16, debugY + 660, fontId, string.c_str());
+				App->fonts->BlitText(debugX + 16, debugY + 720, fontId, string.c_str());
 			}
 			else {
 				string = std::string("WEAPON: MISSILE");
-				App->fonts->BlitText(debugX + 16, debugY + 660, fontId, string.c_str());
+				App->fonts->BlitText(debugX + 16, debugY + 720, fontId, string.c_str());
 			}
 
 		}
