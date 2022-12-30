@@ -26,7 +26,7 @@ public:
 	bool drawDebug = false;
 	bool drawPhysics = false;
 	bool variables = false;
-	bool lightsON = false;
+	bool fpsCap = false;
 	bool musicON = false;
 	bool sfxON = true;
 	bool hideUI = false;

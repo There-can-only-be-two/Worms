@@ -42,13 +42,21 @@ update_status ModuleDebug::Update()
 
 		//F2: Lights ON/OFF
 		if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
-			lightsON = !lightsON;
+			fpsCap = !fpsCap;
 
 		//FPS
 		if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN && desiredFPS < 120)
 			desiredFPS += 5;
 		else if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN && desiredFPS > 10)
 			desiredFPS -= 5;
+
+		//Gravity
+		if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT && App->physics->GetGravity() > -100)
+			App->physics->SetGravity(App->physics->GetGravity() - 1);
+		else if (App->input->GetKey(SDL_SCANCODE_T) == KEY_REPEAT && App->physics->GetGravity() < 100)
+			App->physics->SetGravity(App->physics->GetGravity() + 1);
+
+		//Bounce Coef
 
 		//F4: Sfx ON/OFF
 		if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN)
@@ -97,23 +105,24 @@ void ModuleDebug::DrawDebug()
 	else
 		App->fonts->BlitText(debugX, debugY + 20, fontId, "#COLLIDERS  (F1)   OFF");
 
-	//Lights
-	if (lightsON)
-		App->fonts->BlitText(debugX, debugY + 40, fontId, "#LIGHTS     (F2)   ON");
+
+	//FPS Cap
+	if (fpsCap)
+		App->fonts->BlitText(debugX, debugY + 40, fontId, "#FRAME CAP  (F2)   ON");
 	else
-		App->fonts->BlitText(debugX, debugY + 40, fontId, "#LIGHTS     (F2)   OFF");
+		App->fonts->BlitText(debugX, debugY + 40, fontId, "#FRAME CAP  (F2)   OFF");
 
+	std::string string = std::string("MAX FPS   (U-/I+)  ") + std::to_string(desiredFPS);
+	App->fonts->BlitText(debugX + 16, debugY + 60, fontId, string.c_str());
 
-	//Frames
-	std::string string = std::string("#FRAMESPS   (Q-/E+)  ") + std::to_string(desiredFPS);
-	App->fonts->BlitText(debugX, debugY + 80, fontId, string.c_str());
 
 	//Gravity
-	string = std::string("#GRAVITY.Y  (S-/W+)  ") + std::to_string(99999);
+	string = std::string("#GRAVITY.Y  (J-/K+)  ") + std::to_string(App->physics->GetGravity());
 	App->fonts->BlitText(debugX, debugY + 100, fontId, string.c_str());
 
+
 	////Bounce coef
-	string = std::string("#BOUNCE COEF(A-/D+)  ") + std::to_string(99999);
+	string = std::string("#BOUNCE COEF(N-/M+)  ") + std::to_string(99999);
 	App->fonts->BlitText(debugX, debugY + 120, fontId, string.c_str());
 
 
@@ -187,15 +196,25 @@ void ModuleDebug::DrawDebug()
 
 void ModuleDebug::DrawPhysics()
 {
-	//Shooting angle
-	double cosinus = METERS_TO_PIXELS(100 * cos(App->player->shootAngle * DEGTORAD));
-	double sinus = METERS_TO_PIXELS(100 * sin(App->player->shootAngle * DEGTORAD));
+	int shootForce = App->player->shootForce;
+
+	//Shooting Angle
+	double cosinus = METERS_TO_PIXELS(shootForce * cos(App->player->shootAngle * DEGTORAD));
+	double sinus = METERS_TO_PIXELS(shootForce * sin(App->player->shootAngle * DEGTORAD));
 	double playerX = METERS_TO_PIXELS(App->player->pBody->px);
 	double playerY = METERS_TO_PIXELS(App->player->pBody->py);
-	App->renderer->DrawLine(playerX, playerY, playerX + cosinus, playerY - sinus, 255, 165, 0, 255, false);
 
-  //Draw physBodies
-  p2List_item<Circle*>* item;
+	//Shoot Force color
+	uint r = 2 * shootForce;
+	uint g = 2 * (1 - shootForce);
+	uint b = 0;
+	uint a = 255;
+
+	App->renderer->DrawLine(playerX, playerY, playerX + cosinus, playerY - sinus, r, g, b, a, false);
+
+
+    //Draw physBodies
+    p2List_item<Circle*>* item;
 	Circle* pBody = NULL;
   
 	for (item = App->physics->listBodies.getFirst(); item != NULL; item = item->next)

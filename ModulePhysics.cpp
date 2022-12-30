@@ -17,7 +17,7 @@ bool ModulePhysics::Start()
 {
 	LOG("Creating Physics 2D environment");
 	
-	
+	gravity = GRAVITY;
 
 	return true;
 }
@@ -42,8 +42,6 @@ update_status ModulePhysics::PreUpdate()
 
 		if (!pBody->isStable)
 		{
-			//0.016 time for 1frame asuming 60Hz
-			pBody->ay = 0;
 
 			if (pBody->label == PLAYER)
 			{
@@ -56,17 +54,20 @@ update_status ModulePhysics::PreUpdate()
 			double potentialY = pBody->py + pBody->vy * DELTATIME;*/
 
 			pBody->fx = pBody->fy = 0.0f;
-			pBody->ax = pBody->ay = 0.0f;
-			
+			pBody->ax = 0.0f;
+			pBody->ay = 0.0f;
+
 			// Aerodynamic Drag force (only when not in water)
 			if (!is_colliding_with_water(*pBody, *App->scene_intro->water))
 			{
 				//pBody->px = potentialX;
 				//pBody->py = potentialY;
-
-				float fdx = 0.0f; float fdy = 0.0f;
-				compute_aerodynamic_drag(fdx, fdy, *pBody, *App->scene_intro->atm);
-				pBody->fx += fdx; pBody->fy += fdy; // Add this force to ball's total force
+				if (pBody->label == GRENADE) {
+					float fdx = 0.0f; float fdy = 0.0f;
+					compute_aerodynamic_drag(fdx, fdy, *pBody, *App->scene_intro->atm);
+					pBody->fx += fdx; pBody->fy += fdy; // Add this force to ball's total force
+				}
+				
 			}
 
 			else if (pBody->label == MISSILE)
@@ -83,8 +84,15 @@ update_status ModulePhysics::PreUpdate()
 
 			// Gravity force
 			float fgx = 0.0f;
-			float fgy = pBody->mass * -GRAVITY; // Let's assume gravity is constant and downwards, like in real situations
+			float fgy = pBody->mass * -gravity; // Let's assume gravity is constant and downwards, like in real situations
 			pBody->fx += fgx; pBody->fy += fgy; // Add this force to ball's total force
+
+			if (pBody->label == PLAYER && App->player->isJumping > 0) {
+				App->player->isGrounded = false;
+				pBody->fy -= 1000;
+				App->player->isJumping--;
+			}
+
 
 			// Hydrodynamic forces (only when in water)
 			if (is_colliding_with_water(*pBody, *App->scene_intro->water))
@@ -111,15 +119,12 @@ update_status ModulePhysics::PreUpdate()
 				if (std::abs(pBody->px - (App->scene_intro->ground->x + App->scene_intro->ground->w / 2.0f)) <= ((App->scene_intro->ground->x + App->scene_intro->ground->w)/ 2.0f)) {
 					pBody->py = App->scene_intro->ground->y - pBody->radius;
 				}
-
 				if (pBody->px > App->scene_intro->ground->x && pBody->px < (App->scene_intro->ground->x + App->scene_intro->ground->w / 2.0f)) {
 
 				}
 				if (pBody->px > App->scene_intro->ground->x && pBody->px < (App->scene_intro->ground->x + App->scene_intro->ground->w / 2.0f)) {
 
 				}
-
-
 
 				// TP ball to ground surface
 				pBody->py = App->scene_intro->ground->y - pBody->radius;
@@ -130,6 +135,10 @@ update_status ModulePhysics::PreUpdate()
 				// FUYM non-elasticity
 				pBody->vx *= pBody->coef_friction;
 				pBody->vy *= pBody->coef_restitution;
+
+				if (pBody->label == PLAYER) {
+					App->player->isGrounded = true;
+				}
 			}
 			
 			if (is_colliding_with_enemy(*pBody, *App->scene_intro->enemy)){
@@ -150,9 +159,7 @@ update_status ModulePhysics::PreUpdate()
 			pBody->vx += pBody->ax * dt;
 			pBody->vy += pBody->ay * dt;*/
 		}
-		
 	}
-
 	return UPDATE_CONTINUE;
 }
 
@@ -344,3 +351,24 @@ bool ModulePhysics::check_collision_circle_rectangle(float cx, float cy, float c
 	float cornerDistance_sq = a * a + b * b;
 	return (cornerDistance_sq <= (cr * cr));
 }
+
+void ModulePhysics::SetGravity(float g)
+{
+	gravity = g;
+}
+
+float ModulePhysics::GetGravity()
+{
+	return gravity;
+}
+
+// Convert from meters to pixels (for SDL drawing)
+//SDL_Rect Ground::pixels()
+//{
+//	SDL_Rect pos_px{};
+//	pos_px.x = METERS_TO_PIXELS(x);
+//	pos_px.y = SCREEN_HEIGHT - METERS_TO_PIXELS(y);
+//	pos_px.w = METERS_TO_PIXELS(w);
+//	pos_px.h = METERS_TO_PIXELS(-h); // Can I do this? LOL
+//	return pos_px;
+//}
