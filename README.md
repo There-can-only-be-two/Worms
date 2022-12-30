@@ -41,11 +41,12 @@ Link of the Github Repository:
 - Forces applied: aerodynamic drag, hydrodynamic drag, gravity, impulse forces, bouyancy.
 - When the player collides with water we add 200kg to its mass to simulate the death as in the worms game.
   
-## Feautures
+## Features
 - Explosions: grenades and missiles explode and damage players in a radius.
 - Multiplayer game
 
 ## Development
 
+- The thing that has given as most problems for sure are the collisions we have passed a long time trying to figure out how to make collision at least believable.
 
 -There can only be two
