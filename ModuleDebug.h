@@ -31,10 +31,13 @@ public:
 	bool musicON = false;
 	bool sfxON = true;
 	bool hideUI = false;
+	bool isGrenade = false;
+	bool noGravity = false;
 	
 	microseconds timePerCycle;
 	microseconds elapsedFrame;
 	int desiredFPSmic;
 	float desiredFPS = 60.0f;
+	int saveGravity;
 
 };
