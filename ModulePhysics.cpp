@@ -58,7 +58,7 @@ update_status ModulePhysics::PreUpdate()
 			}
 			else if (pBody->label == MISSILE)
 			{
-				//pBody->isStable = TRUE;
+				pBody->isStable = TRUE;
 			}
 
 

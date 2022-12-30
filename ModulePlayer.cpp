@@ -31,7 +31,7 @@ bool ModulePlayer::Start()
 
 	pBody->mass = 10.0f; // [kg]
 	pBody->surface = 1.0f; // [m^2]
-	pBody->radius = 0.5f; // [m]
+	pBody->radius = 0.8f; // [m]
 	pBody->cd = 0.4f; // [-]
 	pBody->cl = 1.2f; // [-]
 	pBody->b = 10.0f; // [...]
@@ -132,7 +132,7 @@ void ModulePlayer::Shoot()
 
 	bod->mass = 10.0f; // [kg]
 	bod->surface = 1.0f; // [m^2]
-	bod->radius = 0.5f; // [m]
+	bod->radius = 0.4f; // [m]
 	bod->cd = 0.4f; // [-]
 	bod->cl = 1.2f; // [-]
 	bod->b = 10.0f; // [...]
