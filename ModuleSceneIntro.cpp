@@ -64,6 +64,7 @@ update_status ModuleSceneIntro::Update()
 		if (explosion->steps == 0) {
 			App->player->isShootingGrenade = false;
 			App->player->isShootingMissile = false;
+			App->player->pBody->isHit = false;
 		}
 	}
 

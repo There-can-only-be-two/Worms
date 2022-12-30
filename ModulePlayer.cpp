@@ -151,6 +151,7 @@ update_status ModulePlayer::Update()
 					player->py = PIXELS_TO_METERS(400);
 				}
 			}
+		
 		}
 		else {
 			if (player->label == PLAYER_1) {

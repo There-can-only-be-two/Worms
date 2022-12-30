@@ -22,6 +22,18 @@ bool ModulePhysics::Start()
 	return true;
 }
 
+void ModulePhysics::CheckIfHit(PhysBody& body, Explosion& ex) {
+	double x = body.px - ex.x;
+	double y = body.py - ex.y;
+	double h = sqrt((y * y) + (x * x));
+	double sn = y / h;
+	double cs = x / h;
+	if (h <= ex.radius) {
+		body.fx = (ex.radius*cs) - x;
+		body.fy = (ex.radius*sn) - y;
+	}
+}
+
 // 
 update_status ModulePhysics::PreUpdate()
 {
@@ -61,22 +73,25 @@ update_status ModulePhysics::PreUpdate()
 				}
 
 			}
-			else if (pBody->label == MISSILE)
-			{
-				if (is_colliding_with_ground(*pBody, *App->scene_intro->ground))
-				{
-					App->player->explosionTimer = 0;
-				}
-				if (is_colliding_with_water(*pBody, *App->scene_intro->water))
-				{
-					App->player->explosionTimer = 0;
-				}
-			}
 
 			if (App->player->explosionTimer <= 0 && (pBody->label == GRENADE || pBody->label == MISSILE)) {
 				App->scene_intro->explosion->x = pBody->px;
 				App->scene_intro->explosion->y = pBody->py;
 				listBodies.del(item);
+			}
+
+			if (App->player->explosionTimer <= 0 
+				&& (App->player->isShootingGrenade || App->player->isShootingMissile) 
+				&& (pBody->label == PLAYER_1 || pBody->label == PLAYER_2)) {
+				double x = pBody->px - App->scene_intro->explosion->x;
+				double y = pBody->py - App->scene_intro->explosion->y;
+				double h = sqrt((y * y) + (x * x));
+				double sn = y / h;
+				double cs = x / h;
+				if (h <= App->scene_intro->explosion->radius) {
+					pBody->fx += 1000*(App->scene_intro->explosion->radius * cs) - x;
+					pBody->fy += 1000*(App->scene_intro->explosion->radius * sn) - y;
+				}
 			}
 
 			// Gravity force
@@ -91,12 +106,14 @@ update_status ModulePhysics::PreUpdate()
 				pBody->isJumping--;
 			}
 
-
 			// Hydrodynamic forces (only when in water)
 			if (is_colliding_with_water(*pBody, *App->scene_intro->water))
 			{
 				if (pBody->label == PLAYER_1 || pBody->label == PLAYER_2) {
 					pBody->mass = 200.0f;
+				}
+				if (pBody->label == MISSILE) {
+					App->player->explosionTimer = 0;
 				}
 				else {
 					// Hydrodynamic Drag force
@@ -129,6 +146,9 @@ update_status ModulePhysics::PreUpdate()
 
 					if (pBody->label == PLAYER_1 || pBody->label ==  PLAYER_2) {
 						pBody->isGrounded = true;
+					}
+					if (pBody->label == MISSILE) {
+						App->player->explosionTimer = 0;
 					}
 				}
 			}
