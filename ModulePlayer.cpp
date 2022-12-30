@@ -144,6 +144,8 @@ void ModulePlayer::Shoot()
 	bod->coef_friction = 0.9f; // [-]
 	bod->coef_restitution = 0.7f; // [-]
 
+	App->scene_intro->explosion->steps = App->scene_intro->explosion->stepIterator;
+
 	bod->label = GRENADE;
 
 	switch (weaponType) {

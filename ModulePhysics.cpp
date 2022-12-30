@@ -40,7 +40,6 @@ update_status ModulePhysics::PreUpdate()
 		App->player->grenadeTimer--;
 	}
 
-
 	for (item = App->physics->listBodies.getFirst(); item != NULL; item = item->next)
 	{
 		pBody = item->data;
@@ -68,8 +67,9 @@ update_status ModulePhysics::PreUpdate()
 			}
 
 			if (App->player->grenadeTimer <= 0 && pBody->label == GRENADE) {
+				App->scene_intro->explosion->x = pBody->px;
+				App->scene_intro->explosion->y = pBody->py;
 				listBodies.del(item);
-				App->player->isShootingGrenade = false;
 			}
 
 			// Gravity force
