@@ -187,15 +187,25 @@ void ModuleDebug::DrawDebug()
 
 void ModuleDebug::DrawPhysics()
 {
-	//Shooting angle
-	double cosinus = METERS_TO_PIXELS(100 * cos(App->player->shootAngle * DEGTORAD));
-	double sinus = METERS_TO_PIXELS(100 * sin(App->player->shootAngle * DEGTORAD));
+	int shootForce = App->player->shootForce;
+
+	//Shooting Angle
+	double cosinus = METERS_TO_PIXELS(shootForce * cos(App->player->shootAngle * DEGTORAD));
+	double sinus = METERS_TO_PIXELS(shootForce * sin(App->player->shootAngle * DEGTORAD));
 	double playerX = METERS_TO_PIXELS(App->player->pBody->px);
 	double playerY = METERS_TO_PIXELS(App->player->pBody->py);
-	App->renderer->DrawLine(playerX, playerY, playerX + cosinus, playerY - sinus, 255, 165, 0, 255, false);
 
-  //Draw physBodies
-  p2List_item<Circle*>* item;
+	//Shoot Force color
+	uint r = 2 * shootForce;
+	uint g = 2 * (1 - shootForce);
+	uint b = 0;
+	uint a = 255;
+
+	App->renderer->DrawLine(playerX, playerY, playerX + cosinus, playerY - sinus, r, g, b, a, false);
+
+
+    //Draw physBodies
+    p2List_item<Circle*>* item;
 	Circle* pBody = NULL;
   
 	for (item = App->physics->listBodies.getFirst(); item != NULL; item = item->next)

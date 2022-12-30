@@ -132,9 +132,7 @@ update_status ModulePhysics::PreUpdate()
 			pBody->vx += pBody->ax * dt;
 			pBody->vy += pBody->ay * dt;*/
 		}
-		
 	}
-
 	return UPDATE_CONTINUE;
 }
 
