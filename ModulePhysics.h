@@ -54,6 +54,8 @@ public:
 
 	bool isAlive;
 	bool isStable;
+	int isJumping;
+	bool isGrounded;
 	Bodytype type;
 	Label label;
 
