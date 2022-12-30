@@ -74,6 +74,9 @@
     <ClInclude Include="ModuleTitle.h">
       <Filter>Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -121,5 +124,12 @@
     <ClCompile Include="ModuleTitle.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Physics 2.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
+    <Image Include="Game\Assets\worms.ico" />
   </ItemGroup>
 </Project>

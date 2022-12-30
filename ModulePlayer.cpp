@@ -88,6 +88,12 @@ update_status ModulePlayer::Update()
 
 		if (player->label == App->scene_intro->turn)
 		{
+			if (player->label == PLAYER_1) {
+				App->fonts->BlitText(METERS_TO_PIXELS(player->px - 30), METERS_TO_PIXELS(player->py - 50), App->fonts->selected, "PLAYER 1");
+			}else{
+				App->fonts->BlitText(METERS_TO_PIXELS(player->px - 30), METERS_TO_PIXELS(player->py - 50), App->fonts->selected, "PLAYER 2");
+			}
+			
 			//Left
 			if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
 				player->px -= speed * DELTATIME;
@@ -136,6 +142,14 @@ update_status ModulePlayer::Update()
 					player->px = PIXELS_TO_METERS(600);
 					player->py = PIXELS_TO_METERS(400);
 				}
+			}
+		}
+		else {
+			if (player->label == PLAYER_1) {
+				App->fonts->BlitText(METERS_TO_PIXELS(player->px - 30), METERS_TO_PIXELS(player->py - 50), App->fonts->font, "PLAYER 1");
+			}
+			else {
+				App->fonts->BlitText(METERS_TO_PIXELS(player->px - 30), METERS_TO_PIXELS(player->py - 50), App->fonts->font, "PLAYER 2");
 			}
 		}
 	}
