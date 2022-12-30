@@ -161,6 +161,9 @@ public:
 
 	// Detect collision between circle and rectange
 	bool check_collision_circle_rectangle(float cx, float cy, float cr, float rx, float ry, float rw, float rh);
+
+	void SetGravity(float g);
+	float GetGravity();
 private:
 
 	Atmosphere atm;
@@ -168,5 +171,5 @@ private:
 	Water water;
 	bool debug;
 	float dt;
-
+	float gravity;
 };

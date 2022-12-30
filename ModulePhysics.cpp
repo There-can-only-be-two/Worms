@@ -17,7 +17,7 @@ bool ModulePhysics::Start()
 {
 	LOG("Creating Physics 2D environment");
 	
-	
+	gravity = GRAVITY;
 
 	return true;
 }
@@ -84,11 +84,11 @@ update_status ModulePhysics::PreUpdate()
 
 			// Gravity force
 			float fgx = 0.0f;
-			float fgy = pBody->mass * -GRAVITY; // Let's assume gravity is constant and downwards, like in real situations
+			float fgy = pBody->mass * -gravity; // Let's assume gravity is constant and downwards, like in real situations
 			pBody->fx += fgx; pBody->fy += fgy; // Add this force to ball's total force
 
 			if (pBody->label == PLAYER && App->player->isJumping > 0) {
-				App->player->grounded = false;
+				App->player->isGrounded = false;
 				pBody->fy -= 1000;
 				App->player->isJumping--;
 			}
@@ -116,6 +116,18 @@ update_status ModulePhysics::PreUpdate()
 			// Solve collision between ball and ground
 			if (is_colliding_with_ground(*pBody, *App->scene_intro->ground))
 			{
+				if (std::abs(pBody->px - (App->scene_intro->ground->x + App->scene_intro->ground->w / 2.0f)) <= ((App->scene_intro->ground->x + App->scene_intro->ground->w) / 2.0f)) {
+					pBody->py = App->scene_intro->ground->y - pBody->radius;
+				}
+
+
+				if (pBody->px > App->scene_intro->ground->x && pBody->px < (App->scene_intro->ground->x + App->scene_intro->ground->w / 2.0f)) {
+
+				}
+				if (pBody->px > App->scene_intro->ground->x && pBody->px < (App->scene_intro->ground->x + App->scene_intro->ground->w / 2.0f)) {
+
+				}
+
 				// TP ball to ground surface
 				pBody->py = App->scene_intro->ground->y - pBody->radius;
 
@@ -127,7 +139,7 @@ update_status ModulePhysics::PreUpdate()
 				pBody->vy *= pBody->coef_restitution;
 
 				if (pBody->label == PLAYER) {
-					App->player->grounded = true;
+					App->player->isGrounded = true;
 				}
 			}
 			
@@ -137,9 +149,7 @@ update_status ModulePhysics::PreUpdate()
 			pBody->vx += pBody->ax * dt;
 			pBody->vy += pBody->ay * dt;*/
 		}
-		
 	}
-
 	return UPDATE_CONTINUE;
 }
 
@@ -308,6 +318,16 @@ bool ModulePhysics::check_collision_circle_rectangle(float cx, float cy, float c
 	float b = dist_y - rh / 2.0f;
 	float cornerDistance_sq = a * a + b * b;
 	return (cornerDistance_sq <= (cr * cr));
+}
+
+void ModulePhysics::SetGravity(float g)
+{
+	gravity = g;
+}
+
+float ModulePhysics::GetGravity()
+{
+	return gravity;
 }
 
 // Convert from meters to pixels (for SDL drawing)
