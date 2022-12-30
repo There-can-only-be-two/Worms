@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModulePhysics.h"
 #include "math.h"
+#include "ModuleFonts.h"
 
 ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -118,6 +119,7 @@ update_status ModulePhysics::PreUpdate()
 			{
 				if (pBody->label == PLAYER_1 || pBody->label == PLAYER_2) {
 					pBody->mass = 200.0f;
+					pBody->life = 0;
 				}
 				if (pBody->label == MISSILE) {
 					App->player->explosionTimer = 0;
@@ -165,6 +167,8 @@ update_status ModulePhysics::PreUpdate()
 			}
 
 			integrator_velocity_verlet(*pBody, dt);
+
+			
 		}
 	}
 	return UPDATE_CONTINUE;
