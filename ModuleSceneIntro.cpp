@@ -23,10 +23,10 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
-	ground = App->physics->CreateGround(400, 600, 300, 300);
+	ground = App->physics->CreateGround(500, 600, 200, 300);
 	listGrounds.add(ground);
 
-	ground2 = App->physics->CreateGround(400, 0, 100, 600);
+	ground2 = App->physics->CreateGround(400, 0, 100, 800);
 	listGrounds.add(ground2);
 
 	ground3 = App->physics->CreateGround(1200, 500, 400, 400);
