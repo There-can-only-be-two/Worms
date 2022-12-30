@@ -41,26 +41,28 @@ bool ModulePlayer::Start()
 		pBody->ay = 0;
 		speed = 6;
 
-	pBody->isAlive = true;
-	pBody->isStable = false;
-	isGrounded = false;
-	isShootingGrenade = false;
-	isShootingMissile = false;
+		pBody->isAlive = true;
+		pBody->isStable = false;
+		pBody->isGrounded = false;
+		isShootingGrenade = false;
+		isShootingMissile = false;
 
-	pBody->mass = 12.0f; // [kg]
-	pBody->surface = 1.0f; // [m^2]
-	pBody->radius = 0.8f; // [m]
-	pBody->cd = 0.4f; // [-]
-	pBody->cl = 1.2f; // [-]
-	pBody->b = 10.0f; // [...]
-	pBody->coef_friction = 0.0f; // [-]
-	pBody->coef_restitution = 0.0f; // [-]
+		pBody->mass = 30.0f; // [kg]
+		pBody->surface = 1.0f; // [m^2]
+		pBody->radius = 0.8f; // [m]
+		pBody->cd = 0.4f; // [-]
+		pBody->cl = 1.2f; // [-]
+		pBody->b = 10.0f; // [...]
+		pBody->coef_friction = 0.0f; // [-]
+		pBody->coef_restitution = 0.0f; // [-]
 
-	weaponType = 0;
-	shootAngle = 90;
-	shootForce = 10;
-	isJumping = 0;
-	grenadeTimer = 0;
+		weaponType = 0;
+		shootAngle = 90;
+		shootForce = 10;
+		pBody->isJumping = 0;
+		pBody->isGrounded = true;
+
+		explosionTimer = 0;
 
 		App->physics->listBodies.add(pBody);
 		listPlayers.add(pBody);
@@ -94,19 +96,26 @@ update_status ModulePlayer::Update()
 
 		if (player->label == App->scene_intro->turn)
 		{
+			if (player->label == PLAYER_1) {
+				App->fonts->BlitText(METERS_TO_PIXELS(player->px - 30), METERS_TO_PIXELS(player->py - 50), App->fonts->selected, "PLAYER 1");
+			}else{
+				App->fonts->BlitText(METERS_TO_PIXELS(player->px - 30), METERS_TO_PIXELS(player->py - 50), App->fonts->selected, "PLAYER 2");
+			}
+			
 			//Left
 			if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-				pBody->px -= speed * DELTATIME;
+				player->px -= speed * DELTATIME;
 			}
 			//Right
 			if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-				pBody->px += speed * DELTATIME;
+				player->px += speed * DELTATIME;
 			}
 			//Jump
 			if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
-				if (isGrounded) {
-					isJumping = 8;
-					isGrounded = false;
+				
+				if (player->isGrounded) {
+					player->isJumping = 8;
+					player->isGrounded = false;
 				}
 			}
 			//Weapons
@@ -138,9 +147,17 @@ update_status ModulePlayer::Update()
 					Shoot();
 				}
 				if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
-					pBody->px = PIXELS_TO_METERS(600);
-					pBody->py = PIXELS_TO_METERS(400);
+					player->px = PIXELS_TO_METERS(600);
+					player->py = PIXELS_TO_METERS(400);
 				}
+			}
+		}
+		else {
+			if (player->label == PLAYER_1) {
+				App->fonts->BlitText(METERS_TO_PIXELS(player->px - 30), METERS_TO_PIXELS(player->py - 50), App->fonts->font, "PLAYER 1");
+			}
+			else {
+				App->fonts->BlitText(METERS_TO_PIXELS(player->px - 30), METERS_TO_PIXELS(player->py - 50), App->fonts->font, "PLAYER 2");
 			}
 		}
 	}
@@ -182,11 +199,12 @@ void ModulePlayer::Shoot()
 	case 0:
 		bod->label = GRENADE;
 		isShootingGrenade = true;
-		grenadeTimer = 5 / DELTATIME;
+		explosionTimer = 5 / DELTATIME;
 		break;
 	case 1:
 		bod->label = MISSILE;
 		isShootingMissile = true;
+		explosionTimer = 5 / DELTATIME;
 		break;
 	default:
 		break;

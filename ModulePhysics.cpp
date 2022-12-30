@@ -36,8 +36,8 @@ update_status ModulePhysics::PreUpdate()
 	p2List_item<Circle*>* item;
 	Circle* pBody = NULL;
 
-	if (App->player->grenadeTimer > 0) {
-		App->player->grenadeTimer--;
+	if (App->player->explosionTimer > 0) {
+		App->player->explosionTimer--;
 	}
 
 	for (item = App->physics->listBodies.getFirst(); item != NULL; item = item->next)
@@ -65,11 +65,15 @@ update_status ModulePhysics::PreUpdate()
 			{
 				if (is_colliding_with_ground(*pBody, *App->scene_intro->ground))
 				{
-					pBody->isStable = TRUE;
+					App->player->explosionTimer = 0;
+				}
+				if (is_colliding_with_water(*pBody, *App->scene_intro->water))
+				{
+					App->player->explosionTimer = 0;
 				}
 			}
 
-			if (App->player->grenadeTimer <= 0 && pBody->label == GRENADE) {
+			if (App->player->explosionTimer <= 0 && (pBody->label == GRENADE || pBody->label == MISSILE)) {
 				App->scene_intro->explosion->x = pBody->px;
 				App->scene_intro->explosion->y = pBody->py;
 				listBodies.del(item);
@@ -80,26 +84,31 @@ update_status ModulePhysics::PreUpdate()
 			float fgy = pBody->mass * -gravity; // Let's assume gravity is constant and downwards, like in real situations
 			pBody->fx += fgx; pBody->fy += fgy; // Add this force to ball's total force
 
-			if (pBody->label == PLAYER_1 && App->player->isJumping > 0)
+			if ((pBody->label == PLAYER_1 || pBody->label == PLAYER_2) && pBody->isJumping > 0)
 			{
-				App->player->isGrounded = false;
+				pBody->isGrounded = false;
 				pBody->fy -= 1000;
-				App->player->isJumping--;
+				pBody->isJumping--;
 			}
 
 
 			// Hydrodynamic forces (only when in water)
 			if (is_colliding_with_water(*pBody, *App->scene_intro->water))
 			{
-				// Hydrodynamic Drag force
-				float fhdx = 0.0f; float fhdy = 0.0f;
-				compute_hydrodynamic_drag(fhdx, fhdy, *pBody, *App->scene_intro->water);
-				pBody->fx += fhdx; pBody->fy += fhdy; // Add this force to ball's total force
+				if (pBody->label == PLAYER_1 || pBody->label == PLAYER_2) {
+					pBody->mass = 200.0f;
+				}
+				else {
+					// Hydrodynamic Drag force
+					float fhdx = 0.0f; float fhdy = 0.0f;
+					compute_hydrodynamic_drag(fhdx, fhdy, *pBody, *App->scene_intro->water);
+					pBody->fx += fhdx; pBody->fy += fhdy; // Add this force to ball's total force
 
-				// Hydrodynamic Buoyancy force
-				float fhbx = 0.0f; float fhby = 0.0f;
-				compute_hydrodynamic_buoyancy(fhbx, fhby, *pBody, *App->scene_intro->water);
-				pBody->fx += fhbx; pBody->fy -= fhby; // Add this force to ball's total force
+					// Hydrodynamic Buoyancy force
+					float fhbx = 0.0f; float fhby = 0.0f;
+					compute_hydrodynamic_buoyancy(fhbx, fhby, *pBody, *App->scene_intro->water);
+					pBody->fx += fhbx; pBody->fy -= fhby; // Add this force to ball's total force
+				}	
 			}
 
 			// TESTING WITH CODE, DO NOT ERASE
@@ -116,57 +125,19 @@ update_status ModulePhysics::PreUpdate()
 
 				if (is_colliding_with_ground(*pBody, *ground))
 				{
-					if (std::abs(pBody->px - (ground->x + ground->w / 2.0f)) <= ((ground->x + ground->w) / 2.0f)) {
-						pBody->py = ground->y - pBody->radius;
-					}
-					if (pBody->px > ground->x && pBody->px < (ground->x + ground->w / 2.0f)) {
-
-					}
-					if (pBody->px > ground->x && pBody->px < (ground->x + ground->w / 2.0f)) {
-
-					}
-
-					// TP ball to ground surface
-					pBody->py = ground->y - pBody->radius;
-
-					// Elastic bounce with ground
-					pBody->vy = -pBody->vy;
-
-					// FUYM non-elasticity
-					pBody->vx *= pBody->coef_friction;
-					pBody->vy *= pBody->coef_restitution;
+					detect_direction_ground(*pBody, *ground);
 
 					if (pBody->label == PLAYER_1 || pBody->label ==  PLAYER_2) {
-						App->player->isGrounded = true;
+						pBody->isGrounded = true;
 					}
 				}
 			}
 			
-			
-			//if (is_colliding_with_enemy(*pBody, *App->scene_intro->enemy)){
-			//	// TP ball to ground surface
-			//	pBody->py = App->scene_intro->enemy->y - pBody->radius;
-
-			//	// Elastic bounce with ground
-			//	pBody->vy = -pBody->vy;
-
-			//	// FUYM non-elasticity
-			//	pBody->vx *= pBody->coef_friction;
-			//	pBody->vy *= pBody->coef_restitution;
-			//}
+			if (is_colliding_with_enemy(*pBody, *App->scene_intro->enemy)){
+				detect_direction_enemy(*pBody, *App->scene_intro->enemy);
+			}
 
 			integrator_velocity_verlet(*pBody, dt);
-			/*pBody->px += pBody->vx * dt + 0.5f * pBody->ax * dt * dt;
-			pBody->py += pBody->vy * dt + 0.5f * pBody->ay * dt * dt;
-			pBody->vx += pBody->ax * dt;
-			pBody->vy += pBody->ay * dt;*/
-
-			//FUIM integrator
-			/*pBody->vx += pBody->ax * DELTATIME;
-			pBody->vy += pBody->ay * DELTATIME;
-
-			double potentialX = pBody->px + pBody->vx * DELTATIME;
-			double potentialY = pBody->py + pBody->vy * DELTATIME;*/
 		}
 	}
 	return UPDATE_CONTINUE;
@@ -361,6 +332,72 @@ bool ModulePhysics::check_collision_circle_rectangle(float cx, float cy, float c
 	return (cornerDistance_sq <= (cr * cr));
 }
 
+void ModulePhysics::detect_direction_ground(Circle& pBody, const Ground& ground) {
+	if (std::abs(pBody.vy) > std::abs(pBody.vx)) {
+		// TP ball to ground surface
+		if (pBody.vy < 0) {
+			pBody.py = ground.y + ground.h + pBody.radius;
+		}
+		else if (pBody.vy > 0) {
+			pBody.py = ground.y - pBody.radius;
+		}
+		// Elastic bounce with ground
+		pBody.vy = -pBody.vy;
+
+		// FUYM non-elasticity
+		pBody.vx *= pBody.coef_friction;
+		pBody.vy *= pBody.coef_restitution;
+	}
+	else if (std::abs(pBody.vx) > std::abs(pBody.vy)) {
+		// TP ball to ground surface
+		if (pBody.vx < 0) {
+			pBody.px = ground.x + ground.w + pBody.radius;
+		}
+		else if (pBody.vx > 0) {
+			pBody.px = ground.x - pBody.radius;
+		}
+		// Elastic bounce with ground
+		pBody.vx = -pBody.vx;
+
+		// FUYM non-elasticity
+		pBody.vy *= pBody.coef_friction;
+		pBody.vx *= pBody.coef_restitution;
+	}
+}
+
+void ModulePhysics::detect_direction_enemy(Circle& pBody, const Enemy& enemy) {
+	if (std::abs(pBody.vy) > std::abs(pBody.vx)) {
+		// TP ball to ground surface
+		if (pBody.vy < 0) {
+			pBody.py = enemy.y + enemy.h + pBody.radius;
+		}
+		else if (pBody.vy > 0) {
+			pBody.py = enemy.y - pBody.radius;
+		}
+		// Elastic bounce with ground
+		pBody.vy = -pBody.vy;
+
+		// FUYM non-elasticity
+		pBody.vx *= pBody.coef_friction;
+		pBody.vy *= pBody.coef_restitution;
+	}
+	else if (std::abs(pBody.vx) > std::abs(pBody.vy)) {
+		// TP ball to ground surface
+		if (pBody.vx < 0) {
+			pBody.px = enemy.x + enemy.w + pBody.radius;
+		}
+		else if (pBody.vx > 0) {
+			pBody.px = enemy.x - pBody.radius;
+		}
+		// Elastic bounce with ground
+		pBody.vx = -pBody.vx;
+
+		// FUYM non-elasticity
+		pBody.vy *= pBody.coef_friction;
+		pBody.vx *= pBody.coef_restitution;
+	}
+}
+
 void ModulePhysics::SetGravity(float g)
 {
 	gravity = g;
@@ -370,14 +407,3 @@ float ModulePhysics::GetGravity()
 {
 	return gravity;
 }
-
-// Convert from meters to pixels (for SDL drawing)
-//SDL_Rect Ground::pixels()
-//{
-//	SDL_Rect pos_px{};
-//	pos_px.x = METERS_TO_PIXELS(x);
-//	pos_px.y = SCREEN_HEIGHT - METERS_TO_PIXELS(y);
-//	pos_px.w = METERS_TO_PIXELS(w);
-//	pos_px.h = METERS_TO_PIXELS(-h); // Can I do this? LOL
-//	return pos_px;
-//}

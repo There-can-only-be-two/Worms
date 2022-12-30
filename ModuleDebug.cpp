@@ -293,6 +293,7 @@ void ModuleDebug::DrawDebug()
 		{
 			pBody = item->data;
 
+			//Proyectiles
 			std::string string = std::string("PBODY.AX = ") + std::to_string(pBody->ax);
 			App->fonts->BlitText(debugX + 16, debugY + 420, fontId, string.c_str());
 
@@ -311,24 +312,57 @@ void ModuleDebug::DrawDebug()
 			string = std::string("PBODY.PY = ") + std::to_string(pBody->py);
 			App->fonts->BlitText(debugX + 16, debugY + 520, fontId, string.c_str());
 
-			string = std::string("PLAYER.PX = ") + std::to_string(App->player->pBody->px);
-			App->fonts->BlitText(debugX + 16, debugY + 560, fontId, string.c_str());
 
-			string = std::string("PLAYER.PY = ") + std::to_string(App->player->pBody->py);
-			App->fonts->BlitText(debugX + 16, debugY + 580, fontId, string.c_str());
+			//Players
+			p2List_item<Circle*>* item;
+			Circle* pBody = NULL;
 
-			string = std::string("GRENADECOOLDOWN = ") + std::to_string(App->player->grenadeTimer);
-			App->fonts->BlitText(debugX + 16, debugY + 620, fontId, string.c_str());
+			for (item = App->player->listPlayers.getFirst(); item != NULL; item = item->next)
+			{
+				pBody = item->data;
 
-			if (App->player->isShootingGrenade == false) {
+				if (pBody->label == PLAYER_1)
+				{
+					string = std::string("PLAYER 1.PX = ") + std::to_string(pBody->px);
+					App->fonts->BlitText(debugX + 16, debugY + 560, fontId, string.c_str());
+
+					string = std::string("PLAYER 1.PY = ") + std::to_string(pBody->py);
+					App->fonts->BlitText(debugX + 16, debugY + 580, fontId, string.c_str());
+				}
+				else if (pBody->label == PLAYER_2)
+				{
+					string = std::string("PLAYER 2.PX = ") + std::to_string(pBody->px);
+					App->fonts->BlitText(debugX + 16, debugY + 600, fontId, string.c_str());
+
+					string = std::string("PLAYER 2.PY = ") + std::to_string(pBody->py);
+					App->fonts->BlitText(debugX + 16, debugY + 620, fontId, string.c_str());
+
+				}
+				
+			}
+			
+
+			//Grenade cooldown
+			string = std::string("GRENADECOOLDOWN = ") + std::to_string(App->player->explosionTimer);
+			App->fonts->BlitText(debugX + 16, debugY + 660, fontId, string.c_str());
+
+			if (App->player->isShootingGrenade == false && App->player->isShootingMissile == false) {
 				string = std::string("SHOOTING = AVAILABLE");
-				App->fonts->BlitText(debugX + 16, debugY + 640, fontId, string.c_str());
+				App->fonts->BlitText(debugX + 16, debugY + 680, fontId, string.c_str());
 			}
 			else {
 				string = std::string("SHOOTING = UNAVAILABLE");
-				App->fonts->BlitText(debugX + 16, debugY + 640, fontId, string.c_str());
+				App->fonts->BlitText(debugX + 16, debugY + 680, fontId, string.c_str());
 			}
 
+			if (App->player->weaponType == 0) {
+				string = std::string("WEAPON: GRENADE");
+				App->fonts->BlitText(debugX + 16, debugY + 720, fontId, string.c_str());
+			}
+			else {
+				string = std::string("WEAPON: MISSILE");
+				App->fonts->BlitText(debugX + 16, debugY + 720, fontId, string.c_str());
+			}
 
 		}
 

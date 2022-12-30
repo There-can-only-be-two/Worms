@@ -34,7 +34,7 @@ bool ModuleSceneIntro::Start()
 
 	water = App->physics->CreateWater(700, 620, 500, 200);
 	atm = App->physics->CreateAtmosphere();
-	//enemy = App->physics->CreateEnemy(1000, 200, 100, 100);
+	enemy = App->physics->CreateEnemy(1000, 200, 100, 100);
 
 	explosion = new Explosion();
 
@@ -58,11 +58,12 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update()
 {
 
-	if (explosion->steps > 0 && App->player->grenadeTimer <= 0 && App->player->isShootingGrenade == true) {
+	if (explosion->steps > 0 && App->player->explosionTimer <= 0 && (App->player->isShootingGrenade == true || App->player->isShootingMissile == true)) {
 		App->renderer->DrawCircle(METERS_TO_PIXELS(explosion->x), METERS_TO_PIXELS(explosion->y), METERS_TO_PIXELS(explosion->radius) - METERS_TO_PIXELS(explosion->radius*(explosion->steps/explosion->stepIterator)), 255, 128, 0, 255);
 		explosion->steps--;
 		if (explosion->steps == 0) {
 			App->player->isShootingGrenade = false;
+			App->player->isShootingMissile = false;
 		}
 	}
 
@@ -77,13 +78,13 @@ update_status ModuleSceneIntro::PostUpdate()
 	SDL_Rect g2Rect = { METERS_TO_PIXELS(ground2->x), METERS_TO_PIXELS(ground2->y), METERS_TO_PIXELS(ground2->w), METERS_TO_PIXELS(ground2->h) };
 	SDL_Rect g3Rect = { METERS_TO_PIXELS(ground3->x), METERS_TO_PIXELS(ground3->y), METERS_TO_PIXELS(ground3->w), METERS_TO_PIXELS(ground3->h) };
 	SDL_Rect wRect = { METERS_TO_PIXELS(water->x), METERS_TO_PIXELS(water->y), METERS_TO_PIXELS(water->w), METERS_TO_PIXELS(water->h) };
-	//SDL_Rect eRect = { METERS_TO_PIXELS(enemy->x), METERS_TO_PIXELS(enemy->y), METERS_TO_PIXELS(enemy->w), METERS_TO_PIXELS(enemy->h) };
+	SDL_Rect eRect = { METERS_TO_PIXELS(enemy->x), METERS_TO_PIXELS(enemy->y), METERS_TO_PIXELS(enemy->w), METERS_TO_PIXELS(enemy->h) };
 
 	App->renderer->DrawQuad(gRect, 101, 67, 33, 128);
 	App->renderer->DrawQuad(g2Rect, 101, 67, 33, 128);
 	App->renderer->DrawQuad(g3Rect, 101, 67, 33, 128);
 	App->renderer->DrawQuad(wRect, 135, 205, 235, 128);
-	//App->renderer->DrawQuad(eRect, 223, 255, 0, 128);
+	App->renderer->DrawQuad(eRect, 223, 255, 0, 128);
 
 	return UPDATE_CONTINUE;
 }
