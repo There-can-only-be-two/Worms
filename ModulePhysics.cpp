@@ -67,7 +67,8 @@ update_status ModulePhysics::PreUpdate()
 			float fgy = pBody->mass * -gravity; // Let's assume gravity is constant and downwards, like in real situations
 			pBody->fx += fgx; pBody->fy += fgy; // Add this force to ball's total force
 
-			if (pBody->label == PLAYER && App->player->isJumping > 0) {
+			if (pBody->label == PLAYER && App->player->isJumping > 0)
+			{
 				App->player->isGrounded = false;
 				pBody->fy -= 1000;
 				App->player->isJumping--;
