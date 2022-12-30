@@ -38,4 +38,8 @@ public:
 	bool isShootingMissile;
 
 	int speed;
+
+	float coef_rest_player, coef_rest_grenade;
+	float cd_player, cd_grenade;
+	float b_player, b_grenade;
 };

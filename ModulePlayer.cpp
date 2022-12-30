@@ -14,6 +14,10 @@ ModulePlayer::~ModulePlayer()
 // Load assets
 bool ModulePlayer::Start()
 {
+	coef_rest_grenade = 0.7f;
+	cd_grenade = 0.4f;
+	b_grenade = 10.0f;
+
 	for (int i = 0; i < 2; i++)
 	{
 		pBody = new Circle();
@@ -86,8 +90,18 @@ update_status ModulePlayer::Update()
 	{
 		player = pItem->data;
 
+		player->coef_restitution = coef_rest_player;
+		player->cd = cd_player;
+		player->b = b_player;
+
 		if (player->label == App->scene_intro->turn)
 		{
+			if (player->label == PLAYER_1) {
+				App->fonts->BlitText(METERS_TO_PIXELS(player->px - 30), METERS_TO_PIXELS(player->py - 50), App->fonts->selected, "PLAYER 1");
+			}else{
+				App->fonts->BlitText(METERS_TO_PIXELS(player->px - 30), METERS_TO_PIXELS(player->py - 50), App->fonts->selected, "PLAYER 2");
+			}
+			
 			//Left
 			if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
 				player->px -= speed * DELTATIME;
@@ -138,6 +152,14 @@ update_status ModulePlayer::Update()
 				}
 			}
 		}
+		else {
+			if (player->label == PLAYER_1) {
+				App->fonts->BlitText(METERS_TO_PIXELS(player->px - 30), METERS_TO_PIXELS(player->py - 50), App->fonts->font, "PLAYER 1");
+			}
+			else {
+				App->fonts->BlitText(METERS_TO_PIXELS(player->px - 30), METERS_TO_PIXELS(player->py - 50), App->fonts->font, "PLAYER 2");
+			}
+		}
 	}
 		
 
@@ -163,11 +185,11 @@ void ModulePlayer::Shoot(Circle* player)
 	bod->mass = 10.0f; // [kg]
 	bod->surface = 1.0f; // [m^2]
 	bod->radius = 0.4f; // [m]
-	bod->cd = 0.4f; // [-]
+	bod->cd = cd_grenade; // [-]
 	bod->cl = 1.2f; // [-]
-	bod->b = 10.0f; // [...]
+	bod->b = b_grenade; // [...]
 	bod->coef_friction = 0.9f; // [-]
-	bod->coef_restitution = 0.7f; // [-]
+	bod->coef_restitution = coef_rest_grenade; // [-]
 
 	App->scene_intro->explosion->steps = App->scene_intro->explosion->stepIterator;
 

@@ -56,13 +56,80 @@ update_status ModuleDebug::Update()
 		else if (App->input->GetKey(SDL_SCANCODE_K) == KEY_REPEAT && App->physics->GetGravity() < 100)
 			App->physics->SetGravity(App->physics->GetGravity() + 1);
 
-		//Bounce Coef
-		if (App->input->GetKey(SDL_SCANCODE_N) == KEY_REPEAT && App->physics->GetGravity() > -100)
-			App->physics->SetGravity(App->physics->GetGravity() - 1);
-		else if (App->input->GetKey(SDL_SCANCODE_M) == KEY_REPEAT && App->physics->GetGravity() < 100)
-			App->physics->SetGravity(App->physics->GetGravity() + 1);
+		//Wind
+		if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT && App->scene_intro->atm->windx > -20)
+			App->scene_intro->atm->windx -= 1;
+		else if (App->input->GetKey(SDL_SCANCODE_T) == KEY_REPEAT && App->scene_intro->atm->windx < 20)
+			App->scene_intro->atm->windx += 1;
 
-		
+		if (App->input->GetKey(SDL_SCANCODE_3) == KEY_REPEAT && App->scene_intro->atm->windy > -20)
+			App->scene_intro->atm->windy -= 1;
+		else if (App->input->GetKey(SDL_SCANCODE_4) == KEY_REPEAT && App->scene_intro->atm->windy < 20)
+			App->scene_intro->atm->windy += 1;
+
+		//Switch between grenade or player
+		if (App->input->GetKey(SDL_SCANCODE_B) == KEY_DOWN)
+			isGrenade = !isGrenade;
+
+		if (!isGrenade)
+		{
+			//Bounce Coef
+			if (App->input->GetKey(SDL_SCANCODE_N) == KEY_REPEAT && App->player->coef_rest_player > 0)
+				App->player->coef_rest_player -= 0.1;
+			else if (App->input->GetKey(SDL_SCANCODE_M) == KEY_REPEAT && App->player->coef_rest_player < 1)
+				App->player->coef_rest_player += 0.1;
+
+			//Aerodynamic Drag coefficient
+			if (App->input->GetKey(SDL_SCANCODE_Z) == KEY_REPEAT && App->player->cd_player > 0)
+				App->player->cd_player -= 0.1;
+			else if (App->input->GetKey(SDL_SCANCODE_X) == KEY_REPEAT && App->player->cd_player < 1)
+				App->player->cd_player += 0.1;
+
+			//Hydrodynamic Drag coefficient
+			if (App->input->GetKey(SDL_SCANCODE_G) == KEY_REPEAT && App->player->b_player > -10)
+				App->player->b_player -= 0.1;
+			else if (App->input->GetKey(SDL_SCANCODE_H) == KEY_REPEAT && App->player->b_player < 20)
+				App->player->b_player += 0.1;
+		}
+		else if (isGrenade)
+		{
+			//Bounce Coef
+			if (App->input->GetKey(SDL_SCANCODE_N) == KEY_REPEAT && App->player->coef_rest_grenade > 0)
+				App->player->coef_rest_grenade -= 0.1;
+			else if (App->input->GetKey(SDL_SCANCODE_M) == KEY_REPEAT && App->player->coef_rest_grenade < 1)
+				App->player->coef_rest_grenade += 0.1;
+
+			//Aerodynamic Drag coefficient
+			if (App->input->GetKey(SDL_SCANCODE_Z) == KEY_REPEAT && App->player->cd_grenade > 0)
+				App->player->cd_grenade -= 0.1;
+			else if (App->input->GetKey(SDL_SCANCODE_X) == KEY_REPEAT && App->player->cd_grenade < 1)
+				App->player->cd_grenade += 0.1;
+
+			//Hydrodynamic Drag coefficient
+			if (App->input->GetKey(SDL_SCANCODE_G) == KEY_REPEAT && App->player->b_grenade > -10)
+				App->player->b_grenade -= 0.1;
+			else if (App->input->GetKey(SDL_SCANCODE_H) == KEY_REPEAT && App->player->b_grenade < 20)
+				App->player->b_grenade += 0.1;
+		}
+
+		//ACTIVATE / DISACTIVATE FORCES
+
+			//Gravity
+		if (App->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN)
+		{
+			noGravity = !noGravity;
+			if (noGravity)
+			{
+				saveGravity = App->physics->GetGravity();
+				App->physics->SetGravity(0);
+			}
+			else
+			{
+				App->physics->SetGravity(saveGravity);
+			}
+		}
+
+
 
 		//P: Change Player
 		if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
@@ -114,7 +181,6 @@ void ModuleDebug::DrawDebug()
 	int debugX = 50;
 	int debugY = 50;
 
-
 	App->fonts->BlitText(debugX, debugY + 0, fontId, "#DEBUG MODE (TAB)  ON/OFF");
 
 	//Colliders
@@ -122,7 +188,6 @@ void ModuleDebug::DrawDebug()
 		App->fonts->BlitText(debugX, debugY + 20, fontId, "#COLLIDERS  (F1)   ON");
 	else
 		App->fonts->BlitText(debugX, debugY + 20, fontId, "#COLLIDERS  (F1)   OFF");
-
 
 	//FPS Cap
 	if (fpsCap)
@@ -133,16 +198,51 @@ void ModuleDebug::DrawDebug()
 	std::string string = std::string("MAX FPS   (U-/I+)  ") + std::to_string(desiredFPS);
 	App->fonts->BlitText(debugX + 16, debugY + 60, fontId, string.c_str());
 
-
 	//Gravity
 	string = std::string("#GRAVITY.Y  (J-/K+)  ") + std::to_string(App->physics->GetGravity());
 	App->fonts->BlitText(debugX, debugY + 100, fontId, string.c_str());
 
-
-	////Bounce coef
-	string = std::string("#BOUNCE COEF(N-/M+)  ") + std::to_string(99999);
+	//Wind
+	string = std::string("#WIND X  (R-/T+)  ") + std::to_string(App->scene_intro->atm->windx);
 	App->fonts->BlitText(debugX, debugY + 120, fontId, string.c_str());
 
+	string = std::string("#WIND Y  (3-/4+)  ") + std::to_string(App->scene_intro->atm->windy);
+	App->fonts->BlitText(debugX, debugY + 130, fontId, string.c_str());
+
+	////Bounce coef
+	float bouncePrint, cdPrint, bPrint;
+	
+	if (isGrenade)
+	{
+		bouncePrint = App->player->coef_rest_grenade;
+		cdPrint = App->player->cd_grenade;
+		bPrint = App->player->b_grenade;
+		App->fonts->BlitText(debugX, debugY + 150, fontId, "#BOUNCE COEF (B) = GRENADE");
+	}
+	else if (!isGrenade)
+	{
+		bouncePrint = App->player->coef_rest_player;
+		cdPrint = App->player->cd_player;
+		bPrint = App->player->b_player;
+		App->fonts->BlitText(debugX, debugY + 150, fontId, "#SWITCH ENTITY (B) = PLAYER");
+	}
+
+	string = std::string("#BOUNCE COEF     (N-/M+)  ") + std::to_string(bouncePrint);
+	App->fonts->BlitText(debugX, debugY + 170, fontId, string.c_str());
+
+	string = std::string("#AERO DRAG COEF  (Z-/X+)  ") + std::to_string(cdPrint);
+	App->fonts->BlitText(debugX, debugY + 180, fontId, string.c_str());
+
+	string = std::string("#HYDRO DRAG COEF (G-/H+)  ") + std::to_string(bPrint);
+	App->fonts->BlitText(debugX, debugY + 190, fontId, string.c_str());
+
+	//ACTIVATE / DISACTIVATE FORCES
+
+		//Gravity
+	if (!noGravity)
+		App->fonts->BlitText(debugX, debugY + 210, fontId, "#GRAVITY  (5)   ON");
+	else
+		App->fonts->BlitText(debugX, debugY + 210, fontId, "#GRAVITY  (5)   OFF");
 
 
 	//Change player
@@ -153,21 +253,21 @@ void ModuleDebug::DrawDebug()
 		turn = "PLAYER 2";
 
 	string = std::string("#TURN       (P)    ") + turn;
-	App->fonts->BlitText(debugX, debugY + 200, fontId, string.c_str());
+	App->fonts->BlitText(debugX, debugY + 260, fontId, string.c_str());
 
 
 
 	//Hide UI
 	if (hideUI)
-		App->fonts->BlitText(debugX, debugY + 240, fontId, "#HIDE UI    (U)    ON");
+		App->fonts->BlitText(debugX, debugY + 280, fontId, "#HIDE UI    (U)    ON");
 	else
-		App->fonts->BlitText(debugX, debugY + 240, fontId, "#HIDE UI    (U)    OFF");
+		App->fonts->BlitText(debugX, debugY + 280, fontId, "#HIDE UI    (U)    OFF");
 
 	//Mute SFX
 	if (sfxON)
-		App->fonts->BlitText(debugX, debugY + 260, fontId, "#SFX        (M)    ON");
+		App->fonts->BlitText(debugX, debugY + 300, fontId, "#SFX        (M)    ON");
 	else
-		App->fonts->BlitText(debugX, debugY + 260, fontId, "#SFX        (M)    OFF");
+		App->fonts->BlitText(debugX, debugY + 300, fontId, "#SFX        (M)    OFF");
 
 
 

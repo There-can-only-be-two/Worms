@@ -47,7 +47,7 @@ public:
 	void BlitText(int x, int y, int fontIndex, const char* text) const;
 
 	bool CleanUp();
-	int font;
+	int font, selected;
 private:
 	// An array to keep track and store all loaded fonts
 	Font fonts[MAX_FONTS];
