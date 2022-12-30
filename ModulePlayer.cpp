@@ -128,10 +128,11 @@ update_status ModulePlayer::Update()
 			if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 				if (!isShootingGrenade && !isShootingMissile) {
 					Shoot();
-			}
-			if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
-				pBody->px = PIXELS_TO_METERS(600);
-				pBody->py = PIXELS_TO_METERS(400);
+				}
+				if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
+					pBody->px = PIXELS_TO_METERS(600);
+					pBody->py = PIXELS_TO_METERS(400);
+				}
 			}
 		}
 	}

@@ -176,9 +176,9 @@ void ModuleDebug::DrawDebug()
 
 	//Variables
 	if (variables)
-		App->fonts->BlitText(debugX, debugY + 300, fontId, "#VARIABLES  (V)    ON");
+		App->fonts->BlitText(debugX, debugY + 400, fontId, "#VARIABLES  (V)    ON");
 	else
-		App->fonts->BlitText(debugX, debugY + 300, fontId, "#VARIABLES  (V)    OFF");
+		App->fonts->BlitText(debugX, debugY + 400, fontId, "#VARIABLES  (V)    OFF");
 
 
 	if (variables)
@@ -194,39 +194,39 @@ void ModuleDebug::DrawDebug()
 			pBody = item->data;
 
 			std::string string = std::string("PBODY.AX = ") + std::to_string(pBody->ax);
-			App->fonts->BlitText(debugX + 16, debugY + 320, fontId, string.c_str());
-
-			string = std::string("PBODY.AY = ") + std::to_string(pBody->ay);
-			App->fonts->BlitText(debugX + 16, debugY + 340, fontId, string.c_str());
-
-			string = std::string("PBODY.VX = ") + std::to_string(pBody->vx);
-			App->fonts->BlitText(debugX + 16, debugY + 360, fontId, string.c_str());
-
-			string = std::string("PBODY.VY = ") + std::to_string(pBody->vy);
-			App->fonts->BlitText(debugX + 16, debugY + 380, fontId, string.c_str());
-
-			string = std::string("PBODY.PX = ") + std::to_string(pBody->px);
-			App->fonts->BlitText(debugX + 16, debugY + 400, fontId, string.c_str());
-
-			string = std::string("PBODY.PY = ") + std::to_string(pBody->py);
 			App->fonts->BlitText(debugX + 16, debugY + 420, fontId, string.c_str());
 
-			string = std::string("PLAYER.PX = ") + std::to_string(App->player->pBody->px);
+			string = std::string("PBODY.AY = ") + std::to_string(pBody->ay);
+			App->fonts->BlitText(debugX + 16, debugY + 440, fontId, string.c_str());
+
+			string = std::string("PBODY.VX = ") + std::to_string(pBody->vx);
 			App->fonts->BlitText(debugX + 16, debugY + 460, fontId, string.c_str());
 
+			string = std::string("PBODY.VY = ") + std::to_string(pBody->vy);
+			App->fonts->BlitText(debugX + 16, debugY + 480, fontId, string.c_str());
+
+			string = std::string("PBODY.PX = ") + std::to_string(pBody->px);
+			App->fonts->BlitText(debugX + 16, debugY + 500, fontId, string.c_str());
+
+			string = std::string("PBODY.PY = ") + std::to_string(pBody->py);
+			App->fonts->BlitText(debugX + 16, debugY + 520, fontId, string.c_str());
+
+			string = std::string("PLAYER.PX = ") + std::to_string(App->player->pBody->px);
+			App->fonts->BlitText(debugX + 16, debugY + 560, fontId, string.c_str());
+
 			string = std::string("PLAYER.PY = ") + std::to_string(App->player->pBody->py);
-			App->fonts->BlitText(debugX + 16, debugY + 380, fontId, string.c_str());
+			App->fonts->BlitText(debugX + 16, debugY + 580, fontId, string.c_str());
 
 			string = std::string("GRENADECOOLDOWN = ") + std::to_string(App->player->grenadeTimer);
-			App->fonts->BlitText(debugX + 16, debugY + 400, fontId, string.c_str());
+			App->fonts->BlitText(debugX + 16, debugY + 620, fontId, string.c_str());
 
 			if (App->player->isShootingGrenade == false) {
 				string = std::string("SHOOTING = AVAILABLE");
-				App->fonts->BlitText(debugX + 16, debugY + 420, fontId, string.c_str());
+				App->fonts->BlitText(debugX + 16, debugY + 640, fontId, string.c_str());
 			}
 			else {
 				string = std::string("SHOOTING = UNAVAILABLE");
-				App->fonts->BlitText(debugX + 16, debugY + 420, fontId, string.c_str());
+				App->fonts->BlitText(debugX + 16, debugY + 640, fontId, string.c_str());
 			}
 
 
