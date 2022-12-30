@@ -320,12 +320,12 @@ bool ModulePhysics::check_collision_circle_rectangle(float cx, float cy, float c
 	return (cornerDistance_sq <= (cr * cr));
 }
 
-void ModulePhysics::changeGravity(float g)
+void ModulePhysics::SetGravity(float g)
 {
 	gravity = g;
 }
 
-float ModulePhysics::getGravity()
+float ModulePhysics::GetGravity()
 {
 	return gravity;
 }

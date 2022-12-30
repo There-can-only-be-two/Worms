@@ -42,7 +42,7 @@ update_status ModuleDebug::Update()
 
 		//F2: Lights ON/OFF
 		if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
-			lightsON = !lightsON;
+			fpsCap = !fpsCap;
 
 		//FPS
 		if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN && desiredFPS < 120)
@@ -51,10 +51,10 @@ update_status ModuleDebug::Update()
 			desiredFPS -= 5;
 
 		//Gravity
-		if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT && App->physics->getGravity() > -100)
-			App->physics->changeGravity(App->physics->getGravity() - 1);
-		else if (App->input->GetKey(SDL_SCANCODE_T) == KEY_REPEAT && App->physics->getGravity() < 100)
-			App->physics->changeGravity(App->physics->getGravity() + 1);
+		if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT && App->physics->GetGravity() > -100)
+			App->physics->SetGravity(App->physics->GetGravity() - 1);
+		else if (App->input->GetKey(SDL_SCANCODE_T) == KEY_REPEAT && App->physics->GetGravity() < 100)
+			App->physics->SetGravity(App->physics->GetGravity() + 1);
 
 		//Bounce Coef
 
@@ -105,23 +105,24 @@ void ModuleDebug::DrawDebug()
 	else
 		App->fonts->BlitText(debugX, debugY + 20, fontId, "#COLLIDERS  (F1)   OFF");
 
-	//Lights
-	if (lightsON)
-		App->fonts->BlitText(debugX, debugY + 40, fontId, "#LIGHTS     (F2)   ON");
+
+	//FPS Cap
+	if (fpsCap)
+		App->fonts->BlitText(debugX, debugY + 40, fontId, "#FRAME CAP  (F2)   ON");
 	else
-		App->fonts->BlitText(debugX, debugY + 40, fontId, "#LIGHTS     (F2)   OFF");
+		App->fonts->BlitText(debugX, debugY + 40, fontId, "#FRAME CAP  (F2)   OFF");
 
+	std::string string = std::string("MAX FPS   (U-/I+)  ") + std::to_string(desiredFPS);
+	App->fonts->BlitText(debugX + 16, debugY + 60, fontId, string.c_str());
 
-	//Frames
-	std::string string = std::string("#FRAMESPS   (Q-/E+)  ") + std::to_string(desiredFPS);
-	App->fonts->BlitText(debugX, debugY + 80, fontId, string.c_str());
 
 	//Gravity
-	string = std::string("#GRAVITY.Y  (R-/T+)  ") + std::to_string(App->physics->getGravity());
+	string = std::string("#GRAVITY.Y  (J-/K+)  ") + std::to_string(App->physics->GetGravity());
 	App->fonts->BlitText(debugX, debugY + 100, fontId, string.c_str());
 
+
 	////Bounce coef
-	string = std::string("#BOUNCE COEF(A-/D+)  ") + std::to_string(99999);
+	string = std::string("#BOUNCE COEF(N-/M+)  ") + std::to_string(99999);
 	App->fonts->BlitText(debugX, debugY + 120, fontId, string.c_str());
 
 
