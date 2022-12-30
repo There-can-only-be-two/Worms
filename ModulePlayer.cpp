@@ -27,6 +27,7 @@ bool ModulePlayer::Start()
 
 	pBody->isAlive = true;
 	pBody->isStable = false;
+	grounded = false;
 
 	pBody->mass = 10.0f; // [kg]
 	pBody->surface = 1.0f; // [m^2]
@@ -70,7 +71,10 @@ update_status ModulePlayer::Update()
 	}
 	//Jump
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
-		isJumping = 8;
+		if (grounded) {
+			isJumping = 8;
+			grounded = false;
+		}
 	}
 	//Weapons
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
