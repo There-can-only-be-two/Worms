@@ -89,12 +89,13 @@ public:
 	float coef_friction;
 	float coef_restitution;
 
-
 };
 
 class Circle : public PhysBody {
 public:
 	float radius = 1.0f;
+	uint life = 100;
+
 };
 
 class Rect : public PhysBody {

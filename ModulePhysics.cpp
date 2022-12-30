@@ -91,9 +91,16 @@ update_status ModulePhysics::PreUpdate()
 				if (h <= App->scene_intro->explosion->radius) {
 					pBody->fx += 1000*(App->scene_intro->explosion->radius * cs) - x;
 					pBody->fy += 1000*(App->scene_intro->explosion->radius * sn) - y;
+					if (pBody->isHit) {
+						pBody->life -= 20;
+						pBody->isHit = false;
+					}
+
 				}
+
 			}
 
+			
 			// Gravity force
 			float fgx = 0.0f;
 			float fgy = pBody->mass * -gravity; // Let's assume gravity is constant and downwards, like in real situations
