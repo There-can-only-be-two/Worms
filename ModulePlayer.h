@@ -34,6 +34,7 @@ public:
 	uint weaponType;
 
 	uint explosionTimer;
+	uint shootingIFrames;
 	bool isShootingGrenade;
 	bool isShootingMissile;
 

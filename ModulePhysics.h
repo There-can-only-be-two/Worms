@@ -189,8 +189,12 @@ public:
 	// Detect collision with enemy
 	bool is_colliding_with_enemy(const Circle& ball, const Enemy& enemy);
 
+	bool is_colliding_with_player(const Circle& ball, const Circle& player);
+
 	// Detect collision between circle and rectange
 	bool check_collision_circle_rectangle(float cx, float cy, float cr, float rx, float ry, float rw, float rh);
+
+	bool check_collision_circles(float cx1, float cy1, float cr1, float cx2, float cy2, float cr2);
 
 	// Detect Direction
 	void detect_direction_ground(Circle& pBody, const Ground& ground);

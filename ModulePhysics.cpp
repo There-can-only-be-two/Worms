@@ -52,6 +52,10 @@ update_status ModulePhysics::PreUpdate()
 		App->player->explosionTimer--;
 	}
 
+	if (App->player->shootingIFrames > 0) {
+		App->player->shootingIFrames--;
+	}
+
 	for (item = App->physics->listBodies.getFirst(); item != NULL; item = item->next)
 	{
 		pBody = item->data;
@@ -95,9 +99,7 @@ update_status ModulePhysics::PreUpdate()
 						pBody->life -= 20;
 						pBody->isHit = false;
 					}
-
 				}
-
 			}
 
 			
@@ -159,6 +161,16 @@ update_status ModulePhysics::PreUpdate()
 					}
 				}
 			}
+
+			if (pBody->label != PLAYER_1 && pBody->label != PLAYER_2) {
+				if (is_colliding_with_player(*pBody, *App->player->listPlayers.getFirst()->data) 
+					|| is_colliding_with_player(*pBody, *App->player->listPlayers.getLast()->data)) {
+					if (App->player->shootingIFrames == 0) {
+						App->player->explosionTimer = 0;
+					}
+				}
+			}
+
 			
 			if (is_colliding_with_enemy(*pBody, *App->scene_intro->enemy)){
 				detect_direction_enemy(*pBody, *App->scene_intro->enemy);
@@ -335,6 +347,10 @@ bool ModulePhysics::is_colliding_with_enemy(const Circle& ball, const Enemy& ene
 	return check_collision_circle_rectangle(ball.px, ball.py, ball.radius, rect_x, rect_y, enemy.w, enemy.h);
 }
 
+bool ModulePhysics::is_colliding_with_player(const Circle& ball, const Circle& player) {
+	return check_collision_circles(ball.px, ball.py, ball.radius, player.px, player.py, player.radius);
+}
+
 // Detect collision between circle and rectange
 bool ModulePhysics::check_collision_circle_rectangle(float cx, float cy, float cr, float rx, float ry, float rw, float rh)
 {
@@ -357,6 +373,16 @@ bool ModulePhysics::check_collision_circle_rectangle(float cx, float cy, float c
 	float b = dist_y - rh / 2.0f;
 	float cornerDistance_sq = a * a + b * b;
 	return (cornerDistance_sq <= (cr * cr));
+}
+
+bool ModulePhysics::check_collision_circles(float cx1, float cy1, float cr1, float cx2, float cy2, float cr2) {
+
+	float dist_x = std::abs(cx1 - cx2);
+	float dist_y = std::abs(cy1 - cy2);
+	float r = cr1 + cr2;
+	float h = dist_x * dist_x + dist_y * dist_y;
+
+	return (h <= r * r);
 }
 
 void ModulePhysics::detect_direction_ground(Circle& pBody, const Ground& ground) {

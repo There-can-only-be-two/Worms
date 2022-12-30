@@ -181,6 +181,7 @@ update_status ModulePlayer::Update()
 
 void ModulePlayer::Shoot(Circle* player)
 {
+
 	Circle* bod = new Circle();
 
 	bod->ax = 0;
@@ -207,6 +208,8 @@ void ModulePlayer::Shoot(Circle* player)
 	App->scene_intro->explosion->steps = App->scene_intro->explosion->stepIterator;
 
 	bod->label = GRENADE;
+
+	shootingIFrames = 10;
 
 	switch (weaponType) {
 	case 0:
