@@ -12,10 +12,11 @@
 // buoyancy (EN CATALÀ: flotabilitat) (, 
 // elastic(springs) (f=kx).
 
+#define M_PI 3.14159265358979323846
 #define PIXELS_PER_METER 32.0f // if touched change METER_PER_PIXEL too
 #define METERS_PER_PIXEL 0.03125f // this is 1 / PIXELS_PER_METER !
-#define RAD_PER_DEG ((float)180/b2_pi)
-#define DEG_PER_RAD ((float)b2_pi/180)
+#define RAD_PER_DEG ((float)180/M_PI)
+#define DEG_PER_RAD ((float)M_PI/180)
 
 #define METERS_TO_PIXELS(m) ((int) floor(PIXELS_PER_METER * m))
 #define PIXELS_TO_METERS(p)  ((float) METERS_PER_PIXEL * p)
@@ -163,6 +164,10 @@ public:
 	void Drag(PhysBody* phbody);
 
 	p2List<Circle*> listBodies;
+	double pointList[32][2];
+	double vectorX;
+	double vectorY;
+	double angle;
 
 	// Compute modulus of a vector
 	float modulus(float vx, float vy);
@@ -192,6 +197,7 @@ public:
 	bool check_collision_circle_rectangle(float cx, float cy, float cr, float rx, float ry, float rw, float rh);
 
 	// Detect Direction
+	void collision_direction(Circle& pBody, const Ground& ground);
 	void detect_direction_ground(Circle& pBody, const Ground& ground);
 	void detect_direction_enemy(Circle& pBody, const Enemy& enemy);
 

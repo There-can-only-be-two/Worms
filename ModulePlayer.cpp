@@ -31,7 +31,7 @@ bool ModulePlayer::Start()
 		else
 		{
 			pBody->px = PIXELS_TO_METERS(1400);
-			pBody->py = PIXELS_TO_METERS(500);
+			pBody->py = PIXELS_TO_METERS(440);
 			pBody->label = PLAYER_2;
 		}
 
@@ -118,6 +118,7 @@ update_status ModulePlayer::Update()
 					player->isGrounded = false;
 				}
 			}
+
 			//Weapons
 			if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
 				LOG("Selected GRENADE");

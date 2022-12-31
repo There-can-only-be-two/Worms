@@ -141,7 +141,7 @@ update_status ModulePhysics::PreUpdate()
 				ground = gItem->data;
 
 				if (is_colliding_with_ground(*pBody, *ground))
-				{
+				{					
 					detect_direction_ground(*pBody, *ground);
 
 					if (pBody->label == PLAYER_1 || pBody->label ==  PLAYER_2) {
@@ -307,6 +307,7 @@ void ModulePhysics::integrator_velocity_verlet(Circle& ball, float dt)
 // Detect collision with ground
 bool ModulePhysics::is_colliding_with_ground(const Circle& ball, const Ground& ground)
 {
+
 	float rect_x = (ground.x + ground.w / 2.0f); // Center of rectangle
 	float rect_y = (ground.y + ground.h / 2.0f); // Center of rectangle
 	return check_collision_circle_rectangle(ball.px, ball.py, ball.radius, rect_x, rect_y, ground.w, ground.h);
@@ -352,55 +353,133 @@ bool ModulePhysics::check_collision_circle_rectangle(float cx, float cy, float c
 	return (cornerDistance_sq <= (cr * cr));
 }
 
-void ModulePhysics::detect_direction_ground(Circle& pBody, const Ground& ground) {
-	
-	////up-left
-	//if (pBody.vx < 0 && pBody.vy < 0) {
-	//	
-	//}
-	////up-right
-	//else if (pBody.vx > 0 && pBody.vy < 0) {
-	//
-	//}
-	////down-left
-	//else if (pBody.vx < 0 && pBody.vy > 0) {
-	//
-	//}
-	////down-right
-	//else if (pBody.vx > 0 && pBody.vy > 0) {
-	//
-	//}
-	
-	if (std::abs(pBody.vy) > std::abs(pBody.vx)) {
-		// TP ball to ground surface
-		if (pBody.vy < 0) {
-			pBody.py = ground.y + ground.h + pBody.radius;
+void ModulePhysics::collision_direction(Circle& pBody, const Ground& ground)
+{
+	double vectorX = 0;
+	double vectorY = 0;
+	int count = 1;
+
+	for (int i = 0; i < 32; i++)
+	{
+		//resert point list
+		pointList[i][0] = -69420;
+		pointList[i][1] = -69420;
+
+		double arc = 360 / 32;
+		double x = pBody.px + (pBody.radius * cos(DEG_TO_RAD(i*arc)));
+		double y = pBody.py + (pBody.radius * sin(DEG_TO_RAD(i*arc)));
+
+		if ((x >= ground.x) && (x <= ground.x + ground.w) && (y >= ground.y) && (y <= ground.y + ground.h))
+		{
+			count++;
+
+			pointList[i][0] = x;
+			pointList[i][1] = y;
+
+			vectorX += (pBody.px - x);
+			vectorY += (pBody.py - y);
 		}
-		else if (pBody.vy > 0) {
-			pBody.py = ground.y - pBody.radius;
-		}
-		// Elastic bounce with ground
-		pBody.vy = -pBody.vy;
-	
-		// FUYM non-elasticity
-		pBody.vx *= pBody.coef_friction;
-		pBody.vy *= pBody.coef_restitution;
 	}
-	else if (std::abs(pBody.vx) > std::abs(pBody.vy)) {
-		// TP ball to ground surface
-		if (pBody.vx < 0) {
-			pBody.px = ground.x + ground.w + pBody.radius;
-		}
-		else if (pBody.vx > 0) {
-			pBody.px = ground.x - pBody.radius;
-		}
+
+	App->physics->vectorX = vectorX;
+	App->physics->vectorY = vectorY;
+}
+
+void ModulePhysics::detect_direction_ground(Circle& pBody, const Ground& ground)
+{	
+	//calculate collision vector
+	collision_direction(pBody, ground);
+
+	//vector to angle
+	angle = RAD_TO_DEG(atan2(vectorY, vectorX));
+	//angle = RAD_TO_DEG(atan(vectorX/vectorY));
+
+	//right
+	if ((angle >= 0 && angle <= 45) || (angle <= 0 && angle >= -45))
+	{
+		pBody.px = ground.x + ground.w + pBody.radius;
+
 		// Elastic bounce with ground
 		pBody.vx = -pBody.vx;
-	
+
 		// FUYM non-elasticity
 		pBody.vy *= pBody.coef_friction;
 		pBody.vx *= pBody.coef_restitution;
 	}
+	//up
+	else if (angle >= -135 && angle <= -45)
+	{
+		pBody.py = ground.y - pBody.radius;
+
+		// Elastic bounce with ground
+		pBody.vy = -pBody.vy;
+
+		// FUYM non-elasticity
+		pBody.vx *= pBody.coef_friction;
+		pBody.vy *= pBody.coef_restitution;
+	}
+	 
+	//left
+	else if ((angle <= -135 && angle >= -180) || (angle <= 180 && angle >= 135))
+	{
+		pBody.px = ground.x - pBody.radius;
+
+		// Elastic bounce with ground
+		pBody.vx = -pBody.vx;
+
+		// FUYM non-elasticity
+		pBody.vy *= pBody.coef_friction;
+		pBody.vx *= pBody.coef_restitution;
+	}
+	//down
+	else if (angle >= 45 && angle <= 135)
+	{
+		pBody.py = ground.y + ground.h + pBody.radius;
+
+		// Elastic bounce with ground
+		pBody.vy = -pBody.vy;
+
+		// FUYM non-elasticity
+		pBody.vx *= pBody.coef_friction;
+		pBody.vy *= pBody.coef_restitution;
+	}
+
+	////Top-bot
+	//if (std::abs(pBody.vy) > std::abs(pBody.vx)) {
+	//	// TP ball to ground surface
+	//	//bot
+	//	if (pBody.vy < 0) {
+	//		pBody.py = ground.y + ground.h + pBody.radius;
+	//	}
+	//	//top
+	//	else if (pBody.vy > 0) {
+	//		pBody.py = ground.y - pBody.radius;
+	//	}
+	//	// Elastic bounce with ground
+	//	pBody.vy = -pBody.vy;
+	//
+	//	// FUYM non-elasticity
+	//	pBody.vx *= pBody.coef_friction;
+	//	pBody.vy *= pBody.coef_restitution;
+	//}
+	////left-right
+	//else if (std::abs(pBody.vx) > std::abs(pBody.vy)) {
+	//	// TP ball to ground surface
+	//	//right
+	//	if (pBody.vx < 0) {
+	//		pBody.px = ground.x + ground.w + pBody.radius;
+	//	}
+	//	//left
+	//	else if (pBody.vx > 0) {
+	//		pBody.px = ground.x - pBody.radius;
+	//	}
+	//	// Elastic bounce with ground
+	//	pBody.vx = -pBody.vx;
+	//
+	//	// FUYM non-elasticity
+	//	pBody.vy *= pBody.coef_friction;
+	//	pBody.vx *= pBody.coef_restitution;
+	//}
 }
 
 void ModulePhysics::detect_direction_enemy(Circle& pBody, const Enemy& enemy) {

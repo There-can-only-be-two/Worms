@@ -269,6 +269,9 @@ void ModuleDebug::DrawDebug()
 		App->fonts->BlitText(debugX, debugY + 340, fontId, "#SFX        (M)    OFF");
 
 
+	//DEBUG ANGLE
+	string = std::string("ANGLE:  ") + std::to_string(App->physics->angle);
+	App->fonts->BlitText(debugX, debugY + 380, fontId, string.c_str());
 
 
 
@@ -411,5 +414,22 @@ void ModuleDebug::DrawPhysics()
 	uint b = 0;
 	uint a = 255;
 
-	App->renderer->DrawLine(playerX, playerY, playerX + cosinus, playerY - sinus, r, g, b, a, false);  
+	App->renderer->DrawLine(playerX, playerY, playerX + cosinus, playerY - sinus, r, g, b, a, false);
+
+
+	//point list collision
+	for (int i = 0; i < 32; i++)
+	{
+		double x = App->physics->pointList[i][0];
+		double y = App->physics->pointList[i][1];
+
+		if (x != -69420 && y != -69420)
+		{
+			App->renderer->DrawCircle(METERS_TO_PIXELS(x), METERS_TO_PIXELS(y), 2, 255, 0, 0);
+		}
+	}
+
+	//Draw vector
+	App->renderer->DrawLine(playerX, playerY, playerX + METERS_TO_PIXELS(App->physics->vectorX), playerY + METERS_TO_PIXELS(App->physics->vectorY), 255, 0, 0, a, false);
+
 }
