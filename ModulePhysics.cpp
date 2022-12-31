@@ -506,6 +506,16 @@ void ModulePhysics::detect_direction_enemy(Circle& pBody, const Enemy& enemy) {
 	}
 }
 
+bool ModulePhysics::check_collision_circles(float cx1, float cy1, float cr1, float cx2, float cy2, float cr2) {
+
+	float dist_x = std::abs(cx1 - cx2);
+	float dist_y = std::abs(cy1 - cy2);
+	float r = cr1 + cr2;
+	float h = dist_x * dist_x + dist_y * dist_y;
+
+	return (h <= r * r);
+}
+
 void ModulePhysics::SetGravity(float g)
 {
 	gravity = g;
