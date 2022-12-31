@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModulePhysics.h"
 #include "math.h"
+#include "ModuleFonts.h"
 
 ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -52,6 +53,10 @@ update_status ModulePhysics::PreUpdate()
 		App->player->explosionTimer--;
 	}
 
+	if (App->player->shootingIFrames > 0) {
+		App->player->shootingIFrames--;
+	}
+
 	for (item = App->physics->listBodies.getFirst(); item != NULL; item = item->next)
 	{
 		pBody = item->data;
@@ -91,9 +96,14 @@ update_status ModulePhysics::PreUpdate()
 				if (h <= App->scene_intro->explosion->radius) {
 					pBody->fx += 1000*(App->scene_intro->explosion->radius * cs) - x;
 					pBody->fy += 1000*(App->scene_intro->explosion->radius * sn) - y;
+					if (pBody->isHit) {
+						pBody->life -= 20;
+						pBody->isHit = false;
+					}
 				}
 			}
 
+			
 			// Gravity force
 			float fgx = 0.0f;
 			float fgy = pBody->mass * -gravity; // Let's assume gravity is constant and downwards, like in real situations
@@ -111,6 +121,7 @@ update_status ModulePhysics::PreUpdate()
 			{
 				if (pBody->label == PLAYER_1 || pBody->label == PLAYER_2) {
 					pBody->mass = 200.0f;
+					pBody->life = 0;
 				}
 				if (pBody->label == MISSILE) {
 					App->player->explosionTimer = 0;
@@ -152,12 +163,24 @@ update_status ModulePhysics::PreUpdate()
 					}
 				}
 			}
+
+			if (pBody->label != PLAYER_1 && pBody->label != PLAYER_2) {
+				if (is_colliding_with_player(*pBody, *App->player->listPlayers.getFirst()->data) 
+					|| is_colliding_with_player(*pBody, *App->player->listPlayers.getLast()->data)) {
+					if (App->player->shootingIFrames == 0) {
+						App->player->explosionTimer = 0;
+					}
+				}
+			}
+
 			
 			if (is_colliding_with_enemy(*pBody, *App->scene_intro->enemy)){
 				detect_direction_enemy(*pBody, *App->scene_intro->enemy);
 			}
 
 			integrator_velocity_verlet(*pBody, dt);
+
+			
 		}
 	}
 	return UPDATE_CONTINUE;
@@ -329,6 +352,10 @@ bool ModulePhysics::is_colliding_with_enemy(const Circle& ball, const Enemy& ene
 	return check_collision_circle_rectangle(ball.px, ball.py, ball.radius, rect_x, rect_y, enemy.w, enemy.h);
 }
 
+bool ModulePhysics::is_colliding_with_player(const Circle& ball, const Circle& player) {
+	return check_collision_circles(ball.px, ball.py, ball.radius, player.px, player.py, player.radius);
+}
+
 // Detect collision between circle and rectange
 bool ModulePhysics::check_collision_circle_rectangle(float cx, float cy, float cr, float rx, float ry, float rw, float rh)
 {
@@ -444,42 +471,6 @@ void ModulePhysics::detect_direction_ground(Circle& pBody, const Ground& ground)
 		pBody.vy *= pBody.coef_restitution;
 	}
 
-	////Top-bot
-	//if (std::abs(pBody.vy) > std::abs(pBody.vx)) {
-	//	// TP ball to ground surface
-	//	//bot
-	//	if (pBody.vy < 0) {
-	//		pBody.py = ground.y + ground.h + pBody.radius;
-	//	}
-	//	//top
-	//	else if (pBody.vy > 0) {
-	//		pBody.py = ground.y - pBody.radius;
-	//	}
-	//	// Elastic bounce with ground
-	//	pBody.vy = -pBody.vy;
-	//
-	//	// FUYM non-elasticity
-	//	pBody.vx *= pBody.coef_friction;
-	//	pBody.vy *= pBody.coef_restitution;
-	//}
-	////left-right
-	//else if (std::abs(pBody.vx) > std::abs(pBody.vy)) {
-	//	// TP ball to ground surface
-	//	//right
-	//	if (pBody.vx < 0) {
-	//		pBody.px = ground.x + ground.w + pBody.radius;
-	//	}
-	//	//left
-	//	else if (pBody.vx > 0) {
-	//		pBody.px = ground.x - pBody.radius;
-	//	}
-	//	// Elastic bounce with ground
-	//	pBody.vx = -pBody.vx;
-	//
-	//	// FUYM non-elasticity
-	//	pBody.vy *= pBody.coef_friction;
-	//	pBody.vx *= pBody.coef_restitution;
-	//}
 }
 
 void ModulePhysics::detect_direction_enemy(Circle& pBody, const Enemy& enemy) {

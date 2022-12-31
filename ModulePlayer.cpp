@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModulePlayer.h"
 #include "ModuleRender.h"
+#include <string>
 
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -55,6 +56,7 @@ bool ModulePlayer::Start()
 		pBody->b = 10.0f; // [...]
 		pBody->coef_friction = 0.0f; // [-]
 		pBody->coef_restitution = 0.0f; // [-]
+		pBody->life = 100;
 
 		weaponType = 0;
 		pBody->shootAngle = 90;
@@ -76,7 +78,16 @@ bool ModulePlayer::Start()
 bool ModulePlayer::CleanUp()
 {
 	LOG("Unloading player");
-
+	p2List_item<Circle*>* pItem;
+	Circle* player = NULL;
+	for (pItem = listPlayers.getFirst(); pItem != NULL; pItem = pItem->next)
+	{
+		player = pItem->data;
+		player->px = 1000;
+		player->py = 1000;
+		player->label = DEAD;
+	
+	}
 	return true;
 }
 
@@ -93,13 +104,19 @@ update_status ModulePlayer::Update()
 		player->coef_restitution = coef_rest_player;
 		player->cd = cd_player;
 		player->b = b_player;
+		std::string string;
 
 		if (player->label == App->scene_intro->turn)
 		{
 			if (player->label == PLAYER_1) {
-				App->fonts->BlitText(METERS_TO_PIXELS(player->px - 30), METERS_TO_PIXELS(player->py - 50), App->fonts->selected, "PLAYER 1");
+				App->fonts->BlitText(METERS_TO_PIXELS(player->px - 30), METERS_TO_PIXELS(player->py - 80), App->fonts->selected, "PLAYER 1");
+				string = std::to_string(player->life);
+				App->fonts->BlitText(METERS_TO_PIXELS(player->px - 10), METERS_TO_PIXELS(player->py - 50), App->fonts->selected, string.c_str());
+
 			}else{
-				App->fonts->BlitText(METERS_TO_PIXELS(player->px - 30), METERS_TO_PIXELS(player->py - 50), App->fonts->selected, "PLAYER 2");
+				App->fonts->BlitText(METERS_TO_PIXELS(player->px - 30), METERS_TO_PIXELS(player->py - 80), App->fonts->selected, "PLAYER 2");
+				string = std::to_string(player->life);
+				App->fonts->BlitText(METERS_TO_PIXELS(player->px - 10), METERS_TO_PIXELS(player->py - 50), App->fonts->selected, string.c_str());
 			}
 			
 			//Left
@@ -146,22 +163,48 @@ update_status ModulePlayer::Update()
 			if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 				if (!isShootingGrenade && !isShootingMissile) {
 					Shoot(player);
+					if (App->scene_intro->turn == PLAYER_1) {
+						App->scene_intro->turn = PLAYER_2;
+					}
+					else {
+						App->scene_intro->turn = PLAYER_1;
+					}
 				}
 				if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
 					player->px = PIXELS_TO_METERS(600);
 					player->py = PIXELS_TO_METERS(400);
 				}
+				
 			}
-		
+			if (player->life == 0) {
+				//if (pBody->label == PLAYER_1)
+
+				App->fonts->BlitText(700, 400, App->fonts->selected, "GAME OVER, CLICK ENTER TO RESTART");
+				if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+					App->fade->FadeBlack((Module*)App->scene_intro, (Module*)App->scene_intro, 90);
+					player->life = 100;
+					player->px = 1000;
+					player->py = 1000;
+					player->label = DEAD;
+					//listPlayers.del(*player);
+
+				}
+			}
 		}
 		else {
 			if (player->label == PLAYER_1) {
-				App->fonts->BlitText(METERS_TO_PIXELS(player->px - 30), METERS_TO_PIXELS(player->py - 50), App->fonts->font, "PLAYER 1");
+				App->fonts->BlitText(METERS_TO_PIXELS(player->px - 30), METERS_TO_PIXELS(player->py - 80), App->fonts->font, "PLAYER 1");
+				string = std::to_string(player->life);
+				App->fonts->BlitText(METERS_TO_PIXELS(player->px - 10), METERS_TO_PIXELS(player->py - 50), App->fonts->font, string.c_str());
 			}
 			else {
-				App->fonts->BlitText(METERS_TO_PIXELS(player->px - 30), METERS_TO_PIXELS(player->py - 50), App->fonts->font, "PLAYER 2");
+				App->fonts->BlitText(METERS_TO_PIXELS(player->px - 30), METERS_TO_PIXELS(player->py - 80), App->fonts->font, "PLAYER 2");
+				string = std::to_string(player->life);
+				App->fonts->BlitText(METERS_TO_PIXELS(player->px - 10), METERS_TO_PIXELS(player->py - 50), App->fonts->font, string.c_str());
 			}
 		}
+
+		
 	}
 		
 
@@ -170,6 +213,7 @@ update_status ModulePlayer::Update()
 
 void ModulePlayer::Shoot(Circle* player)
 {
+
 	Circle* bod = new Circle();
 
 	bod->ax = 0;
@@ -196,6 +240,8 @@ void ModulePlayer::Shoot(Circle* player)
 	App->scene_intro->explosion->steps = App->scene_intro->explosion->stepIterator;
 
 	bod->label = GRENADE;
+
+	shootingIFrames = 10;
 
 	switch (weaponType) {
 	case 0:

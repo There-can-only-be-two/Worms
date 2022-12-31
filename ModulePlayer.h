@@ -34,6 +34,7 @@ public:
 	uint weaponType;
 
 	uint explosionTimer;
+	uint shootingIFrames;
 	bool isShootingGrenade;
 	bool isShootingMissile;
 
@@ -42,4 +43,9 @@ public:
 	float coef_rest_player, coef_rest_grenade;
 	float cd_player, cd_grenade;
 	float b_player, b_grenade;
+
+	char life_1[3] = { "\0" };
+	uint TOTAL_LIFE_1 = 0;
+	char life_2[3] = { "\0" };
+	uint TOTAL_LIFE_2 = 0;
 };
